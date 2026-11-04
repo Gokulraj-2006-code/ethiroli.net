@@ -1,0 +1,263 @@
+import Intern from '../models/Intern.js';
+import AuditLog from '../models/AuditLog.js';
+import { asyncHandler } from '../middleware/errorHandler.js';
+import { success } from '../utils/response.js';
+import { NotFoundError } from '../utils/errors.js';
+
+export const listInterns = asyncHandler(async (req, res) => {
+  const { mentor_id, page = 1, limit = 50 } = req.query;
+  const offset = (parseInt(page) - 1) * parseInt(limit);
+
+  const [items, countRow] = await Promise.all([
+    Intern.list({ mentor_id, limit: parseInt(limit), offset }),
+    Intern.count({ mentor_id })
+  ]);
+
+  return success(res, 200, items, 'Interns retrieved', {
+    page: parseInt(page),
+    limit: parseInt(limit),
+    total: countRow,
+    totalPages: Math.ceil(countRow / parseInt(limit))
+  });
+});
+
+import User from '../models/User.js';
+import { BadRequestError } from '../utils/errors.js';
+import pool from '../config/database.js';
+import { resolveOrganizationAssignment } from '../services/organizationAssignments.js';
+
+export const createIntern = asyncHandler(async (req, res) => {
+  throw new BadRequestError('Use the secure HR onboarding invitation workflow at /v1/hr/onboarding/intern');
+});
+
+export const getIntern = asyncHandler(async (req, res) => {
+  const intern = await Intern.findById(req.params.id);
+  if (!intern) throw new NotFoundError('Intern not found');
+  return success(res, 200, intern, 'Intern retrieved');
+});
+
+export const updateIntern = asyncHandler(async (req, res) => {
+  const intern = await Intern.findById(req.params.id);
+  if (!intern) throw new NotFoundError('Intern not found');
+  const connection = await pool.getConnection();
+  try {
+    const assignment = await resolveOrganizationAssignment(connection, req.body, intern);
+    await Intern.update(req.params.id, { ...req.body, ...(assignment || {}) });
+  } finally { connection.release(); }
+
+  if (intern.user_id && (req.body.name || req.body.full_name || req.body.email || req.body.is_active !== undefined)) {
+    const userUpdates = {};
+    if (req.body.name || req.body.full_name) userUpdates.full_name = req.body.name || req.body.full_name;
+    if (req.body.email) userUpdates.email = req.body.email;
+    if (req.body.is_active !== undefined) userUpdates.is_active = Boolean(req.body.is_active);
+    await User.update(intern.user_id, userUpdates);
+    if (req.body.account_status === undefined) await Intern.update(req.params.id, { account_status: req.body.is_active ? 'ACTIVE' : 'ARCHIVED' });
+  }
+
+  const updated = await Intern.findById(req.params.id);
+  return success(res, 200, updated, 'Intern updated successfully');
+});
+
+export const deleteIntern = asyncHandler(async (req, res) => {
+  const intern = await Intern.findById(req.params.id);
+  if (!intern) throw new NotFoundError('Intern not found');
+  await Intern.update(req.params.id, { account_status: 'ARCHIVED' });
+  if (intern.user_id) {
+    await User.softDelete(intern.user_id);
+    const pool = (await import('../config/database.js')).default;
+    await pool.query('DELETE FROM sessions WHERE user_id = ?', [intern.user_id]);
+  }
+  return success(res, 200, null, 'Intern archived; historical records were retained');
+});
+
+export const getInternDashboard = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  const dashboardData = await Intern.getDashboardData(userId);
+  return success(res, 200, dashboardData, 'Intern dashboard data retrieved');
+});
+
+export const getInternPortalConfig = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  const config = await Intern.getPortalConfig(userId);
+  return success(res, 200, config, 'Intern portal configuration retrieved');
+});
+
+/**
+ * The signed-in intern's own record.
+ *
+ * /interns (roster) and /interns/:id stay admin-only, so an intern can read
+ * their own profile without gaining access to everyone else's.
+ */
+export const getMyInternProfile = asyncHandler(async (req, res) => {
+  const intern = await Intern.findByUserId(req.user.id);
+  if (!intern) throw new NotFoundError('No intern profile is linked to this account yet.');
+  return success(res, 200, intern, 'Intern profile retrieved');
+});
+
+export const updateMyInternProfile = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  const intern = await Intern.findByUserId(userId);
+  if (!intern) throw new NotFoundError('No intern profile is linked to this account.');
+
+  const { personal, academic, skills, socialLinks, internship, full_name, phone, avatar_url } = req.body;
+
+  const user = await User.findById(userId);
+  if (!user) throw new NotFoundError('User not found.');
+
+  const currentPrefs = user.preferences || {};
+  const newPrefs = { ...currentPrefs };
+  const userUpdates = {};
+
+  if (personal) {
+    if (personal.firstName !== undefined || personal.lastName !== undefined) {
+      const fName = personal.firstName !== undefined ? String(personal.firstName).trim() : (newPrefs.firstName || '');
+      const lName = personal.lastName !== undefined ? String(personal.lastName).trim() : (newPrefs.lastName || '');
+      const combined = `${fName} ${lName}`.trim();
+      if (combined) {
+        userUpdates.full_name = combined;
+      }
+      newPrefs.firstName = fName;
+      newPrefs.lastName = lName;
+    }
+    if (personal.phone !== undefined) {
+      const p = personal.phone ? String(personal.phone).trim() : null;
+      userUpdates.phone = p;
+      newPrefs.phone = p;
+    }
+    if (personal.dob !== undefined) newPrefs.dob = personal.dob;
+    if (personal.gender !== undefined) newPrefs.gender = personal.gender;
+    if (personal.address !== undefined) newPrefs.address = personal.address;
+    if (personal.emergencyContactName !== undefined) newPrefs.emergencyContactName = personal.emergencyContactName;
+    if (personal.emergencyContactPhone !== undefined) newPrefs.emergencyContactPhone = personal.emergencyContactPhone;
+    if (personal.emergencyRelation !== undefined) newPrefs.emergencyRelation = personal.emergencyRelation;
+  }
+
+  if (full_name !== undefined) {
+    userUpdates.full_name = String(full_name).trim();
+  }
+  if (phone !== undefined) {
+    userUpdates.phone = phone ? String(phone).trim() : null;
+  }
+  if (avatar_url !== undefined) {
+    userUpdates.avatar_url = avatar_url;
+  }
+
+  if (academic) {
+    if (academic.degree !== undefined) newPrefs.degree = academic.degree;
+    if (academic.department !== undefined) newPrefs.department = academic.department;
+    if (academic.yearOfStudy !== undefined) newPrefs.yearOfStudy = academic.yearOfStudy;
+    if (academic.rollNumber !== undefined) newPrefs.rollNumber = academic.rollNumber;
+    if (academic.cgpa !== undefined) newPrefs.cgpa = academic.cgpa;
+    if (academic.college !== undefined) {
+      newPrefs.college = academic.college;
+      await Intern.update(intern.id, { college_name: academic.college });
+    }
+  }
+
+  if (skills !== undefined && Array.isArray(skills)) {
+    newPrefs.skills = skills;
+  }
+
+  if (socialLinks) {
+    newPrefs.socialLinks = {
+      ...(newPrefs.socialLinks || {}),
+      ...socialLinks
+    };
+  }
+
+  if (internship) {
+    if (internship.track !== undefined) newPrefs.track = internship.track;
+    if (internship.cohort !== undefined) newPrefs.cohort = internship.cohort;
+    if (internship.assignedProject !== undefined) {
+      newPrefs.assignedProject = internship.assignedProject;
+      await Intern.update(intern.id, { project_target: internship.assignedProject });
+    } else if (internship.track !== undefined) {
+      await Intern.update(intern.id, { project_target: internship.track });
+    }
+  }
+
+  userUpdates.preferences = newPrefs;
+  await User.update(userId, userUpdates);
+
+  const updatedProfile = await Intern.findByUserId(userId);
+  return success(res, 200, updatedProfile, 'Intern profile updated successfully');
+});
+
+export const getAvailableMentors = asyncHandler(async (req, res) => {
+  const pool = (await import('../config/database.js')).default;
+  // There is no 'MENTOR' role in this schema - mentors are tutors. The old
+  // list therefore never matched and always returned empty.
+  const [rows] = await pool.execute(
+    `SELECT id, full_name, email, role FROM users
+     WHERE role IN ('TUTOR', 'SENIOR_TUTOR', 'HR', 'ADMIN', 'SUPER_ADMIN') AND is_active = true
+     ORDER BY full_name`
+  );
+  return success(res, 200, rows, 'Available mentors retrieved');
+});
+
+export const bulkUpdateInterns = asyncHandler(async (req, res) => {
+  const { ids, data } = req.body;
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    return success(res, 400, null, 'No intern IDs provided');
+  }
+  
+  const pool = (await import('../config/database.js')).default;
+  const placeholders = ids.map(() => '?').join(',');
+  const updates = [];
+  const values = [];
+  
+  if (data.mentor_id !== undefined) { updates.push('mentor_id = ?'); values.push(data.mentor_id); }
+  if (data.progress !== undefined) { updates.push('progress = ?'); values.push(Number(data.progress)); }
+  if (data.status !== undefined) { updates.push('status = ?'); values.push(data.status); }
+  
+  if (updates.length === 0) {
+    return success(res, 400, null, 'No valid fields to update');
+  }
+  
+  values.push(...ids);
+  await pool.execute(`UPDATE interns SET ${updates.join(', ')} WHERE id IN (${placeholders})`, values);
+  
+  return success(res, 200, { updated: ids.length }, `${ids.length} interns updated successfully`);
+});
+
+export const exportInterns = asyncHandler(async (req, res) => {
+  const { mentor_id } = req.query;
+  
+  const pool = (await import('../config/database.js')).default;
+  let query = `
+    SELECT i.*, u.email, u.full_name, m.full_name as mentor_name 
+    FROM interns i
+    JOIN users u ON i.user_id = u.id
+    LEFT JOIN users m ON i.mentor_id = m.id
+  `;
+  const params = [];
+  
+  if (mentor_id) {
+    query += ' WHERE i.mentor_id = ?';
+    params.push(mentor_id);
+  }
+  
+  const [rows] = await pool.execute(query, params);
+  
+  // Format as CSV
+  const headers = ['ID', 'Name', 'Email', 'Mentor', 'College', 'Stipend', 'Start Date', 'End Date', 'Progress', 'Project Target'];
+  const csvRows = rows.map(row => [
+    row.id,
+    row.full_name,
+    row.email,
+    row.mentor_name || 'Unassigned',
+    row.college_name,
+    row.stipend,
+    row.start_date,
+    row.end_date,
+    row.progress,
+    row.project_target || ''
+  ]);
+  
+  const csvContent = [headers.join(','), ...csvRows.map(r => r.join(','))].join('\n');
+  
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', `attachment; filename=interns-export-${new Date().toISOString().slice(0,10)}.csv`);
+  return res.send(csvContent);
+});
+

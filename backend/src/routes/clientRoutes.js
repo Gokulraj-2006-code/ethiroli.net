@@ -1,0 +1,18 @@
+import express from 'express';
+import { listClients, createClient, getClient, updateClient, deleteClient } from '../controllers/clientController.js';
+import { authenticate } from '../middleware/auth.js';
+import { requireRole } from '../middleware/rbac.js';
+import { validateBody } from '../middleware/validation.js';
+
+const router = express.Router();
+
+router.use(authenticate);
+
+router.get('/clients', requireRole('SALES', 'PROJECT_MANAGER', 'ADMIN', 'FINANCE', 'SUPER_ADMIN'), listClients);
+router.post('/clients', requireRole('SALES', 'PROJECT_MANAGER', 'ADMIN', 'SUPER_ADMIN'), validateBody('createClient'), createClient);
+router.get('/clients/:id', requireRole('SALES', 'PROJECT_MANAGER', 'ADMIN', 'FINANCE', 'SUPER_ADMIN'), getClient);
+router.put('/clients/:id', requireRole('SALES', 'PROJECT_MANAGER', 'ADMIN', 'SUPER_ADMIN'), validateBody('updateClient'), updateClient);
+router.patch('/clients/:id', requireRole('SALES', 'PROJECT_MANAGER', 'ADMIN', 'SUPER_ADMIN'), validateBody('updateClient'), updateClient);
+router.delete('/clients/:id', requireRole('ADMIN', 'SUPER_ADMIN'), deleteClient);
+
+export default router;

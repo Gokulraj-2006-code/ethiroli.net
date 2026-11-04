@@ -1,0 +1,17 @@
+export { default as HRDashboard } from './pages/Dashboard.jsx';
+export { default as HREmployees } from './pages/Employees.jsx';
+export { default as HRInterns } from './pages/Interns.jsx';
+export { default as HRAttendance } from './pages/Attendance.jsx';
+export { default as HRLeaves } from './pages/Leaves.jsx';
+export { default as HRInterviews } from './pages/Interviews.jsx';
+export { default as HRCommunications } from './pages/Communications.jsx';
+export { default as HRPayroll } from './pages/Payroll.jsx';
+export { default as HRPerformance } from './pages/Performance.jsx';
+export { default as HRJobsBoard } from './pages/JobsBoard.jsx';
+export { default as HROnboarding } from './pages/Onboarding.jsx';
+export { default as HRTraining } from './pages/Training.jsx';
+export { default as HRDocuments } from './pages/Documents.jsx';
+export { default as HRReports } from './pages/Reports.jsx';
+export { default as HROffboarding } from './pages/Offboarding.jsx';
+export { default as HRCareerApplications } from './pages/CareerApplications.jsx';
+export { default as HRInquiries } from './pages/Inquiries.jsx';

@@ -1,0 +1,1 @@
+import{j as o}from"./vendor-react-CyNzO99t.js";import{P as r}from"./PersonnelDirectory-D_CWgjOy.js";import"./AdminPage-BXe2dG37.js";import"./ErrorBoundary-RBhnLkHi.js";import"./vendor-router-Dfg4Plmy.js";import"./vendor-redux-DLJ9qq_A.js";import"./vendor-network-DuvCiPtx.js";function a(){return o.jsx(r,{kind:"employee"})}export{a as default};

@@ -1,0 +1,406 @@
+export const ROLES = {
+  SUPER_ADMIN: 'SUPER_ADMIN',
+  HR_SUPERADMIN: 'HR_SUPERADMIN',
+  ADMIN: 'ADMIN',
+  HR: 'HR',
+  SENIOR_TUTOR: 'SENIOR_TUTOR',
+  TUTOR: 'TUTOR',
+  PROJECT_MANAGER: 'PROJECT_MANAGER',
+  FINANCE: 'FINANCE',
+  SALES: 'SALES',
+  RECEPTION: 'RECEPTION',
+  EMPLOYEE: 'EMPLOYEE',
+  STUDENT: 'STUDENT',
+  INTERN: 'INTERN'
+};
+
+/**
+ * Impersonation (member-aware role switching) rules.
+ * Defines which roles are allowed to impersonate which target roles.
+ * - SUPER_ADMIN can impersonate every role except SUPER_ADMIN.
+ * - ADMIN can impersonate only EMPLOYEE / INTERN / STUDENT users
+ *   within the same organization (single-business rule is enforced at runtime).
+ */
+export const IMPERSONATION_TARGETS = {
+  SUPER_ADMIN: Object.values(ROLES).filter((role) => role !== ROLES.SUPER_ADMIN),
+  ADMIN: [ROLES.EMPLOYEE, ROLES.INTERN, ROLES.STUDENT]
+};
+
+export const LEAD_STATUS = {
+  NEW: 'NEW',
+  CONTACTED: 'CONTACTED',
+  DEMO: 'DEMO',
+  COUNSELLING: 'COUNSELLING',
+  ADMISSION: 'ADMISSION',
+  PAYMENT: 'PAYMENT',
+  LOST: 'LOST'
+};
+
+export const LEAVE_STATUS = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
+};
+
+export const PAYMENT_STATUS = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED'
+};
+
+export const INVOICE_STATUS = {
+  DRAFT: 'DRAFT',
+  SENT: 'SENT',
+  PAID: 'PAID',
+  OVERDUE: 'OVERDUE',
+  CANCELLED: 'CANCELLED'
+};
+
+export const ATTENDANCE_STATUS = {
+  PRESENT: 'PRESENT',
+  ABSENT: 'ABSENT',
+  HALF_DAY: 'HALF_DAY',
+  LEAVE: 'LEAVE'
+};
+
+export const GENDER = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  OTHER: 'OTHER'
+};
+
+export const EMPLOYMENT_TYPE = {
+  FULL_TIME: 'FULL_TIME',
+  PART_TIME: 'PART_TIME',
+  CONTRACT: 'CONTRACT',
+  INTERN: 'INTERN'
+};
+
+export const PAYMENT_METHOD = {
+  CASH: 'CASH',
+  CARD: 'CARD',
+  UPI: 'UPI',
+  BANK_TRANSFER: 'BANK_TRANSFER',
+  CHEQUE: 'CHEQUE',
+  ONLINE: 'ONLINE'
+};
+
+export const QUERY_STATUS = {
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED'
+};
+
+export const APPROVAL_STATUS = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export const RECURRING_FREQUENCY = {
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY',
+  YEARLY: 'YEARLY'
+};
+
+export const CACHE_TTL = {
+  SHORT: 60,
+  MEDIUM: 300,
+  LONG: 3600
+};
+
+export const HTTP_STATUS = {
+  OK: 200,
+  CREATED: 201,
+  NO_CONTENT: 204,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  CONFLICT: 409,
+  UNPROCESSABLE_ENTITY: 422,
+  TOO_MANY_REQUESTS: 429,
+  INTERNAL_SERVER_ERROR: 500
+};
+
+export const ERROR_MESSAGES = {
+  INTERNAL_ERROR: 'Internal server error',
+  NOT_FOUND: 'Resource not found',
+  VALIDATION_FAILED: 'Validation failed',
+  AUTHENTICATION_REQUIRED: 'Authentication required',
+  INSUFFICIENT_PERMISSIONS: 'Insufficient permissions',
+  RESOURCE_CONFLICT: 'Resource conflict',
+  RATE_LIMIT_EXCEEDED: 'Rate limit exceeded',
+  SESSION_EXPIRED: 'Session expired. Please log in again.',
+  USER_NOT_FOUND: 'User not found',
+  EMAIL_ALREADY_EXISTS: 'User with this email already exists',
+  INVALID_CREDENTIALS: 'Invalid email or password',
+  RESOURCE_NOT_FOUND: 'Resource not found',
+  OPERATION_FAILED: 'Operation failed',
+  REQUIRED_FIELD_MISSING: 'Required field missing',
+  ACCOUNT_DEACTIVATED: 'User account is deactivated.'
+};
+
+export const SUCCESS_MESSAGES = {
+  CREATED: 'Resource created successfully',
+  UPDATED: 'Resource updated successfully',
+  DELETED: 'Resource deleted successfully',
+  RETRIEVED: 'Resource retrieved successfully',
+  OPERATION_SUCCESS: 'Operation completed successfully',
+  LOGIN_SUCCESS: 'Login successful',
+  LOGOUT_SUCCESS: 'Logged out successfully'
+};
+
+export const PORTAL_CONFIGS = {
+  SUPER_ADMIN: {
+    slug: 'super-admin',
+    strategies: ['password'],
+    mfaRequired: true,
+    oauthProviders: [],
+    sessionDuration: 4 * 60 * 60,
+    cookiePath: '/app/super-admin'
+  },
+  ADMIN: {
+    slug: 'admin',
+    strategies: ['password'],
+    mfaRequired: true,
+    oauthProviders: [],
+    sessionDuration: 8 * 60 * 60,
+    cookiePath: '/app/admin'
+  },
+  HR: {
+    slug: 'hr',
+    strategies: ['password'],
+    mfaRequired: false,
+    oauthProviders: [],
+    sessionDuration: 8 * 60 * 60,
+    cookiePath: '/app/hr'
+  },
+  TUTOR: {
+    slug: 'tutor',
+    strategies: ['password'],
+    mfaRequired: false,
+    oauthProviders: [],
+    sessionDuration: 8 * 60 * 60,
+    cookiePath: '/app/tutor'
+  },
+  PROJECT_MANAGER: {
+    slug: 'manager',
+    strategies: ['password'],
+    mfaRequired: false,
+    oauthProviders: [],
+    sessionDuration: 8 * 60 * 60,
+    cookiePath: '/app/manager'
+  },
+  FINANCE: {
+    slug: 'finance',
+    strategies: ['password'],
+    mfaRequired: false,
+    oauthProviders: [],
+    sessionDuration: 8 * 60 * 60,
+    cookiePath: '/app/finance'
+  },
+  SALES: {
+    slug: 'sales',
+    strategies: ['password'],
+    mfaRequired: false,
+    oauthProviders: [],
+    sessionDuration: 8 * 60 * 60,
+    cookiePath: '/app/sales'
+  },
+  RECEPTION: {
+    slug: 'reception',
+    strategies: ['password'],
+    mfaRequired: false,
+    oauthProviders: [],
+    sessionDuration: 8 * 60 * 60,
+    cookiePath: '/app/reception'
+  },
+  EMPLOYEE: {
+    slug: 'employee',
+    allowedRoles: ['EMPLOYEE', 'INTERN'],
+    strategies: ['password'],
+    mfaRequired: false,
+    oauthProviders: [],
+    sessionDuration: 8 * 60 * 60,
+    cookiePath: '/app/employee'
+  },
+  STUDENT: {
+    slug: 'student',
+    strategies: ['password'],
+    mfaRequired: false,
+    oauthProviders: [],
+    sessionDuration: 24 * 60 * 60,
+    cookiePath: '/app/student'
+  },
+  INTERN: {
+    slug: 'intern',
+    strategies: ['password'],
+    mfaRequired: false,
+    oauthProviders: [],
+    sessionDuration: 24 * 60 * 60,
+    cookiePath: '/app/intern'
+  }
+};
+
+export const getPortalConfigBySlug = (slug) => {
+  const entry = Object.entries(PORTAL_CONFIGS).find(([, config]) => config.slug === slug);
+  return entry ? { role: entry[0], ...entry[1] } : null;
+};
+
+export const getPortalConfigByRole = (role) => {
+  return PORTAL_CONFIGS[role] || null;
+};
+
+export const ROLE_PERMISSIONS = {
+  SUPER_ADMIN: ['*'],
+  ADMIN: ['*'],
+  HR: [
+    'employees:read', 'employees:write',
+    'interns:read', 'interns:write',
+    'students:read', 'students:write',
+    'onboarding:read', 'onboarding:write',
+    'candidates:read', 'candidates:write',
+    'inquiries:read', 'inquiries:write',
+    'attendance:read', 'attendance:write',
+    'leaves:read', 'leaves:write',
+    'training:read', 'training:write',
+    'courses:read', 'courses:write',
+    'modules:read', 'modules:write',
+    'lessons:read', 'lessons:write',
+    'enrollments:read', 'enrollments:write',
+    'quizzes:read', 'quizzes:write',
+    'assignments:read', 'assignments:write',
+    'interviews:read', 'interviews:write',
+    'payroll:read', 'payroll:write',
+    'performance:read', 'performance:write',
+    'documents:read', 'documents:write',
+    'hr_requests:read', 'hr_requests:write',
+    'letters:read', 'letters:write',
+    'offboarding:read', 'offboarding:write',
+    'communications:read', 'communications:write',
+    'reports:read', 'reports:write',
+    'calendar:read', 'calendar:write',
+    'holidays:read', 'holidays:write',
+    'approvals:read', 'approvals:write'
+  ],
+  TUTOR: [
+    'courses:read', 'courses:write',
+    'modules:read', 'modules:write',
+    'lessons:read', 'lessons:write',
+    'enrollments:read', 'enrollments:write',
+    'quizzes:read', 'quizzes:write',
+    'assignments:read', 'assignments:write',
+    'forum:read', 'forum:write',
+    'badges:read',
+    'certificates:read',
+    'calendar:read', 'calendar:write'
+  ],
+  PROJECT_MANAGER: [
+    'clients:read', 'clients:write',
+    'subscriptions:read', 'subscriptions:write',
+    'tasks:read', 'tasks:write',
+    'invoices:read', 'invoices:write',
+    'company_settings:read', 'company_settings:write',
+    'calendar:read', 'calendar:write',
+    'approvals:read', 'approvals:write'
+  ],
+  FINANCE: [
+    'invoices:read', 'invoices:write',
+    'payments:read', 'payments:write',
+    'transactions:read', 'transactions:write',
+    'payroll:read', 'payroll:write',
+    'reports:read', 'reports:write',
+    'calendar:read', 'calendar:write'
+  ],
+  SALES: [
+    'leads:read', 'leads:write',
+    'clients:read',
+    'calendar:read', 'calendar:write'
+  ],
+  RECEPTION: [
+    'attendance:read', 'attendance:write',
+    'leaves:read',
+    'calendar:read', 'calendar:write',
+    'communications:read', 'communications:write'
+  ],
+  EMPLOYEE: [
+    'attendance:read', 'attendance:write',
+    'leaves:read', 'leaves:write',
+    'tasks:read',
+    'performance:read',
+    'calendar:read', 'calendar:write',
+    'approvals:read', 'approvals:write',
+    'payslips:read'
+  ],
+  STUDENT: [
+    'courses:read',
+    'enrollments:read', 'enrollments:write',
+    'quizzes:read', 'quizzes:write',
+    'assignments:read', 'assignments:write',
+    'forum:read', 'forum:write',
+    'badges:read',
+    'certificates:read',
+    'calendar:read', 'calendar:write',
+    'projects:read', 'projects:write',
+    'mindmaps:read', 'mindmaps:write'
+  ],
+  INTERN: [
+    'attendance:read', 'attendance:write',
+    'leaves:read', 'leaves:write',
+    'tasks:read', 'tasks:write',
+    'calendar:read', 'calendar:write',
+    'projects:read', 'projects:write'
+  ]
+};
+
+const DEFAULT_ORIGIN_LIST = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:5000',
+  'http://localhost:5173',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:3001',
+  'http://127.0.0.1:5000',
+  'http://127.0.0.1:5173',
+  'https://ethiroli.net',
+  'http://ethiroli.net',
+  'https://www.ethiroli.net',
+  'http://www.ethiroli.net'
+];
+
+const parsedEnvOrigins = (process.env.ALLOWED_ORIGINS || process.env.FRONTEND_ORIGIN || '')
+  .split(',')
+  .map(o => o.trim())
+  .filter(Boolean);
+
+export const ALLOWED_ORIGINS = Array.from(new Set([...DEFAULT_ORIGIN_LIST, ...parsedEnvOrigins]));
+
+/**
+ * Single source of truth for "may this browser talk to us?".
+ *
+ * The allow-list covers the deployed origins, and any loopback host is allowed
+ * on purpose so a developer can serve a portal on whatever port is free (the
+ * intern and project-manager dev servers use 3100 and 3200). Socket.IO needs
+ * this as a function: given a plain array it allow-lists exact strings only, so
+ * a new dev port fails the handshake with no Access-Control-Allow-Origin header
+ * while ordinary REST calls from that same port still work.
+ */
+export const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+  if (ALLOWED_ORIGINS.includes(origin)) return true;
+  try {
+    const { hostname } = new URL(origin);
+    if (['localhost', '127.0.0.1', '::1'].includes(hostname)) return true;
+    if (hostname === 'ethiroli.net' || hostname.endsWith('.ethiroli.net')) return true;
+    if (hostname.endsWith('.hostingersite.com') || hostname.endsWith('.hostinger.com')) return true;
+  } catch {
+    return false;
+  }
+  return false;
+};
+

@@ -1,0 +1,85 @@
+import axiosInstance from './axiosInstance.js';
+
+export const getAttendance = async (params = {}) => {
+  const response = await axiosInstance.get('/v1/attendance', { params });
+  return response.data;
+};
+
+export const checkIn = async (data = {}) => {
+  const response = await axiosInstance.post('/v1/attendance/check-in', data);
+  return response.data;
+};
+
+export const checkOut = async (data = {}) => {
+  const response = await axiosInstance.post('/v1/attendance/check-out', typeof data === 'object' ? data : { id: data });
+  return response.data;
+};
+
+/** `YYYY-MM-DD` for the local calendar day, not the UTC day. */
+export const localDateKey = (d = new Date()) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+export const getAttendanceById = async (id) => {
+  const response = await axiosInstance.get(`/v1/attendance/${id}`);
+  return response.data;
+};
+
+/* ---------------------------------------------------------------------------
+ * Session-based punch clock (self-scoped on the server).
+ *
+ * The endpoints above write a single day row per day, so they cannot express
+ * multiple work sessions, breaks, or a live "still clocked in" state. These
+ * power the punch-clock UI that the Employee and Intern portals share.
+ * ------------------------------------------------------------------------- */
+
+/** Today's punch state plus every session, with live worked minutes. */
+export const getTodayAttendance = async () => {
+  const response = await axiosInstance.get('/v1/attendance/today');
+  return response.data;
+};
+
+/** History rows enriched with per-day sessions and true worked minutes. */
+export const getAttendanceHistory = async (params = {}) => {
+  const response = await axiosInstance.get('/v1/attendance/history', { params });
+  return response.data;
+};
+
+/** `action` is 'CHECK_IN' or 'CHECK_OUT'. */
+export const punchAttendance = async (action, data = {}) => {
+  const response = await axiosInstance.post('/v1/attendance/punch', { action, ...data });
+  return response.data;
+};
+
+export const updateAttendance = async (id, data) => {
+  const response = await axiosInstance.put(`/v1/attendance/${id}`, data);
+  return response.data;
+};
+
+export const deleteAttendance = async (id) => {
+  const response = await axiosInstance.delete(`/v1/attendance/${id}`);
+  return response.data;
+};
+
+export const getAttendanceSummary = async (params = {}) => {
+  const response = await axiosInstance.get('/v1/attendance/summary', { params });
+  return response.data;
+};
+
+export const listAttendance = getAttendance;
+
+export const attendanceApi = {
+  getAll: getAttendance,
+  getAttendance,
+  getById: getAttendanceById,
+  checkIn,
+  checkOut,
+  update: updateAttendance,
+  delete: deleteAttendance,
+  getSummary: getAttendanceSummary,
+  getToday: getTodayAttendance,
+  getHistory: getAttendanceHistory,
+  punch: punchAttendance,
+};
+
+export default attendanceApi;
+

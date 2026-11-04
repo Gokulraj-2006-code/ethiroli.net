@@ -1,0 +1,590 @@
+/* ==========================================================================
+   Intern Login Page — Exact UI/UX Replica matching the reference mockup
+   Role: INTERN | Clean 58/42 Split Screen Layout (Zero OAuth, Zero Google)
+   ========================================================================== */
+
+.pageContainer {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  background: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #0f172a;
+  overflow-x: hidden;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   LEFT SECTION: HERO & SHOWCASE (58%)
+   ========================================================================== */
+.leftSection {
+  flex: 0 0 58%;
+  width: 58%;
+  display: flex;
+  flex-direction: column;
+  padding: 2.25rem 3.5rem 1.75rem 3.5rem;
+  position: relative;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+/* Header */
+.leftHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.75rem;
+}
+
+.brandBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerLogoImg {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.brandTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #0f172a;
+}
+
+.headerDivider {
+  color: #cbd5e1;
+  font-size: 1.1rem;
+  margin: 0 4px;
+}
+
+.portalSub {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.taglineDots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.dot {
+  color: #94a3b8;
+}
+
+/* Headline Group */
+.heroTextGroup {
+  margin-bottom: 1.25rem;
+}
+
+.mainHeading {
+  font-size: 2.35rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: #0f172a;
+  margin: 0 0 0.45rem 0;
+}
+
+.headingAccent {
+  color: #059669;
+  position: relative;
+  display: inline-block;
+}
+
+.underlineCurve {
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 10px;
+  pointer-events: none;
+}
+
+.heroSubheading {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+}
+
+.subDot {
+  margin: 0 4px;
+  color: #94a3b8;
+}
+
+/* 4 Feature Badges */
+.featuresRow {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.featureCard {
+  flex: 1;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  min-width: 0;
+}
+
+.featureCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.08);
+  border-color: #a7f3d0;
+}
+
+.featureIconBox {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.iconBoxGreen {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.iconBoxEmerald {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.iconBoxBlue {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.iconBoxCyan {
+  background: #ecfeff;
+  color: #0891b2;
+}
+
+.featureInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.featureTitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.featureDesc {
+  font-size: 10px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+/* Hero Desk Workspace Image */
+.heroImageWrapper {
+  flex: 1;
+  width: 100%;
+  min-height: 380px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 36px -12px rgba(15, 23, 42, 0.1);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  margin-bottom: 0.75rem;
+  background: #f8fafc;
+}
+
+.heroDeskImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  display: block;
+}
+
+/* Left Footer */
+.leftFooter {
+  padding-top: 0.25rem;
+  font-size: 11.5px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leftFooter strong {
+  color: #0f172a;
+  letter-spacing: 0.04em;
+}
+
+.leftFooter em {
+  font-style: normal;
+  color: #64748b;
+}
+
+/* ==========================================================================
+   RIGHT SECTION: FORM CARD & SURROUNDINGS (42%)
+   ========================================================================== */
+.rightSection {
+  flex: 0 0 42%;
+  width: 42%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+  position: relative;
+  background: #f8fafc;
+  border-left: 1px solid #f1f5f9;
+  box-sizing: border-box;
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 2.25rem 2.25rem 2rem 2.25rem;
+  box-shadow: 0 20px 45px -15px rgba(15, 23, 42, 0.08), 0 0 1px 1px rgba(0, 0, 0, 0.02);
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+/* Brand header inside card */
+.cardBrandHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.cardLogoRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardLogoImg {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+.cardBrandName {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #0f172a;
+}
+
+.cardBrandSub {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #64748b;
+  margin-top: 3px;
+  text-transform: uppercase;
+}
+
+/* Welcome Group */
+.welcomeGroup {
+  margin-bottom: 1.25rem;
+}
+
+.welcomeTitle {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.02em;
+}
+
+.welcomeSubtitle {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Alerts */
+.alertError {
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  color: #dc2626;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.alertNotice {
+  background: #f0fdf4;
+  border: 1px solid #dcfce7;
+  color: #16a34a;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+/* Form */
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 14px;
+  color: #94a3b8;
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.textInput {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px 0 42px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 13.5px;
+  color: #0f172a;
+  background: #ffffff;
+  outline: none;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.passwordInput {
+  padding-right: 42px;
+}
+
+.textInput::placeholder {
+  color: #94a3b8;
+}
+
+.textInput:focus {
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+}
+
+.togglePasswordBtn {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.togglePasswordBtn:hover {
+  color: #475569;
+}
+
+/* Remember me & Forgot password row */
+.formRowMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px;
+  margin-top: -2px;
+}
+
+.checkboxLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  user-select: none;
+  color: #475569;
+  font-weight: 500;
+}
+
+.customCheckbox {
+  width: 16px;
+  height: 16px;
+  accent-color: #0b4d3c;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.forgotLink {
+  color: #0b4d3c;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.forgotLink:hover {
+  text-decoration: underline;
+}
+
+/* Submit Button */
+.submitBtn {
+  width: 100%;
+  height: 48px;
+  background: #0b4d3c;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+  margin-top: 0.35rem;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #07382c;
+  transform: translateY(-1px);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Security Badge */
+.securityBadge {
+  background: #f0fdf4;
+  border: 1px solid #dcfce7;
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 0.75rem;
+}
+
+.securityIconBox {
+  font-size: 18px;
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.securityText {
+  display: flex;
+  flex-direction: column;
+}
+
+.securityTitle {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #166534;
+  line-height: 1.25;
+}
+
+.securitySub {
+  font-size: 10.5px;
+  color: #15803d;
+  line-height: 1.25;
+}
+
+
+
+/* Botanical leaf artwork in bottom right corner outside card */
+.cornerLeaves {
+  position: absolute;
+  right: -10px;
+  bottom: -10px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 1100px) {
+  .leftSection {
+    padding: 2rem;
+  }
+  .featuresRow {
+    flex-wrap: wrap;
+  }
+  .featureCard {
+    flex: 0 0 calc(50% - 6px);
+  }
+}
+
+@media (max-width: 860px) {
+  .pageContainer {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .leftSection {
+    width: 100%;
+    flex: none;
+    padding: 2rem 1.5rem;
+  }
+  .heroImageWrapper {
+    min-height: 240px;
+    max-height: 280px;
+  }
+  .rightSection {
+    width: 100%;
+    flex: none;
+    padding: 2rem 1.5rem;
+    border-left: none;
+    border-top: 1px solid #f1f5f9;
+  }
+  .loginCard {
+    max-width: 100%;
+    padding: 2rem 1.5rem;
+  }
+}

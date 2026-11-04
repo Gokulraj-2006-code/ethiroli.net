@@ -1,0 +1,1 @@
+import{j as r}from"./vendor-react-CyNzO99t.js";import{P as t}from"./PersonnelDirectory-BSrH8-et.js";import"./AdminPage-BXe2dG37.js";import"./ErrorBoundary-RBhnLkHi.js";import"./vendor-router-Dfg4Plmy.js";import"./vendor-redux-DLJ9qq_A.js";import"./vendor-network-DuvCiPtx.js";function a(){return r.jsx(t,{kind:"intern"})}export{a as default};

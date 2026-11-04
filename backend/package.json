@@ -1,0 +1,40 @@
+{
+  "name": "ethiroli-career-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --watch-path=src src/server.js",
+    "start": "node src/server.js",
+    "start:cluster": "node src/cluster.js",
+    "test:cluster": "node tests/test-load-balancer.js",
+    "test": "node tests/test-phase1.js",
+    "test:all": "node tests/test-phase1.js && node tests/test-phase2.js && node tests/test-phase3.js && node tests/test-phase4.js && node tests/test-phase5.js && node tests/test-phase6.js && node tests/test-phase7.js && node tests/test-phase8.js",
+    "seed": "node scripts/seed-hr-data.js",
+    "db:migrate": "node scripts/apply-migration.js",
+    "db:audit": "node scripts/audit-lms-db.cjs",
+    "build": "npm --prefix ../frontend run build && node -e \"console.log('Build completed successfully')\"",
+    "lint": "echo 'No linter configured'",
+    "migrate": "node scripts/initialize-local-schema.js"
+  },
+  "dependencies": {
+    "@socket.io/cluster-adapter": "^0.3.0",
+    "@socket.io/redis-adapter": "^8.3.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "express-session": "^1.19.0",
+    "ioredis": "^6.0.0",
+    "kafkajs": "^2.2.4",
+    "mysql2": "^3.15.3",
+    "nodemailer": "^10.0.13",
+    "socket.io": "^4.8.3"
+  },
+  "overrides": {
+    "qs": "^6.16.0",
+    "engine.io": "^6.6.11",
+    "nodemailer": "^10.0.13",
+    "proxy-addr": "^2.0.8"
+  }
+}
