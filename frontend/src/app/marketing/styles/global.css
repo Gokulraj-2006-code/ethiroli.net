@@ -5874,6 +5874,122 @@ details[open] summary:after {
     transform: scale(1.05);
 }
 
+/* Student-work cards: whole card is the demo link */
+.et-srv-student {
+    padding-top: 0;
+}
+
+.et-srv-student-intro,
+.et-srv-showcase-intro {
+    max-width: 640px;
+}
+
+.et-srv-student-card {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.et-srv-student-card:focus-visible {
+    outline: 2px solid var(--color-secondary, #AF431E);
+    outline-offset: 3px;
+}
+
+.et-srv-student-thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-accent, #1A4B48) 0%, #2f6b64 55%, var(--color-primary, #819E35) 130%);
+    aspect-ratio: 2.88 / 1;
+    height: auto;
+    max-height: 190px;
+}
+
+.et-srv-student-thumb img {
+    position: absolute;
+    inset: 0;
+}
+
+.et-srv-student-thumb-brand {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+/* LIVE DEMO badge pinned to the top-left of the card thumbnail */
+.et-srv-demo-badge {
+    position: absolute;
+    top: 0.55rem;
+    left: 0.55rem;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 26px;
+    padding: 0.28rem 0.6rem;
+    border-radius: 9999px;
+    background: rgba(12, 26, 25, 0.82);
+    color: #ffffff;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.et-srv-demo-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4ade80;
+    flex: 0 0 auto;
+}
+
+.et-srv-student-card:hover .et-srv-demo-badge {
+    background: var(--color-secondary, #AF431E);
+}
+
+.et-srv-card-arrow--link {
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile: student cards get 44px tap targets, full-width badge stays visible */
+@media (max-width: 768px) {
+    .et-srv-student-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.85rem;
+    }
+    .et-srv-student-card {
+        min-height: 44px;
+    }
+    .et-srv-demo-badge {
+        top: 0.45rem;
+        left: 0.45rem;
+        min-height: 28px;
+        font-size: 0.64rem;
+        padding: 0.3rem 0.55rem;
+    }
+    .et-srv-card-info {
+        padding: 0.9rem 0.8rem 0.9rem 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .et-srv-student-grid {
+        grid-template-columns: 1fr;
+    }
+    .et-srv-card-arrow--link {
+        min-width: 44px;
+        min-height: 44px;
+    }
+}
+
 .et-srv-card-info {
     padding: 1.1rem 1rem 1rem 1rem;
     display: flex;

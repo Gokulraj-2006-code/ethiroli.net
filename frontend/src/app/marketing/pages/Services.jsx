@@ -41,6 +41,68 @@ const allProjects = [
   },
 ];
 
+// Student demo/community project cards shown below the case studies.
+// Titles, subtitles and tags come from each site's own <title>/description;
+// swap in a real screenshot image per card when available (fallback: branded placeholder).
+const studentProjects = [
+  {
+    id: 'homecraft-shop',
+    title: 'HomeCraft',
+    subtitle: 'Furniture Crafted for Better Living',
+    image: '/assets/images/services/student_homecraft.jpg',
+    tags: ['E-Commerce', 'UI/UX Design', 'Student Project'],
+    link: 'https://homecraft-shop.vercel.app/',
+  },
+  {
+    id: 'medi-aura',
+    title: 'MediAura',
+    subtitle: 'Modern healthcare, comfortably simple',
+    image: '/assets/images/services/student_mediaura.jpg',
+    tags: ['Healthcare', 'Landing Page', 'Student Project'],
+    link: 'https://medi-aura.vercel.app/',
+  },
+  {
+    id: 'mistrisworld',
+    title: 'Mistri’s World',
+    subtitle: 'Industry & Engineering Template',
+    image: '/assets/images/services/student_mistrisworld.jpg',
+    tags: ['Corporate', 'Web Design', 'Student Project'],
+    link: 'https://mistrisworld.vercel.app/',
+  },
+  {
+    id: 'dentiaa',
+    title: 'Dentia',
+    subtitle: 'Dentist & Dental Clinic Template',
+    image: '/assets/images/services/student_dentiaa.jpg',
+    tags: ['Dental Clinic', 'Booking Flow', 'Student Project'],
+    link: 'https://dentiaa.vercel.app/',
+  },
+  {
+    id: 'whitetooth',
+    title: 'BrightSmile Dental',
+    subtitle: 'Painless, Modern Dental Care',
+    image: '/assets/images/services/student_whitetooth.jpg',
+    tags: ['Dental Care', 'Brand Site', 'Student Project'],
+    link: 'https://whitetooth.vercel.app/',
+  },
+  {
+    id: 'framweb-beta',
+    title: 'Kaveri Organic Farms',
+    subtitle: 'Organic Agriculture, Fresh From the Earth',
+    image: '/assets/images/services/student_kaveri.jpg',
+    tags: ['Organic Farming', 'E-Commerce', 'Student Project'],
+    link: 'https://framweb-beta.vercel.app/',
+  },
+  {
+    id: 'dentalto',
+    title: 'Dentalto',
+    subtitle: 'Dentist & Dental Clinic',
+    image: '/assets/images/services/student_dentalto.jpg',
+    tags: ['Dental Clinic', 'Web Design', 'Student Project'],
+    link: 'https://dentalto.vercel.app/',
+  },
+];
+
 const disciplines = [
   {
     title: 'Brand Identity',
@@ -522,6 +584,78 @@ const EthiroliPage = () => {
                     </div>
                   </div>
                 </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        </div>
+      </section>
+
+      {/* 4B. STUDENT WORK — LIVE DEMO PROJECTS */}
+      <section className="et-srv-showcase et-srv-student" id="student-work">
+        <div className="et-srv-container">
+          <motion.div
+            className="et-srv-showcase-intro"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-50px' }}
+            variants={sectionFade}
+          >
+            <div className="et-srv-badge">
+              <span className="et-srv-badge-star star-rotate">&#9733;</span>
+              <span>STUDENT WORK &amp; LIVE DEMOS</span>
+            </div>
+            <h2 className="et-srv-section-title">Our Students' Live Projects</h2>
+            <p className="et-srv-section-desc">
+              Real websites built and shipped by our students — click any card to open the live demo in a new tab.
+            </p>
+          </motion.div>
+
+          <div className="et-srv-showcase-grid et-srv-student-grid">
+            <AnimatePresence mode="popLayout">
+              {studentProjects.map((s, idx) => (
+                <motion.a
+                  key={s.id}
+                  href={s.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="et-srv-showcase-card et-srv-student-card"
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  whileHover={{ y: -6 }}
+                  transition={{ duration: 0.35, delay: idx * 0.04 }}
+                  aria-label={`Open ${s.title} live demo`}
+                >
+                  <div className="et-srv-card-thumb et-srv-student-thumb">
+                    {s.image ? (
+                      <img src={s.image} alt={s.title} loading="lazy" decoding="async" />
+                    ) : (
+                      <span className="et-srv-student-thumb-brand" aria-hidden="true">
+                        {s.title.charAt(0)}
+                      </span>
+                    )}
+                    <span className="et-srv-demo-badge">
+                      <span className="et-srv-demo-dot" aria-hidden="true" />
+                      LIVE DEMO
+                    </span>
+                  </div>
+                  <div className="et-srv-card-info">
+                    <h3 className="et-srv-card-name">{s.title}</h3>
+                    {s.subtitle && <span className="et-srv-card-sub">{s.subtitle}</span>}
+                    <div className="et-srv-card-bottom">
+                      <div className="et-srv-project-tags">
+                        {s.tags.map((t) => (
+                          <span key={t} className="et-srv-ptag">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                      <span className="et-srv-card-arrow et-srv-card-arrow--link" aria-hidden="true">
+                        <span className="material-symbols-outlined">arrow_outward</span>
+                      </span>
+                    </div>
+                  </div>
+                </motion.a>
               ))}
             </AnimatePresence>
           </div>
