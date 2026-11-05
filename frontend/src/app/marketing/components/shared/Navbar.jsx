@@ -30,6 +30,7 @@ const Navbar = () => {
     }, [lastScrollY]);
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
+    const isAbout = location.pathname === '/about';
 
     // Close the drawer whenever the route changes.
     useEffect(() => {
@@ -56,7 +57,7 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`main-nav ${scrolled ? 'scrolled' : ''}`}
+            className={`main-nav ${scrolled ? 'scrolled' : ''} ${isAbout ? 'about-nav' : ''}`}
             id="navbar"
             style={{ transform: 'translateY(0)' }}
         >

@@ -4,8 +4,7 @@ import { motion } from 'framer-motion';
 const CareerHero = () => {
   return (
     <section
-      className="ab-hero"
-      style={{ backgroundImage: "url('/assets/images/banner/banner.png')" }}
+      className="ab-hero career-hero"
     >
       <div className="ab-hero-content">
         <motion.h1
