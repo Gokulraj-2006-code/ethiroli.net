@@ -90,8 +90,8 @@ export default function EthiroliSeminar() {
         >
           <div className="hero__bg">
             <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8KtEsKaXTQhuwXHz9HTEjq-YGowJ4jh1HtmPMGTIPWH8rMwC5PlC22h7-fQizBIoMmHouR8iwQeOdnss4Ta2yuOS2CxNR96ZkSXHXEgFQGsbz8w7afRndZNO8C8vWPAPnPD7lhozefyxKbX4wAJ4eYQlJCmxllSH8CEv0ERq0s6QFOZrsPwFBc2kVyodrpp05IXr2KyDewTuChRtXgbgQt9U1LVM5aNkyTxIBVkfnALUx0Aw7piz8lBBQ9Fr8AtpMhrTc2dhJzAmP"
-              alt="Seminar hall"
+              src="/assets/images/projects/webinar-digital-marketing.jpg"
+              alt="Digital marketing webinar presentation"
               className="hero__img"
             />
             <div className="hero__overlay" />
@@ -139,15 +139,15 @@ export default function EthiroliSeminar() {
             <motion.div className="about__img-wrap" variants={fadeUp} transition={{ duration: 0.7 }}>
               <div className="about__circle">
                 <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9jzEgrLoG0KMSuWNT7lmHxGGbS8D7iSiOTpfNrglOTNiov6esxEUOn2_Qmv32hrs6KdTDs2isKM0PKgkOXHiJwgQJpGuSED-vHAkknzRFFYwbxuCuS4nF18vxJ4vNFCUpSgfeVneUKo3Ha4T-w1RYwQ8q0UEcElKCg9iQZ3M9O_diHpmS-hl61GEZli1fRRcNmwpCFMRFRnNwYJRbZptHpmc6by9Ezj1DoyMSzEZUF3gpmXdLBCyPgAvau0Z0S-zmJNoutVNRJaEP"
-                  alt="Students"
+                  src="/assets/images/projects/seminar-empowering-students.jpg"
+                  alt="Students attending the digital marketing seminar"
                   className="about__circle-img"
                 />
               </div>
               <div className="about__thumb">
                 <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBfMy-dgSr53f2Ta4YYfBPuiC8mjM7l7iLV0sJlkkvGeOSvsM0XJ5YJKXq37ds5CKVAHh48NU_ZBMio3LMsGmljJOsDVvkur7A3e-oX0lBR8aMmqbNMQAmNUashC8omA-VsHd2ONtMFD6dekJKfKj7M5zPDE_rbQVvVaLP0rj0Qjr7foRm-zu8Oo71doekmeBdoTm794vsXPM842QxFILZqMMb5NGHloWGYPwL33C03BBSlKSTV7JpgIihTltHWhp8Jnn51wI14w8F"
-                  alt="Analytics"
+                  src="/assets/images/projects/digital-workshop.jpg"
+                  alt="Digital marketing workshop in progress"
                   className="about__thumb-img"
                 />
               </div>
@@ -325,10 +325,10 @@ export default function EthiroliSeminar() {
             </div>
             <div className="masonry-grid">
               {[
-                { src: "https://lh3.googleusercontent.com/aida-public/AB6AXuBCwX-uSrW89XhUS_SOSVql0ul_KxcnmvNq2P-ZSedCT0FvK9Y5u9fE4G6FR7pxVPdolLWLvhjeNvp36T36lWTp9HMBEBhY4m-EG5rSIKI57vP6nBR8WMMeuLgR3PFCzGyvhbnwTG4JNVdgqtuTt3OVgGF8HLafhIxunOrfTZxuUL29ZazpAWfxlgS5EQMID-EVsmFO7yLqrW2EPJ4WqWxk8AUXXf4nzneJwz8QYChs2NN6g4OY9SoBPHHVTfAi34J1oZf36v2ikkWb", caption: "Interactive Session" },
-                { src: "https://lh3.googleusercontent.com/aida-public/AB6AXuChCi9L3xyyOwr3FablE_HmQtVFmlJmkgKzM9JINbXusNc1tdVF90zrzNx8tGB__c-KvVpixAEDEC2j6NYe2bp6hNzqzxpCwZ2sqAX4pf-Sbi_hazAdaR2IBhBFKnVnakZiFyw0_mHxoJ9hXJn2pSBsqWZ2RmdDcHgkj9K4MgiozQQASccSB_YYKH9BwgYOZJ374VowyIu1kKgslPj8M84-pHo6wvLh-SHgnHl41OVW-FeIaWTimz8DCEwbJfiYmXVJqKMjvgeSRBP0", caption: "KSRCT Audience" },
-                { src: "https://lh3.googleusercontent.com/aida-public/AB6AXuBbu54b-tENjprIB-aSF3zPnHp2PqBFV4L8j_iWaI2JB_e6VKIRpHdjTwGQJKK7zLrVBbAePnPsILGHAYWHpd7ZedBe41BU7UZ1ic2t3TEhErymHCQt11Hq7sattD44KSMrgPdTTWMej_RuaOcEB7IleR6vSF266OwSLHwDnNPFJ5EKygUFARuCPnfH0wFjb1uEqmhbpO2dBvX_d71VXV6sTMK-ZHai-h9WPxpIbmXxx5MctGHguCn-0afrgvkXxrSzGTBCZ9vbP936", caption: "Discussing Business Models" },
-                { src: "https://lh3.googleusercontent.com/aida-public/AB6AXuBgfdIy21M8i-Ul8iZ6yHEqrBpRnB0PULzJrNUQjaHQrKOjrNSVOxTxXXWKf1F3NzkdLuBw2QBf6mPDbXULREaVYF_9DQ8xMVnq8SjuXt8peJPODrSEnrV8eouhFR1GNzMB9FnxpZ-luvXYcuMQgJs2WyU6mj0UtjTj7t9Trmd5IxCqW49oucaGvhrjg1cmOt9D0EaamMp1WmXTiAgKm7QUVUr1fb9mAVyez_AaCJ5KAB4i-uYGc9k8YasQefOg0DYFJCcZBVJqXUnz", caption: "Q&A with Students" },
+                { src: "/assets/images/projects/digital-workshop.jpg", caption: "Interactive Session" },
+                { src: "/assets/images/projects/seminar-empowering-students.jpg", caption: "KSRCT Audience" },
+                { src: "/assets/images/projects/webinar-digital-marketing.jpg", caption: "Discussing Business Models" },
+                { src: "/assets/images/projects/career-team.jpg", caption: "Q&A with Students" },
               ].map(({ src, caption }) => (
                 <motion.div key={caption} className="masonry-item gallery-item" variants={fadeUp} transition={{ duration: 0.55 }}>
                   <img src={src} alt={caption} className="gallery-item__img" />

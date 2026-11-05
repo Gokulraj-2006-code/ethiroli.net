@@ -1,68 +1,37 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import SEO from '../components/shared/SEO';
+import ContactMessageForm from '../components/contact/ContactMessageForm';
+import ContactModal from '../components/contact/ContactModal';
+import '../styles/contact-page.css';
 
 const Contact = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        phone: '',
-        email: '',
-        subject: '',
-        message: '',
-        enquiry_type: 'General',
-        meeting_preference: '',
-    });
-    const [submitState, setSubmitState] = useState({
-        loading: false,
-        error: '',
-        success: '',
-    });
+    const [isConversationOpen, setIsConversationOpen] = useState(false);
+    const location = useLocation();
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+    const openConversation = useCallback(() => setIsConversationOpen(true), []);
+    const closeConversation = useCallback(() => setIsConversationOpen(false), []);
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        setSubmitState({ loading: true, error: '', success: '' });
+    // Keep the site header solid dark green on the contact page instead of
+    // the default transparent-to-glass transition.
+    useEffect(() => {
+        document.body.classList.add('contact-page-active');
+        return () => document.body.classList.remove('contact-page-active');
+    }, []);
 
-        try {
-            const rawBase = import.meta.env.VITE_API_BASE_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5000');
-            const apiBase = rawBase.replace(/\/api\/?$/, '');
-            const response = await fetch(`${apiBase}/api/v1/contact-messages`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-            });
+    // Deep links such as /contact_us#faq arrive after the lazy page has
+    // rendered, so the browser's native anchor jump happens too early.
+    useEffect(() => {
+        if (!location.hash) return undefined;
 
-            const payload = await response.json();
-            if (!response.ok) {
-                throw new Error(payload.message || 'Failed to send your message.');
-            }
+        const targetId = decodeURIComponent(location.hash.slice(1));
+        const timer = window.setTimeout(() => {
+            document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 350);
 
-            setFormData({
-                name: '',
-                phone: '',
-                email: '',
-                subject: '',
-                message: '',
-                enquiry_type: 'General',
-                meeting_preference: '',
-            });
-            setSubmitState({
-                loading: false,
-                error: '',
-                success: payload.message || 'Your enquiry was received. Our team will contact you shortly. A meeting is not confirmed until the team confirms it.',
-            });
-        } catch (error) {
-            setSubmitState({
-                loading: false,
-                error: error.message || 'Something went wrong. Please try again.',
-                success: '',
-            });
-        }
-    };
+        return () => window.clearTimeout(timer);
+    }, [location.hash]);
 
     return (
         <div className="contact-page">
@@ -72,8 +41,16 @@ const Contact = () => {
                 canonical="https://ethiroli.net/contact_us"
                 keywords="contact ethiroli, branding agency contact, marketing agency salem, ethiroli phone number, ethiroli address, ethiroli.net"
             />
-            <section className="ab-hero" style={{ backgroundImage: "url('/assets/images/banner/banner.png')" }}>
-                <div className="ab-hero-content">
+            <section className="contact-hero">
+                <div className="contact-hero-content">
+                    <motion.span
+                        className="contact-hero-badge"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <i className="fa-solid fa-sparkles"></i> Let's Connect
+                    </motion.span>
                     <motion.h1
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -91,6 +68,31 @@ const Contact = () => {
                 </div>
             </section>
 
+            <section className="contact-info-section">
+                <div className="contact-info-grid">
+                    <motion.div className="contact-info-card" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4 }}>
+                        <div className="icon"><i className="fa-regular fa-envelope"></i></div>
+                        <h3>Email</h3>
+                        <a href="mailto:ethiroli.net@gmail.com">ethiroli.net@gmail.com</a>
+                    </motion.div>
+                    <motion.div className="contact-info-card" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.1 }}>
+                        <div className="icon"><i className="fa-solid fa-phone"></i></div>
+                        <h3>Phone</h3>
+                        <a href="tel:+916380049042">+91 63800 49042</a>
+                    </motion.div>
+                    <motion.div className="contact-info-card" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.2 }}>
+                        <div className="icon"><i className="fa-solid fa-location-dot"></i></div>
+                        <h3>Address</h3>
+                        <p>1st Floor, Gopala Krishnan Complex, Gugai, Salem, Tamil Nadu 636006</p>
+                    </motion.div>
+                    <motion.div className="contact-info-card" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.3 }}>
+                        <div className="icon"><i className="fa-regular fa-clock"></i></div>
+                        <h3>Working Hours</h3>
+                        <p>Mon - Sat, 9:00 AM - 6:30 PM</p>
+                    </motion.div>
+                </div>
+            </section>
+
             <section className="contact-premium" id="contactFormSection">
                 <motion.div
                     className="contact-panel contact-panel-form"
@@ -102,70 +104,7 @@ const Contact = () => {
                     <p className="contact-badge"><span className="star-rotate">&#9733;</span>Start A Conversation</p>
                     <h2>Send Us A Message</h2>
                     <p className="contact-note">Share your requirement and our team will get back to you within 24 hours.</p>
-                    <form className="contact-form-grid" id="contactForm" onSubmit={handleSubmit} autoComplete="on">
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            placeholder="Your Name *"
-                            required
-                            aria-label="Your Name"
-                            autoComplete="name"
-                        />
-                        <input
-                            type="tel"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            placeholder="Phone Number *"
-                            required
-                            aria-label="Phone Number"
-                            autoComplete="tel"
-                        />
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="Email *"
-                            required
-                            aria-label="Email Address"
-                            autoComplete="email"
-                        />
-                        <input
-                            type="text"
-                            name="subject"
-                            value={formData.subject}
-                            onChange={handleChange}
-                            placeholder="Subject *"
-                            required
-                            aria-label="Subject"
-                            autoComplete="off"
-                        />
-                        <select name="enquiry_type" value={formData.enquiry_type} onChange={handleChange} aria-label="Enquiry type">
-                            <option value="General">General enquiry</option>
-                            <option value="Services">Services</option>
-                            <option value="Careers">Careers</option>
-                            <option value="Internship">Internship</option>
-                            <option value="Meeting">Request a meeting</option>
-                        </select>
-                        {formData.enquiry_type === 'Meeting' && <input name="meeting_preference" type="datetime-local" value={formData.meeting_preference} onChange={handleChange} aria-label="Preferred meeting date and time (optional)" />}
-                        <textarea
-                            name="message"
-                            value={formData.message}
-                            onChange={handleChange}
-                            placeholder="Write your message..."
-                            required
-                            aria-label="Message"
-                            autoComplete="off"
-                        ></textarea>
-                        <button type="submit" className="btn" disabled={submitState.loading}>
-                            {submitState.loading ? 'Sending...' : 'Submit Now'}
-                        </button>
-                        {submitState.error ? <p className="contact-feedback error">{submitState.error}</p> : null}
-                        {submitState.success ? <p className="contact-feedback success">{submitState.success}</p> : null}
-                    </form>
+                    <ContactMessageForm formId="contactForm" idPrefix="contact-page" />
                 </motion.div>
 
                 <motion.div
@@ -190,9 +129,13 @@ const Contact = () => {
                             <i className="fa-solid fa-phone"></i>
                             +91 63800 49042
                         </a>
-                        <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer">
+                        <a
+                            href="https://www.google.com/maps/search/?api=1&query=Gopala+Krishnan+Complex,+Gugai,+Salem,+Tamil+Nadu+636006"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             <i className="fa-solid fa-location-dot"></i>
-                            1st Floor Gopala Krishnan complex guagi, Salem, India 636005
+                            1st Floor, Gopala Krishnan Complex, Gugai, Salem, Tamil Nadu 636006
                         </a>
                     </div>
                     <a className="btn" href="#faq">Read FAQs</a>
@@ -209,9 +152,9 @@ const Contact = () => {
                     <div className="et-faq-list">
                         <div>
                             <details>
-                                <summary title="What services does Eithiroli offer?">What services does Eithiroli offer?</summary>
+                                <summary title="What services does Ethiroli offer?">What services does Ethiroli offer?</summary>
                                 <p className="et-faq-content">
-                                    Eithiroli is a premier branding and marketing agency in Tamil Nadu offering brand strategy, visual identity design, performance marketing, marketing automation, SEO/AEO/GEO optimization, and high-converting lead generation.
+                                    Ethiroli is a premier branding and marketing agency in Tamil Nadu offering brand strategy, visual identity design, performance marketing, marketing automation, SEO/AEO/GEO optimization, and high-converting lead generation.
                                 </p>
                             </details>
                         </div>
@@ -225,7 +168,7 @@ const Contact = () => {
                         </div>
                         <div>
                             <details>
-                                <summary title="How does Eithiroli generate leads for businesses?">How does Eithiroli generate leads for businesses?</summary>
+                                <summary title="How does Ethiroli generate leads for businesses?">How does Ethiroli generate leads for businesses?</summary>
                                 <p className="et-faq-content">
                                     We deploy data-driven performance marketing strategies including multi-channel paid ads, automated marketing funnels, landing page optimization, and analytics tracking to generate high-intent leads and measurable business growth.
                                 </p>
@@ -253,8 +196,8 @@ const Contact = () => {
             <section className="et-map-section">
                 <div className="et-map-frame">
                     <iframe
-                        src="https://www.google.com/maps?q=1st+Floor+Gopala+Krishnan+complex+guagi,+Salem,+India+636005&output=embed"
-                        title="Eithiroli Location"
+                        src="https://www.google.com/maps?q=Gopala+Krishnan+Complex,+Gugai,+Salem,+Tamil+Nadu+636006&output=embed"
+                        title="Ethiroli Location"
                         className="et-map-iframe"
                         allowFullScreen
                         loading="lazy"
@@ -264,11 +207,14 @@ const Contact = () => {
             </section>
             <section className="et-cta-section">
                 <div className="et-cta-content">
-                    <h1>LET'S BUILD IMPACT TOGETHER</h1>
-                    <a href="#contactFormSection" className="et-btn">Start a Conversation</a>
+                    <h2 className="et-cta-title">LET'S BUILD IMPACT TOGETHER</h2>
+                    <button type="button" className="et-btn" onClick={openConversation}>
+                        Start a Conversation
+                    </button>
                 </div>
             </section>
 
+            <ContactModal open={isConversationOpen} onClose={closeConversation} />
         </div>
     );
 };

@@ -1,0 +1,175 @@
+/* ============================================================
+   CONTACT POPUP
+   ============================================================ */
+
+.contact-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(16px, 4vw, 40px);
+    background: rgba(8, 20, 19, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    overflow-y: auto;
+}
+
+.contact-modal {
+    position: relative;
+    width: min(760px, 100%);
+    max-height: min(88vh, 880px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(232, 214, 87, 0.35);
+    border-radius: 26px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(129, 158, 53, 0.16), transparent 42%),
+        linear-gradient(160deg, #fffdf9 0%, #f4efe8 100%);
+    box-shadow: 0 34px 90px rgba(0, 0, 0, 0.45);
+}
+
+.contact-modal::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--base-olive), var(--base-gold), var(--base-clay));
+    z-index: 2;
+}
+
+.contact-modal-scroll {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: clamp(24px, 4vw, 42px);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(129, 158, 53, 0.55) transparent;
+}
+
+.contact-modal-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.contact-modal-scroll::-webkit-scrollbar-thumb {
+    background: rgba(129, 158, 53, 0.55);
+    border-radius: 999px;
+}
+
+.contact-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 3;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid rgba(26, 75, 72, 0.18);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--color-accent);
+    font-size: 1.65rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.contact-modal-close:hover {
+    background: var(--color-accent);
+    color: var(--base-white);
+    transform: rotate(90deg);
+}
+
+.contact-modal-close:focus-visible {
+    outline: 3px solid rgba(129, 158, 53, 0.5);
+    outline-offset: 2px;
+}
+
+.contact-modal-head {
+    padding-right: 56px;
+    margin-bottom: 22px;
+}
+
+.contact-modal-head h2 {
+    margin-bottom: 8px;
+    color: var(--color-accent);
+    font-size: clamp(1.55rem, 3vw, 2.15rem);
+    line-height: 1.15;
+}
+
+.contact-modal-head .contact-note {
+    margin-bottom: 0;
+}
+
+.contact-modal .contact-form-grid {
+    gap: 14px;
+}
+
+.contact-modal-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(26, 75, 72, 0.12);
+    font-size: 0.86rem;
+    color: var(--color-text-muted);
+}
+
+.contact-modal-foot a {
+    color: var(--color-accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.contact-modal-foot a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+    .contact-modal-backdrop {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .contact-modal {
+        width: 100%;
+        max-height: 94vh;
+        border-radius: 24px 24px 0 0;
+    }
+
+    .contact-modal::before {
+        border-radius: 24px 24px 0 0;
+    }
+
+    .contact-modal-scroll {
+        padding: 26px 20px 22px;
+    }
+
+    .contact-modal-close {
+        top: 10px;
+        right: 10px;
+        width: 44px;
+        height: 44px;
+        font-size: 1.45rem;
+        touch-action: manipulation;
+    }
+
+    .contact-modal-head {
+        padding-right: 42px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .contact-modal-close {
+        transition: none;
+    }
+
+    .contact-modal-close:hover {
+        transform: none;
+    }
+}

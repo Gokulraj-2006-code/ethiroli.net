@@ -1,0 +1,227 @@
+/* ============================================================
+   CONTACT MESSAGE FORM
+   Shared by the inline contact panel and the contact popup.
+   ============================================================ */
+
+.contact-form-grid .contact-select {
+    width: 100%;
+    padding: 12px 42px 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(26, 75, 72, 0.18);
+    background-color: rgba(255, 255, 255, 0.95);
+    color: var(--color-text-main);
+    font: inherit;
+    line-height: 1.4;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' fill='none' stroke='%231A4B48' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 12px 8px;
+    cursor: pointer;
+}
+
+.contact-form-grid input:focus,
+.contact-form-grid textarea:focus,
+.contact-form-grid select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(129, 158, 53, 0.18);
+}
+
+.contact-form-grid input::placeholder,
+.contact-form-grid textarea::placeholder {
+    color: rgba(45, 45, 45, 0.48);
+}
+
+.contact-form-grid .contact-field--full {
+    grid-column: 1 / -1;
+}
+
+.contact-form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.contact-form-grid .contact-submit-btn,
+.contact-success-actions .contact-submit-btn {
+    width: auto;
+    min-width: 150px;
+    padding: 12px 26px;
+    border-radius: 999px;
+    font-size: 0.94rem;
+    letter-spacing: 0.02em;
+    box-shadow: 0 12px 24px rgba(175, 67, 30, 0.2);
+}
+
+.contact-form-grid .contact-submit-btn:hover:not(:disabled),
+.contact-success-actions .contact-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 30px rgba(175, 67, 30, 0.28);
+}
+
+.contact-form-grid .contact-submit-btn:disabled,
+.contact-success-actions .contact-submit-btn:disabled {
+    opacity: 0.7;
+    cursor: wait;
+    transform: none;
+}
+
+.contact-privacy {
+    flex: 1 1 240px;
+    margin: 0;
+    font-size: 0.76rem;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+}
+
+.contact-form-status {
+    grid-column: 1 / -1;
+}
+
+.contact-form-status:empty {
+    display: none;
+}
+
+.contact-form-status .contact-feedback {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+
+/* ============================================================
+   SUCCESS PANEL
+   Replaces the form after a submission. Works unchanged inside the
+   inline contact panel and inside the Start A Conversation popup.
+   ============================================================ */
+
+.contact-success-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 30px 22px 26px;
+    border-radius: 18px;
+    border: 1px solid rgba(26, 75, 72, 0.14);
+    background: linear-gradient(180deg, rgba(129, 158, 53, 0.1), rgba(255, 255, 255, 0.72));
+    text-align: center;
+}
+
+.contact-success-icon {
+    display: grid;
+    place-items: center;
+    width: 66px;
+    height: 66px;
+    margin-bottom: 16px;
+    border-radius: 50%;
+    background: var(--color-primary, #819e35);
+    color: #fff;
+    font-size: 2rem;
+    line-height: 1;
+    box-shadow: 0 14px 28px rgba(129, 158, 53, 0.28);
+}
+
+.contact-success-title {
+    margin: 0 0 6px;
+    color: var(--color-text-main, #2d2d2d);
+    font-size: 1.45rem;
+    line-height: 1.25;
+}
+
+.contact-success-title:focus {
+    outline: none;
+}
+
+.contact-success-greeting {
+    margin: 0 0 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-main, #2d2d2d);
+}
+
+.contact-success-copy {
+    max-width: 44ch;
+    margin: 0 0 14px;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--color-text-muted, #666);
+}
+
+.contact-success-ref {
+    margin: 0 0 18px;
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-muted, #666);
+}
+
+.contact-success-ref span {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing: 0.12em;
+    color: var(--color-text-main, #2d2d2d);
+}
+
+.contact-success-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.contact-success-actions .contact-submit-btn--ghost {
+    background: transparent;
+    color: var(--color-accent, #1a4b48);
+    border: 1px solid rgba(26, 75, 72, 0.28);
+    box-shadow: none;
+}
+
+.contact-success-actions .contact-submit-btn--ghost:hover:not(:disabled) {
+    background: rgba(26, 75, 72, 0.08);
+    box-shadow: none;
+}
+
+.contact-success-alt {
+    margin: 0;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: var(--color-text-muted, #666);
+}
+
+.contact-success-alt a {
+    color: var(--color-primary, #819e35);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.contact-success-alt a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+    .contact-form-actions {
+        align-items: stretch;
+    }
+
+    .contact-form-grid .contact-submit-btn,
+    .contact-success-actions .contact-submit-btn {
+        width: 100%;
+    }
+
+    .contact-privacy {
+        flex-basis: 100%;
+    }
+
+    .contact-success-panel {
+        padding: 24px 16px 22px;
+    }
+
+    .contact-success-actions {
+        width: 100%;
+    }
+}

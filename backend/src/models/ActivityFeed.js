@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import pool from '../config/database.js';
 import { decrypt } from '../config/encryption.js';
 
@@ -10,11 +11,26 @@ const safeDecrypt = (v) => {
   return decrypted === v ? null : decrypted;
 };
 
+/** `payload` is a JSON column on fresh installs but a validated LONGTEXT on
+ *  older production schemas. Normalise both so callers always receive an
+ *  object instead of a JSON string. */
+const parsePayload = (raw) => {
+  if (!raw || typeof raw === 'object') return raw;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return raw;
+  }
+};
+
 export default class ActivityFeed {
   static format(row) {
     if (!row) return null;
     return {
       ...row,
+      // `payload` may still be a JSON string on schemas where the column is
+      // LONGTEXT rather than JSON.
+      payload: parsePayload(row.payload),
       // users.full_name / users.email are AES-encrypted at rest; decrypt before
       // exposing to the frontend so users see real names, not ciphertext.
       actor_name: safeDecrypt(row.actor_name) || null,
@@ -28,10 +44,16 @@ export default class ActivityFeed {
   }
 
   static async create({ user_id, actor_id = null, event_type, entity_type, entity_id = null, payload = null }) {
-    const [result] = await pool.execute(
-      `INSERT INTO activity_feeds (user_id, actor_id, event_type, entity_type, entity_id, payload)
-       VALUES (?, ?, ?, ?, ?, ?)`,
+    // The id column is CHAR(36) with a database-side UUID() default, which
+    // means `insertId` is 0. Generate the id in the application so callers can
+    // broadcast the created row immediately (the notification tray needs a
+    // stable key to mark that row as read).
+    const id = crypto.randomUUID();
+    await pool.execute(
+      `INSERT INTO activity_feeds (id, user_id, actor_id, event_type, entity_type, entity_id, payload)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
+        id,
         user_id,
         actor_id,
         event_type,
@@ -40,7 +62,7 @@ export default class ActivityFeed {
         payload ? JSON.stringify(payload) : null
       ]
     );
-    return result.insertId || result.info;
+    return id;
   }
 
   static async update(id, updates) {

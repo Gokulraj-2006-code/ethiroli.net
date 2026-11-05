@@ -9,6 +9,8 @@ import Navbar from './Navbar.jsx';
 import FeedItemDetail from './FeedItemDetail.jsx';
 import { useAuth } from '../hooks/useAuth.js';
 
+const isContactFeedItem = (item) => String(item?.entity_type || '').toLowerCase() === 'contactenquiry';
+
 export default function MainLayout() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -78,22 +80,35 @@ export default function MainLayout() {
   /**
    * The feed row whose full record is open, or null.
    *
-   * Scoped to the EMPLOYEE role on purpose. The Activity Feed tray is shared by
-   * every portal, and the request was to make clicking a notification open the
-   * message - for the employee portal only. Gating on the active role keeps every
-   * other portal's tray byte-for-byte identical in behaviour: their rows stay
-   * plain text with no click handler and no dialog.
+   * Employee rows open the full record in a dialog. HR and CEO contact
+   * notifications instead navigate to the matching enquiry. All other roles
+   * keep the original plain-text tray behaviour.
    */
   const [selectedFeedItem, setSelectedFeedItem] = useState(null);
 
-  const isEmployeePortal = ['EMPLOYEE', 'INTERN'].includes(String(user?.role || '').toUpperCase());
+  const normalizedRole = String(user?.role || '').toUpperCase();
+  const isEmployeePortal = ['EMPLOYEE', 'INTERN'].includes(normalizedRole);
+  // Contact enquiries are actionable for the people who resolve them: opening
+  // one takes HR / the CEO straight to the matching row on the enquiries page.
+  const contactFeedPath = normalizedRole === 'HR'
+    ? '/app/hr/enquiries'
+    : normalizedRole === 'SUPER_ADMIN'
+      ? '/app/super-admin/enquiries'
+      : null;
+  const isFeedItemActionable = (item) => isEmployeePortal || Boolean(contactFeedPath && isContactFeedItem(item));
 
   const openFeedItem = useCallback(
     (item) => {
-      if (!isEmployeePortal) return;
-      setSelectedFeedItem(item);
+      if (isEmployeePortal) {
+        setSelectedFeedItem(item);
+        return;
+      }
+      if (contactFeedPath && isContactFeedItem(item)) {
+        setFeedOpen(false);
+        navigate(contactFeedPath, { state: { enquiryId: item.entity_id } });
+      }
     },
-    [isEmployeePortal]
+    [isEmployeePortal, contactFeedPath, navigate]
   );
 
   return (
@@ -138,7 +153,7 @@ export default function MainLayout() {
             className="closeBtn" 
             onClick={() => setFeedOpen(false)}
             aria-label="Close activity feed"
-            style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: 'var(--color-text-muted)' }}
+            style={{ background: 'none', border: 'none', fontSize: '28px', fontWeight: 700, lineHeight: 1, padding: '2px 6px', cursor: 'pointer', color: 'var(--color-text-muted)' }}
           >
             &times;
           </button>
@@ -150,17 +165,20 @@ export default function MainLayout() {
               <p className="emptyFeed" style={{ margin: 0 }}>No recent activity.</p>
             </div>
           ) : (
-            feedItems.map((item) => (
-              // For the employee portal the whole row opens the full record; for
-              // every other role this renders exactly as it did before.
+            feedItems.map((item) => {
+              const actionable = isFeedItemActionable(item);
+              return (
+              // Employee rows open the full record; HR / CEO contact-notification
+              // rows jump to the matching entry on the enquiries page. Every
+              // other role still renders exactly as it did before.
               <div
                 key={item.id}
-                className={`feedItem ${!item.is_read ? 'unreadItem' : ''}${isEmployeePortal ? ' feedItem--clickable' : ''}`}
-                {...(isEmployeePortal
+                className={`feedItem ${!item.is_read ? 'unreadItem' : ''}${actionable ? ' feedItem--clickable' : ''}`}
+                {...(actionable
                   ? {
                     role: 'button',
                     tabIndex: 0,
-                    'aria-label': `Open notification: ${item.payload?.message || item.event_type}`,
+                    'aria-label': `${isEmployeePortal ? 'Open notification' : 'Open contact enquiry'}: ${item.payload?.message || item.event_type}`,
                     onClick: () => openFeedItem(item),
                     onKeyDown: (e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
@@ -189,7 +207,8 @@ export default function MainLayout() {
                   )}
                 </div>
               </div>
-            ))
+              );
+            })
           )}
         </div>
       </aside>

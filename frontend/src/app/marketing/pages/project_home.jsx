@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import SEO from '../components/shared/SEO';
+import '../styles/contact-page.css';
 
 const projects = [
   {
@@ -30,7 +31,7 @@ const projects = [
     title: 'Empowering Students',
     description:
       'A social media marketing seminar helping students learn visibility, branding, and digital confidence.',
-    image: '/assets/images/banner/gals.png',
+    image: '/assets/images/projects/seminar-empowering-students.jpg',
     year: 2026,
     keywords: ['students', 'social media', 'marketing', 'seminar'],
     link: '/projects/Ethiroliseminarjayarani',
@@ -40,7 +41,7 @@ const projects = [
   { 
   title: 'Digital Marketing in the Web Era', 
   description: 'A comprehensive webinar at KSRCT on building successful business models through digital strategy, brand visibility, and modern marketing channels.', 
-  image: '/assets/images/banner/gals.png', 
+  image: '/assets/images/projects/webinar-digital-marketing.jpg',
   year: 2026, 
   keywords: ['ksrct', 'digital marketing', 'business models', 'webinar', 'branding'], 
   link: '/projects/Ethiroliseminarksrct', 
@@ -73,6 +74,11 @@ const ProjectHome = () => {
   const [selectedYear, setSelectedYear] = useState('All');
   const [sortMode, setSortMode] = useState('recent');
 
+  useEffect(() => {
+    document.body.classList.add('contact-page-active');
+    return () => document.body.classList.remove('contact-page-active');
+  }, []);
+
   const filteredProjects = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
 
@@ -95,6 +101,14 @@ const ProjectHome = () => {
   }, [searchTerm, selectedYear, sortMode]);
 
   return (
+    <>
+      <section className="contact-hero">
+        <div className="contact-hero-content">
+          <span className="contact-hero-badge"><i className="fa-solid fa-briefcase"></i> Our Work</span>
+          <h1>Projects</h1>
+          <p>Explore our latest work, search by keyword, filter by year, and sort by recent impact.</p>
+        </div>
+      </section>
     <section className="et-projects-section project-home-page">
       <SEO
         title="Projects & Case Studies — Ethiroli Branding & Marketing Agency"
@@ -210,6 +224,7 @@ const ProjectHome = () => {
         </AnimatePresence>
       </div>
     </section>
+    </>
   );
 };
 

@@ -200,6 +200,13 @@ export const deleteCandidate = asyncHandler(async (req, res) => {
 
 export const deleteCareerApplication = asyncHandler(async (req, res) => {
   const { id } = req.params;
+
+  const [rows] = await pool.execute('SELECT * FROM career_applications WHERE id = ?', [id]);
+  if (!rows || rows.length === 0) {
+    throw new NotFoundError('Career application not found');
+  }
+  const application = rows[0];
+
   const [result] = await pool.execute('DELETE FROM career_applications WHERE id = ?', [id]);
   if (result.affectedRows === 0) {
     throw new NotFoundError('Career application not found');
@@ -210,11 +217,17 @@ export const deleteCareerApplication = asyncHandler(async (req, res) => {
     action: 'DELETE_CAREER_APPLICATION',
     entity_type: 'CAREER_APPLICATION',
     entity_id: String(id),
+    old_value: application,
     ip_address: req.ip || req.headers['x-forwarded-for'] || 'unknown',
     user_agent: req.headers['user-agent']
   });
 
-  return success(res, 200, { id }, 'Career application deleted successfully');
+  const payload = { id: Number(id), email: application.email };
+  broadcastToRole('HR', 'career_application_deleted', payload);
+  broadcastToRole('ADMIN', 'career_application_deleted', payload);
+  broadcastToRole('SUPER_ADMIN', 'career_application_deleted', payload);
+
+  return success(res, 200, payload, 'Career application deleted successfully');
 });
 
 export const convertCandidateToEmployee = asyncHandler(async (req, res) => {

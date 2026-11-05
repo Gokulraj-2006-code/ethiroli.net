@@ -28,6 +28,16 @@ const feedSlice = createSlice({
       state.items.unshift(action.payload);
       state.unreadCount += 1;
     },
+    removeFeedItem: (state, action) => {
+      const { id, entity_id: entityId } = action.payload || {};
+      const before = state.items.length;
+      state.items = state.items.filter((item) => {
+        if (id && item.id === id) return false;
+        if (entityId && item.entity_id === entityId) return false;
+        return true;
+      });
+      state.unreadCount = state.items.filter((item) => !item.is_read).length;
+    },
     markFeedItemRead: (state, action) => {
       const index = state.items.findIndex(item => item.id === action.payload);
       if (index !== -1 && !state.items[index].is_read) {
@@ -43,6 +53,7 @@ export const {
   fetchFeedSuccess,
   fetchFeedFailure,
   addFeedItem,
+  removeFeedItem,
   markFeedItemRead
 } = feedSlice.actions;
 

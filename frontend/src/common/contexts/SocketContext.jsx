@@ -5,7 +5,7 @@ import { useAuth } from './AuthContext.jsx';
 import { connectSocket, disconnectSocket } from '../../socket.js';
 import { useAppDispatch } from '../../store/hooks.js';
 import { addLead, updateLeadItem } from '../../store/slices/leadsSlice.js';
-import { addFeedItem } from '../../store/slices/feedSlice.js';
+import { addFeedItem, removeFeedItem } from '../../store/slices/feedSlice.js';
 
 const SocketContext = createContext(null);
 
@@ -30,9 +30,14 @@ export const SocketProvider = ({ children }) => {
 
       s.on('new_activity', (activity) => {
         dispatch(addFeedItem(activity));
-        if (Notification.permission === 'granted') {
-          new Notification('Ethiroli Alert', { body: activity.message });
+        const text = activity?.payload?.message || activity?.message;
+        if (text && Notification.permission === 'granted') {
+          new Notification('Ethiroli Alert', { body: text });
         }
+      });
+
+      s.on('contact_enquiry_deleted', (payload) => {
+        dispatch(removeFeedItem({ entity_id: payload?.inquiry_id }));
       });
 
       // HR-specific live data events
@@ -75,6 +80,7 @@ export const SocketProvider = ({ children }) => {
         s.off('lead_created');
         s.off('lead_status_changed');
         s.off('new_activity');
+        s.off('contact_enquiry_deleted');
         s.off('hr_attendance_update');
         s.off('hr_leave_request');
         s.off('hr_employee_update');

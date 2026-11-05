@@ -1,7 +1,9 @@
 import crypto from 'crypto';
 import pool from '../config/database.js';
 import AuditLog from '../models/AuditLog.js';
-import { broadcastToRole } from '../services/socketService.js';
+import ActivityFeed from '../models/ActivityFeed.js';
+import { broadcastToRole, broadcastToUser } from '../services/socketService.js';
+import { logger } from '../config/logger.js';
 import { createNotification } from './notificationController.js';
 import { asyncHandler } from '../middleware/errorHandler.js';
 import { success } from '../utils/response.js';
@@ -27,15 +29,25 @@ function present(row) {
 
 export const listContactMessages = asyncHandler(async (req, res) => {
   const params = [];
-  let sql = `SELECT i.*, u.full_name AS assigned_to_name FROM contact_inquiries i
-    LEFT JOIN users u ON u.id=i.assigned_to WHERE i.is_deleted=0`;
+  let where = 'i.is_deleted=0';
   if (req.query.status && VALID_STATUSES.includes(String(req.query.status).toUpperCase())) {
-    sql += ' AND i.status=?'; params.push(String(req.query.status).toUpperCase());
+    where += ' AND i.status=?'; params.push(String(req.query.status).toUpperCase());
   }
-  sql += ' ORDER BY i.created_at DESC LIMIT 250';
-  const [rows] = await pool.execute(sql, params);
+  // The dashboard only needs the newest handful; the enquiries table still
+  // requests the full 250-row window.
+  const requested = Number.parseInt(req.query.limit, 10);
+  const limit = Number.isFinite(requested) ? Math.min(Math.max(requested, 1), 250) : 250;
+  const [rows] = await pool.execute(`SELECT i.*, u.full_name AS assigned_to_name FROM contact_inquiries i
+    LEFT JOIN users u ON u.id=i.assigned_to WHERE ${where} ORDER BY i.created_at DESC LIMIT ${limit}`, params);
+  const [counts] = await pool.execute(`SELECT COUNT(*) AS total,
+    COALESCE(SUM(i.status='NEW'), 0) AS new_count FROM contact_inquiries i WHERE ${where}`, params);
   const items = rows.map(present);
-  return success(res, 200, items, 'Contact enquiries retrieved', { total: items.length });
+  res.locals.meta = {
+    total: Number(counts[0]?.total || 0),
+    new_count: Number(counts[0]?.new_count || 0),
+    returned: items.length
+  };
+  return success(res, 200, items, 'Contact enquiries retrieved');
 });
 
 export const getContactMessage = asyncHandler(async (req, res) => {
@@ -68,18 +80,63 @@ export const createContactMessage = asyncHandler(async (req, res) => {
 
   const id = crypto.randomUUID();
   const status = preference || /meeting/i.test(type) ? 'MEETING_REQUESTED' : 'NEW';
+  const cleanPhone = phone ? String(phone).trim() : null;
   await pool.execute(`INSERT INTO contact_inquiries
     (inquiry_id, first_name, last_name, email, phone, subject, message, inquiry_source, category, status, meeting_preference)
     VALUES (?, ?, ?, ?, ?, ?, ?, 'WEBSITE', ?, ?, ?)`,
-  [id, first_name, last_name, cleanEmail, phone ? String(phone).trim() : null, cleanSubject, cleanMessage, type, status, preference]);
-  const inquiry = { inquiry_id: id, name: cleanName, email: cleanEmail, phone: phone || null, subject: cleanSubject, message: cleanMessage, category: type, status, meeting_preference: preference };
+  [id, first_name, last_name, cleanEmail, cleanPhone, cleanSubject, cleanMessage, type, status, preference]);
+  const inquiry = { inquiry_id: id, name: cleanName, email: cleanEmail, phone: cleanPhone, subject: cleanSubject, message: cleanMessage, category: type, status, meeting_preference: preference };
   broadcastToRole('HR', 'new_contact_message', inquiry);
   broadcastToRole('SUPER_ADMIN', 'new_contact_message', inquiry);
-  // Notify HR and CEO
+
+  // Contact pipeline: every active HR and CEO account receives an Activity
+  // Feed row (the tray the HR portal actually renders), a bell notification,
+  // and a live socket event. Notification failures must never lose the
+  // enquiry that already committed above, so each channel is best-effort.
   const [hrUsers] = await pool.execute("SELECT id FROM users WHERE role IN ('HR','SUPER_ADMIN') AND is_active=1");
+  const feedPayload = {
+    message: `New website enquiry from ${cleanName}: ${cleanSubject}`,
+    inquiry_id: id,
+    name: cleanName,
+    email: cleanEmail,
+    phone: cleanPhone,
+    subject: cleanSubject,
+    category: type,
+    status,
+    meeting_preference: preference ? preference.toISOString() : null,
+    link: '/app/hr/enquiries'
+  };
   for (const u of hrUsers) {
-    await createNotification(u.id, 'CONTACT_ENQUIRY', 'New Contact Us message', `New enquiry from ${cleanName}: ${cleanSubject}`, 'CONTACT_INQUIRY', id);
+    try {
+      const feedId = await ActivityFeed.create({
+        user_id: u.id,
+        actor_id: null,
+        event_type: 'CONTACT_ENQUIRY_RECEIVED',
+        entity_type: 'ContactEnquiry',
+        entity_id: id,
+        payload: feedPayload
+      });
+      broadcastToUser(u.id, 'new_activity', {
+        id: feedId,
+        user_id: u.id,
+        event_type: 'CONTACT_ENQUIRY_RECEIVED',
+        entity_type: 'ContactEnquiry',
+        entity_id: id,
+        payload: feedPayload,
+        is_read: false,
+        created_at: new Date().toISOString()
+      });
+    } catch (feedError) {
+      logger.error('Could not create contact enquiry activity feed row', { userId: u.id, inquiryId: id, error: feedError.message });
+    }
+    try {
+      await createNotification(u.id, 'CONTACT_ENQUIRY', 'New Contact Us message', `New enquiry from ${cleanName}: ${cleanSubject}`, 'CONTACT_INQUIRY', id);
+    } catch (notificationError) {
+      logger.error('Could not create contact enquiry bell notification', { userId: u.id, inquiryId: id, error: notificationError.message });
+    }
   }
+
+  return success(res, 201, { id }, 'Your enquiry has been received. Our team will contact you within 24 hours.');
 });
 
 export const updateContactMessage = asyncHandler(async (req, res) => {
@@ -103,7 +160,26 @@ export const updateContactMessage = asyncHandler(async (req, res) => {
 });
 
 export const deleteContactMessage = asyncHandler(async (req, res) => {
-  throw new BadRequestError('Contact enquiries are retained for history; close them instead.');
+  const [existing] = await pool.execute('SELECT inquiry_id FROM contact_inquiries WHERE inquiry_id=? AND is_deleted=0', [req.params.id]);
+  if (!existing.length) throw new NotFoundError('Contact enquiry not found');
+  // Capture the Activity Feed rows before removing them so the HR portals can
+  // drop the matching notification from their trays in real time.
+  let activityIds = [];
+  try {
+    const [feedRows] = await pool.execute('SELECT id FROM activity_feeds WHERE entity_type=? AND entity_id=?', ['ContactEnquiry', req.params.id]);
+    activityIds = feedRows.map((row) => row.id);
+  } catch (e) { console.error('Could not read contact enquiry activity feeds:', e.message); }
+  // Remove the related HR notification trail as well, so the bell inbox and
+  // Activity Feed no longer reference an enquiry that no longer exists.
+  try { await pool.execute('DELETE FROM notifications WHERE related_entity_type=? AND related_entity_id=?', ['CONTACT_INQUIRY', req.params.id]); } catch (e) { console.error('Could not delete contact enquiry notifications:', e.message); }
+  try { await pool.execute('DELETE FROM activity_feeds WHERE entity_type=? AND entity_id=?', ['ContactEnquiry', req.params.id]); } catch (e) { console.error('Could not delete contact enquiry activity feeds:', e.message); }
+  await pool.execute('UPDATE contact_inquiries SET is_deleted=1, deleted_at=NOW() WHERE inquiry_id=? AND is_deleted=0', [req.params.id]);
+  // Tell every HR / CEO client to drop the notification from their tray.
+  broadcastToRole('HR', 'contact_enquiry_deleted', { inquiry_id: req.params.id, activity_ids: activityIds });
+  broadcastToRole('SUPER_ADMIN', 'contact_enquiry_deleted', { inquiry_id: req.params.id, activity_ids: activityIds });
+  await AuditLog.create({ user_id: req.user.id, action: 'DELETE_CONTACT_ENQUIRY', entity_type: 'CONTACT_ENQUIRY', entity_id: req.params.id,
+    new_value: { deleted: true }, ip_address: req.ip || 'unknown', user_agent: req.headers['user-agent'] });
+  return success(res, 200, { id: req.params.id }, 'Enquiry deleted');
 });
 
 export const convertInquiryToLead = asyncHandler(async (req, res) => {
