@@ -7,9 +7,11 @@ import JciJourney from './jci/JciJourney';
 import JciAlumni from './jci/JciAlumni';
 import JciEligibility from './jci/JciEligibility';
 import JciFAQ from './jci/JciFAQ';
+import ApplyModal from '../career/ApplyModal';
 
 const JciDigitalSkills = () => {
     const [activeFaq, setActiveFaq] = useState(null);
+    const [isApplyOpen, setIsApplyOpen] = useState(false);
 
     const toggleFaq = (index) => {
         setActiveFaq(activeFaq === index ? null : index);
@@ -171,9 +173,16 @@ const JciDigitalSkills = () => {
                 canonical="https://ethiroli.net/projects/jci-digital-skills"
                 keywords="jci digital skills, women empowerment, digital marketing salem, ethiroli initiative, branding training"
             />
-            <JciHero 
-                {...projectData.hero} 
-                onCtaClick={() => document.getElementById('eligibility')?.scrollIntoView()} 
+            <JciHero
+                {...projectData.hero}
+                primaryCta={{
+                    label: 'Apply Now',
+                    onClick: () => setIsApplyOpen(true),
+                }}
+                secondaryCta={{
+                    label: 'Explore Program',
+                    onClick: () => document.getElementById('eligibility')?.scrollIntoView({ behavior: 'smooth' }),
+                }}
             />
             
             <JciMission {...projectData.mission} />
@@ -195,13 +204,28 @@ const JciDigitalSkills = () => {
                 onToggle={toggleFaq} 
             />
             
-            <section className="jci-hero1" style={{ backgroundImage: "url('/assets/images/banner/banner.png')" , backgroundSize: 'cover', backgroundPosition: 'center', padding: '4rem 2rem', display: 'flex', }}>
+            <section
+                className="jci-hero1"
+                style={{
+                    backgroundImage: "linear-gradient(90deg, rgba(8, 20, 19, 0.94) 0%, rgba(8, 20, 19, 0.72) 48%, rgba(8, 20, 19, 0.32) 100%), url('/assets/images/founder/WhatsApp Image 2026-03-16 at 2.11.29 PM.jpeg')",
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    padding: '4rem 2rem',
+                    display: 'flex',
+                }}
+            >
                 <div style={{ color: 'white' }}>
                     <h2 style={{ color: 'white', fontFamily: 'var(--jci-font-heading)', fontSize: '3rem', marginBottom: '1.5rem' }}>Be Part of the Journey</h2>
-                    <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '1.2rem', marginBottom: '2.5rem' }}>Your involvement shapes the future of women in media and technology.</p>
-                    <button className="jci-btn-primary jci-btn-clay">Apply Now</button>
+                    <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '1.2rem', marginBottom: '2.5rem' }}>Your involvement shapes the future of women in media and technology.</p>
+                    <button type="button" className="jci-btn-primary jci-btn-clay" onClick={() => setIsApplyOpen(true)}>Apply Now</button>
                 </div>
             </section>
+
+            <ApplyModal
+                open={isApplyOpen}
+                role="JCI Women Digital Skills Program"
+                onClose={() => setIsApplyOpen(false)}
+            />
         </div>
     );
 };

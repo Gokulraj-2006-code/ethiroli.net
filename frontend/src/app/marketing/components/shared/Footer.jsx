@@ -46,7 +46,7 @@ const Footer = () => {
                     <h4 className="et-footer-title">Contact Us</h4>
                     <div>
                         <p><strong>Our Address</strong></p>
-                        <p>1st Floor Gopala Krishnan complex guagi, Salem, India 636005</p>
+                        <p>1st Floor, Gopala Krishnan Complex, Gugai, Salem, Tamil Nadu 636006</p>
                     </div>
                     <div>
                         <p><strong>Phone Number</strong></p>

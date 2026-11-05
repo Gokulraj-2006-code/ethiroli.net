@@ -5,7 +5,7 @@ const JciHero = ({ title, subtitle, tag, primaryCta, secondaryCta }) => {
     return (
         <section
             className="jci-hero"
-            style={{ backgroundImage: "url('/assets/images/banner/banner.png')" }}
+            style={{ backgroundImage: "url('/assets/images/projects/jci-women-digital-skills.jpg')" }}
         >
             <div className="jci-hero-overlay" />
             <div className="jci-hero-content">

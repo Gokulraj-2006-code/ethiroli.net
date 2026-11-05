@@ -5,7 +5,7 @@ const CareerHero = () => {
   return (
     <section
       className="ab-hero"
-      style={{ backgroundImage: "url('/assets/images/banner/banner.png')" }}
+      style={{ backgroundImage: "linear-gradient(135deg, rgba(8, 20, 19, 0.86), rgba(26, 75, 72, 0.62)), url('/assets/images/projects/career-team.jpg')" }}
     >
       <div className="ab-hero-content">
         <motion.h1

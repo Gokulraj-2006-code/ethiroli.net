@@ -85,6 +85,25 @@ export const ensureEssentialTables = async () => {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `);
 
+    // 4b. Older databases predate the contact workflow. The public form now
+    //     writes these columns, so add them on startup rather than relying on
+    //     a manually-run migration. Mirrors 024_contact_workflow.sql.
+    for (const ddl of [
+      `ALTER TABLE contact_inquiries ADD COLUMN IF NOT EXISTS category VARCHAR(80) NOT NULL DEFAULT 'General'`,
+      `ALTER TABLE contact_inquiries ADD COLUMN IF NOT EXISTS status ENUM('NEW','IN_PROGRESS','AWAITING_RESPONSE','MEETING_REQUESTED','RESOLVED','CLOSED') NOT NULL DEFAULT 'NEW'`,
+      `ALTER TABLE contact_inquiries ADD COLUMN IF NOT EXISTS meeting_preference DATETIME NULL`,
+      `ALTER TABLE contact_inquiries ADD COLUMN IF NOT EXISTS assigned_to CHAR(36) NULL`,
+      `ALTER TABLE contact_inquiries ADD COLUMN IF NOT EXISTS legacy_message_id INT NULL`
+    ]) {
+      try {
+        await pool.execute(ddl);
+      } catch (colErr) {
+        try {
+          await pool.execute(ddl.replace('ADD COLUMN IF NOT EXISTS', 'ADD COLUMN'));
+        } catch (_) {}
+      }
+    }
+
     // 5. Ensure avatar_url column on users table
     try {
       await pool.execute(`
@@ -125,6 +144,28 @@ export const ensureEssentialTables = async () => {
         INDEX idx_pn_user (user_id),
         INDEX idx_pn_user_unread (user_id, is_read),
         INDEX idx_pn_created (created_at)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `);
+
+    // 6b. Bell-notification inbox used by /v1/bell-notifications and the HR
+    //     Messages page. Like push_notifications above, it was referenced by
+    //     controllers but never declared in the shipped schema. Contact
+    //     enquiries write here in addition to the Activity Feed.
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS notifications (
+        id CHAR(36) PRIMARY KEY,
+        recipient_user_id CHAR(36) NOT NULL,
+        type VARCHAR(100) NOT NULL,
+        title VARCHAR(255) NOT NULL,
+        message TEXT,
+        related_entity_type VARCHAR(100) DEFAULT NULL,
+        related_entity_id CHAR(36) DEFAULT NULL,
+        is_read TINYINT(1) NOT NULL DEFAULT 0,
+        read_at DATETIME DEFAULT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_notifications_recipient (recipient_user_id, is_read, created_at),
+        INDEX idx_notifications_entity (related_entity_type, related_entity_id),
+        CONSTRAINT fk_notifications_recipient FOREIGN KEY (recipient_user_id) REFERENCES users(id) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `);
 
@@ -250,7 +291,7 @@ export const ensureEssentialTables = async () => {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `);
 
-    console.log('Essential tables (contact_messages, career_applications, candidates, contact_inquiries, users.avatar_url, users.is_intern_head, push_notifications, student_projects ownership, attendance.status LEAVE, leaves, leave_balances, hr_requests) verified/created.');
+    console.log('Essential tables (contact_messages, career_applications, candidates, contact_inquiries, contact workflow columns, users.avatar_url, users.is_intern_head, push_notifications, notifications, student_projects ownership, attendance.status LEAVE, leaves, leave_balances, hr_requests) verified/created.');
 
   } catch (err) {
     console.warn('Warning checking essential tables on startup:', err.message);

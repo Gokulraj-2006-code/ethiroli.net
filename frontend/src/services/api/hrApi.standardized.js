@@ -191,6 +191,12 @@ export const listCareerApplications = async (params = {}) => {
   }
 };
 
+export const deleteCareerApplication = async (applicationId) => {
+  return standardFetch(
+    axiosInstance.delete(`/v1/career-applications/applications/${encodeURIComponent(applicationId)}`)
+  );
+};
+
 /**
  * Inquiries
  */

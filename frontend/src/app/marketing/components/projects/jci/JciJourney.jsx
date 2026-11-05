@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const JciJourney = ({ title, description, steps }) => {
+const JciJourney = ({ title, description, steps, roadmap }) => {
+    const items = Array.isArray(steps) ? steps : (Array.isArray(roadmap) ? roadmap : []);
     return (
         <section className="jci-section-spacing">
             <div className="jci-section-header">
@@ -10,7 +11,7 @@ const JciJourney = ({ title, description, steps }) => {
             </div>
             
             <div className="jci-journey-grid">
-                {steps.map((step, idx) => (
+                {items.map((step, idx) => (
                     <motion.div 
                         key={idx} 
                         className="jci-journey-card"
@@ -20,7 +21,7 @@ const JciJourney = ({ title, description, steps }) => {
                         transition={{ delay: idx * 0.2, duration: 0.8 }}
                     >
                         <div className="jci-journey-number">{idx + 1}</div>
-                        <h3>{step.title}</h3>
+                        <h3>{step.title || step.phase}</h3>
                         <p>{step.description}</p>
                         
                         <div className="jci-journey-tags">

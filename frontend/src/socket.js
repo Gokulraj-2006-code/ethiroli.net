@@ -7,7 +7,7 @@ const SOCKET_URL = configuredSocketUrl
   ? new URL(configuredSocketUrl, window.location.origin).origin
   : import.meta.env.PROD
     ? window.location.origin
-    : 'http://localhost:5101';
+    : 'http://localhost:5000';
 
 let socket = null;
 
