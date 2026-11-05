@@ -101,6 +101,14 @@ const studentProjects = [
     tags: ['Dental Clinic', 'Web Design', 'Student Project'],
     link: 'https://dentalto.vercel.app/',
   },
+  {
+    id: 'arun-realestate',
+    title: 'Arun Real Estate',
+    subtitle: 'Real Estate Group — Tamil Nadu, India',
+    image: '/assets/images/services/student_realestate.jpg',
+    tags: ['Real Estate', 'Property Portal', 'Student Project'],
+    link: 'https://arealestate.vercel.app/',
+  },
 ];
 
 const disciplines = [

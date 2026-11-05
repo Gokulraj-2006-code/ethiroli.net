@@ -5876,12 +5876,19 @@ details[open] summary:after {
 
 /* Student-work cards: whole card is the demo link */
 .et-srv-student {
-    padding-top: 0;
+    /* Nudge the whole student section lower so the badge/title and the
+       first card row line up with the case-study grid above it.
+       Mirrors the .et-srv-showcase-header rhythm (title -> cards at 2.25rem). */
+    padding-top: clamp(56px, 7vh, 96px);
+}
+
+.et-srv-student .et-srv-showcase-intro {
+    margin-bottom: 2.25rem;
 }
 
 .et-srv-student-intro,
 .et-srv-showcase-intro {
-    max-width: 640px;
+    max-width: 32rem;
 }
 
 .et-srv-student-card {
