@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 60" width="300" height="60" fill="none">
+  <g transform="translate(10, 8)">
+    <rect x="0" y="0" width="44" height="44" rx="12" fill="#0E5F8A" />
+    <path d="M6 32 L17 16 L23 26 L30 19 L43 36 Z" fill="#FFFFFF" opacity="0.95" />
+    <circle cx="34" cy="13" r="4" fill="#FFD54F" />
+  </g>
+  <text x="66" y="27" font-family="'Montserrat', 'Inter', sans-serif" font-size="16" font-weight="900" fill="#063A54" letter-spacing="1.5">ARUVI</text>
+  <text x="66" y="44" font-family="'Montserrat', 'Inter', sans-serif" font-size="11" font-weight="600" fill="#0E5F8A" letter-spacing="3.5">TOURS</text>
+</svg>

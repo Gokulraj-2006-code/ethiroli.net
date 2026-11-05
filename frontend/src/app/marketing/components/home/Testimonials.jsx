@@ -1,45 +1,59 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 
 const testimonials = [
     {
-        quote: "Ethiroli transformed our brand presence. Professional, creative and results-driven.",
-        name: "Dr. Karthik",
-        company: "Aarogya Hospitals",
-        avatar: "/assets/images/team/founder.png",
+        quote: "Idhu Namma Spot — Salem's spot for coffee & snacks. Rated 4.8/5 (165 reviews) — 'cool atmosphere'.",
+        name: "ATTI CAFE",
+        company: "Rated 4.8/5 · Salem, TN",
+        logo: "/assets/images/logos/atti_cafe.svg",
         stars: "★★★★★"
     },
     {
-        quote: "Our social media engagement increased significantly. Great team to work with!",
-        name: "Priya S",
-        company: "Sri Sai Foods",
-        avatar: "/assets/images/team/reshma.png",
+        quote: "Salem's favorite bakery — teacakes, cheese buns & banana cake. Cozy vibes, melt-in-your-mouth bakes.",
+        name: "PASTRY NATION",
+        company: "Bakery & Cafe · Salem, TN",
+        logo: "/assets/images/logos/pastry_nation.svg",
         stars: "★★★★★"
     },
     {
-        quote: "They built our website and automated our lead process. Highly recommended!",
-        name: "Manoj Kumar",
-        company: "Maruthi Constructions",
-        avatar: "/assets/images/team/co-founder.png",
+        quote: "Job training & placements — Salem's trusted recruitment consultancy. 'Jobs with good salaries via their guidance.'",
+        name: "JAYDEV CONSULTANCY",
+        company: "Job Consultancy · Salem, TN",
+        logo: "/assets/images/logos/jaydev.svg",
+        stars: "★★★★★"
+    },
+    {
+        quote: "Taste of 1952 — famous wood-fire mutton biryani. Rated 4.0/5 (1,445 reviews). A pioneer since 1952.",
+        name: "MAVALLI BIRIYANI",
+        company: "Rated 4.0/5 · Bangalore",
+        logo: "/assets/images/logos/mavalli_biriyani.svg",
+        stars: "★★★★☆"
+    },
+    {
+        quote: "Junior Chamber LO under JCI India — leadership training for young professionals aged 18–40.",
+        name: "JCI ELITE",
+        company: "Junior Chamber · Salem, TN",
+        logo: "/assets/images/logos/jci_elite.svg",
+        stars: "★★★★★"
+    },
+    {
+        quote: "Best tour operator in Tamil Nadu — customized, budget-friendly trips. Rated 4.7/5 on Justdial.",
+        name: "ARUVI TOURS",
+        company: "Tour Operator · Salem, TN",
+        logo: "/assets/images/logos/aruvi_tours.svg",
         stars: "★★★★★"
     }
 ];
 
+// Render the set twice so the auto-scroll loops seamlessly (translateX -50%).
+const marqueeItems = [...testimonials, ...testimonials];
+
 const Testimonials = () => {
-    const [page, setPage] = useState(0);
-
-    const handleNext = () => {
-        setPage((prev) => (prev + 1) % testimonials.length);
-    };
-
-    const handlePrev = () => {
-        setPage((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-    };
-
     return (
         <section className="replica-testimonials-section" id="testimonials">
             <div className="replica-container">
-                <motion.div 
+                <motion.div
                     className="replica-test-header"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -54,45 +68,49 @@ const Testimonials = () => {
                         </div>
                         <h2 className="replica-test-title">What Our Clients Say</h2>
                     </div>
-                    <div className="replica-arrows">
-                        <button className="replica-arrow-btn" aria-label="Previous" onClick={handlePrev}>&larr;</button>
-                        <button className="replica-arrow-btn" aria-label="Next" onClick={handleNext}>&rarr;</button>
-                    </div>
                 </motion.div>
 
-                <div className="replica-test-grid">
-                    {testimonials.map((item, idx) => (
-                        <motion.div 
-                            className="replica-test-card" 
-                            key={idx}
-                            initial={{ opacity: 0, y: 35 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.55, delay: idx * 0.14 }}
-                            whileHover={{ y: -8, transition: { duration: 0.25 } }}
-                        >
-                            <div className="replica-quote-icon">&ldquo;</div>
-                            <p className="replica-quote-text">"{item.quote}"</p>
-                            <div className="replica-client-meta">
-                                <img 
-                                    src={item.avatar} 
-                                    alt={item.name} 
-                                    className="replica-client-avatar" 
-                                    loading="lazy"
-                                />
-                                <div>
-                                    <div className="replica-client-name">{item.name}</div>
-                                    <div className="replica-client-corp">{item.company}</div>
+                <motion.div
+                    className="replica-test-marquee"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.7, delay: 0.1 }}
+                >
+                    <div className="replica-test-track">
+                        {marqueeItems.map((item, idx) => {
+                            const isClone = idx >= testimonials.length;
+                            return (
+                                <div
+                                    className="replica-test-card"
+                                    key={`${item.name}-${idx}`}
+                                    aria-hidden={isClone}
+                                >
+                                    <div className="replica-test-card-top">
+                                        <div className="replica-quote-icon">&ldquo;</div>
+                                        <img
+                                            className="replica-client-logo"
+                                            src={item.logo}
+                                            alt={`${item.name} logo`}
+                                            loading="eager"
+                                        />
+                                    </div>
+                                    <p className="replica-quote-text">"{item.quote}"</p>
+                                    <div className="replica-client-meta">
+                                        <div>
+                                            <div className="replica-client-name">{item.name}</div>
+                                            <div className="replica-client-corp">{item.company}</div>
+                                        </div>
+                                        <div className="replica-star-row">{item.stars}</div>
+                                    </div>
                                 </div>
-                                <div className="replica-star-row">{item.stars}</div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
+                            );
+                        })}
+                    </div>
+                </motion.div>
             </div>
         </section>
     );
 };
 
 export default Testimonials;
-

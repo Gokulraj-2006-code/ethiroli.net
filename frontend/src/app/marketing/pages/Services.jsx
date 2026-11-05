@@ -254,7 +254,12 @@ const EthiroliPage = () => {
         className="et-srv-hero"
         style={{ backgroundImage: "url('/assets/images/banner/banner.png')" }}
       >
-        <div className="et-srv-hero-ambient" />
+        <motion.div
+          className="et-srv-hero-ambient"
+          aria-hidden="true"
+          animate={{ opacity: [0.7, 1, 0.7], scale: [1, 1.04, 1] }}
+          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+        />
         <div className="et-srv-container et-srv-hero-grid">
           {/* Left Column */}
           <motion.div className="et-srv-hero-left" initial="hidden" animate="show" variants={stagger}>
@@ -279,7 +284,14 @@ const EthiroliPage = () => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
-                View Brand Showcase <span className="material-symbols-outlined">arrow_downward</span>
+                View Brand Showcase{' '}
+                <motion.span
+                  className="material-symbols-outlined et-arrow-nudge"
+                  animate={{ y: [0, 5, 0] }}
+                  transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  arrow_downward
+                </motion.span>
               </motion.a>
               <motion.a
                 href="#disciplines"
@@ -287,7 +299,14 @@ const EthiroliPage = () => {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
-                Explore All Services <span className="material-symbols-outlined">arrow_forward</span>
+                Explore All Services{' '}
+                <motion.span
+                  className="material-symbols-outlined et-arrow-nudge"
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
+                >
+                  arrow_forward
+                </motion.span>
               </motion.a>
             </motion.div>
 
@@ -425,7 +444,7 @@ const EthiroliPage = () => {
             viewport={{ once: true, margin: '-50px' }}
             variants={containerStagger}
           >
-            {disciplines.map((d) => (
+            {disciplines.map((d, idx) => (
               <motion.div
                 key={d.title}
                 className="et-srv-discipline-card"
@@ -434,8 +453,9 @@ const EthiroliPage = () => {
               >
                 <motion.div
                   className="et-srv-discipline-icon"
-                  whileHover={{ rotate: 8, scale: 1.08 }}
-                  transition={{ duration: 0.2 }}
+                  animate={{ y: [0, -5, 0] }}
+                  transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: idx * 0.18 }}
+                  whileHover={{ rotate: 8, scale: 1.08, transition: { duration: 0.2 } }}
                 >
                   <span className="material-symbols-outlined">{d.icon}</span>
                 </motion.div>
@@ -478,7 +498,7 @@ const EthiroliPage = () => {
             viewport={{ once: true, margin: '-50px' }}
             variants={containerStagger}
           >
-            {journeyStats.map((st) => (
+            {journeyStats.map((st, idx) => (
               <motion.div
                 key={st.label}
                 className="et-srv-stat-box"
@@ -487,8 +507,9 @@ const EthiroliPage = () => {
               >
                 <motion.div
                   className="et-srv-stat-box-icon"
-                  whileHover={{ scale: 1.15 }}
-                  transition={{ duration: 0.2 }}
+                  animate={{ y: [0, -5, 0] }}
+                  transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut', delay: idx * 0.15 }}
+                  whileHover={{ scale: 1.15, transition: { duration: 0.2 } }}
                 >
                   <span className="material-symbols-outlined">{st.icon}</span>
                 </motion.div>
@@ -773,7 +794,14 @@ const EthiroliPage = () => {
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
               >
-                Start a Conversation <span className="material-symbols-outlined">arrow_forward</span>
+                Start a Conversation{' '}
+                <motion.span
+                  className="material-symbols-outlined et-arrow-nudge"
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  arrow_forward
+                </motion.span>
               </motion.a>
             </motion.div>
           </motion.div>

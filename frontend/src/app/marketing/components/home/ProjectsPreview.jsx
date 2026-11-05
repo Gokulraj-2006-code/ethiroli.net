@@ -25,6 +25,16 @@ const projects = [
     }
 ];
 
+const stagger = {
+    hidden: {},
+    show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+};
+
+const fadeUp = {
+    hidden: { opacity: 0, y: 30 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
+};
+
 const ProjectsPreview = () => {
     return (
         <section className="replica-portfolio-section" id="projects">
@@ -45,19 +55,30 @@ const ProjectsPreview = () => {
                         <h2 className="replica-portfolio-title">Real Projects. Real Results.</h2>
                     </div>
                     <Link to="/projects" className="replica-portfolio-viewall">
-                        View All Projects &rarr;
+                        View All Projects{' '}
+                        <motion.span
+                            className="et-arrow-nudge"
+                            aria-hidden="true"
+                            animate={{ x: [0, 5, 0] }}
+                            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+                        >
+                            &rarr;
+                        </motion.span>
                     </Link>
                 </motion.div>
 
-                <div className="replica-portfolio-grid">
+                <motion.div
+                    className="replica-portfolio-grid"
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, amount: 0.15 }}
+                    variants={stagger}
+                >
                     {projects.map((proj, idx) => (
                         <motion.div 
                             className="replica-project-card" 
                             key={idx}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: idx * 0.12 }}
+                            variants={fadeUp}
                             whileHover={{ y: -8, transition: { duration: 0.25 } }}
                         >
                             <img 
@@ -72,7 +93,7 @@ const ProjectsPreview = () => {
                             </div>
                         </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </section>
     );

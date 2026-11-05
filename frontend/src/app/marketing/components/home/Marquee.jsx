@@ -3,28 +3,28 @@ import { motion } from 'framer-motion';
 
 const clientLogos = [
     {
-        name: "AAROGYA HOSPITALS",
-        logo: "/assets/images/logos/aarogya_hospitals.svg"
+        name: "ATTI CAFE",
+        logo: "/assets/images/logos/atti_cafe.svg"
     },
     {
-        name: "SRI SAI FOODS",
-        logo: "/assets/images/logos/sri_sai_foods.svg"
+        name: "PASTRY NATION",
+        logo: "/assets/images/logos/pastry_nation.svg"
     },
     {
-        name: "VetriTech",
-        logo: "/assets/images/logos/vetritech.svg"
+        name: "JAYDEV CONSULTANCY",
+        logo: "/assets/images/logos/jaydev.svg"
     },
     {
-        name: "MARUTHI CONSTRUCTIONS",
-        logo: "/assets/images/logos/maruthi_constructions.svg"
+        name: "MAVALLI BIRIYANI",
+        logo: "/assets/images/logos/mavalli_biriyani.svg"
     },
     {
-        name: "Bloom BOUTIQUE",
-        logo: "/assets/images/logos/bloom_boutique.svg"
+        name: "JCI ELITE",
+        logo: "/assets/images/logos/jci_elite.svg"
     },
     {
-        name: "ZENITH ACADEMY",
-        logo: "/assets/images/logos/zenith_academy.svg"
+        name: "ARUVI TOURS",
+        logo: "/assets/images/logos/aruvi_tours.svg"
     }
 ];
 

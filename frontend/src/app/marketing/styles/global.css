@@ -328,6 +328,23 @@ video { display: block; }
     background: var(--base-white);
 }
 
+/* Services page only — darker (less transparent) header over the light banner hero.
+   The white nav text is invisible over it, so the links go dark for that page. */
+.main-nav--services {
+    background: rgba(241, 236, 230, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+}
+
+.main-nav--services .nav-links a {
+    color: #1a4b48;
+}
+
+.main-nav--services .nav-links a.active {
+    color: #af431e;
+}
+
 .logo {
     display: flex;
     align-items: center;
@@ -1281,7 +1298,7 @@ video { display: block; }
 }
 
 .project-home-page {
-    padding-top: clamp(54px, 6vw, 78px);
+    padding-top: calc(var(--header-height) + 40px);
 }
 
 .project-home-hero {
@@ -1690,6 +1707,12 @@ video { display: block; }
     display: inline-block;
     animation: spin 4s linear infinite;
     font-size: 1.2em; /* Slightly larger star */
+}
+
+/* --- REPEATING ARROW NUDGE (CTA BUTTONS) --- */
+.et-arrow-nudge {
+    display: inline-block;
+    will-change: transform;
 }
 
 @keyframes spin {
@@ -5369,7 +5392,7 @@ details[open] summary:after {
     min-height: 90vh;
     display: flex;
     align-items: center;
-    padding-top: clamp(64px, 8vh, 86px);
+    padding-top: calc(var(--header-height) + 40px);
     padding-bottom: clamp(40px, 5vh, 56px);
     overflow: hidden;
     background-image: url('/assets/images/banner/banner.png');
@@ -6277,7 +6300,7 @@ details[open] summary:after {
     }
 
     .et-srv-hero {
-        padding-top: 64px;
+        padding-top: calc(var(--header-height) + 24px);
         padding-bottom: 45px;
     }
 
@@ -6501,7 +6524,7 @@ details[open] summary:after {
 .replica-hero-section {
     position: relative;
     background: var(--base-dark, #0c1a19);
-    padding: 56px 0 46px;
+    padding: calc(var(--header-height) + 40px) 0 46px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     overflow: hidden;
 }
@@ -7074,6 +7097,76 @@ details[open] summary:after {
     color: var(--base-gold, #E8D657);
     font-size: 14px;
     letter-spacing: 2px;
+}
+
+/* --- FEEDBACK AUTO-SCROLL TRACK (right to left) --- */
+.replica-test-marquee {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    padding: 8px 0 14px;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.replica-test-track {
+    display: flex;
+    align-items: stretch;
+    gap: 24px;
+    width: max-content;
+    animation: replicaTestScroll 46s linear infinite;
+    will-change: transform;
+}
+
+.replica-test-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes replicaTestScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.replica-test-track .replica-test-card {
+    flex: 0 0 auto;
+    width: 360px;
+}
+
+.replica-test-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.replica-test-card-top .replica-quote-icon {
+    margin-bottom: 0;
+}
+
+.replica-client-logo {
+    height: 34px;
+    width: auto;
+    max-width: 150px;
+    object-fit: contain;
+    background: #ffffff;
+    border: 1px solid rgba(12, 26, 25, 0.08);
+    border-radius: 8px;
+    padding: 4px 8px;
+    flex: 0 0 auto;
+    box-shadow: 0 2px 8px rgba(12, 26, 25, 0.05);
+}
+
+@media (max-width: 600px) {
+    .replica-test-track .replica-test-card {
+        width: 300px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .replica-test-track {
+        animation: none;
+    }
 }
 
 /* 7. STRONG CTA SECTION */

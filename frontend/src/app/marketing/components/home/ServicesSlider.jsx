@@ -49,6 +49,16 @@ const solutions = [
     }
 ];
 
+const stagger = {
+    hidden: {},
+    show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+};
+
+const fadeUp = {
+    hidden: { opacity: 0, y: 35 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
+};
+
 const ServicesSlider = () => {
     return (
         <section className="replica-services-section" id="services">
@@ -69,18 +79,27 @@ const ServicesSlider = () => {
                     </p>
                 </motion.div>
 
-                <div className="replica-services-grid">
+                <motion.div
+                    className="replica-services-grid"
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, amount: 0.15 }}
+                    variants={stagger}
+                >
                     {solutions.map((item, idx) => (
                         <motion.div 
                             className="replica-service-card" 
                             key={idx}
-                            initial={{ opacity: 0, y: 35 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.55, delay: idx * 0.12 }}
+                            variants={fadeUp}
                             whileHover={{ y: -8, transition: { duration: 0.25 } }}
                         >
-                            <div className="replica-service-badge">{item.icon}</div>
+                            <motion.div
+                                className="replica-service-badge"
+                                whileHover={{ scale: 1.1, rotate: 6 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                {item.icon}
+                            </motion.div>
                             <h3 className="replica-service-name">{item.title}</h3>
                             <ul className="replica-service-bullets">
                                 {item.bullets.map((bullet, bIdx) => (
@@ -88,11 +107,19 @@ const ServicesSlider = () => {
                                 ))}
                             </ul>
                             <Link to={item.link} className="replica-service-learn">
-                                Learn More &rarr;
+                                Learn More{' '}
+                                <motion.span
+                                    className="et-arrow-nudge"
+                                    aria-hidden="true"
+                                    animate={{ x: [0, 5, 0] }}
+                                    transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: idx * 0.2 }}
+                                >
+                                    &rarr;
+                                </motion.span>
                             </Link>
                         </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </section>
     );

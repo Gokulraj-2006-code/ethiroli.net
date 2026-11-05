@@ -298,10 +298,27 @@ video { display: block; }
 }
 
 .main-nav.scrolled {
-    background: rgba(241, 236, 230, 0.2);
+    background: rgba(241, 236, 230, 0.4);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Services page only — darker (less transparent) header over the light banner hero.
+   The white nav text is invisible over it, so the links go dark for that page. */
+.main-nav--services {
+    background: rgba(241, 236, 230, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+}
+
+.main-nav--services .nav-links a {
+    color: #1a4b48;
+}
+
+.main-nav--services .nav-links a.active {
+    color: #af431e;
 }
 
 .logo {
@@ -1197,7 +1214,7 @@ video { display: block; }
 }
 
 .project-home-page {
-    padding-top: clamp(54px, 6vw, 78px);
+    padding-top: calc(var(--header-height) + 40px);
 }
 
 .project-home-hero {
@@ -5268,7 +5285,7 @@ details[open] summary:after {
     min-height: 90vh;
     display: flex;
     align-items: center;
-    padding-top: clamp(64px, 8vh, 86px);
+    padding-top: calc(var(--header-height) + 40px);
     padding-bottom: clamp(40px, 5vh, 56px);
     overflow: hidden;
     background-image: url('/assets/images/banner/banner.png');
@@ -6053,7 +6070,7 @@ details[open] summary:after {
     }
 
     .et-srv-hero {
-        padding-top: 64px;
+        padding-top: calc(var(--header-height) + 24px);
         padding-bottom: 45px;
     }
 

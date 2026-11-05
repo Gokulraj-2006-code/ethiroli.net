@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 60" width="300" height="60" fill="none">
+  <g transform="translate(10, 8)">
+    <rect x="0" y="0" width="44" height="44" rx="12" fill="#F57C00" />
+    <path d="M12 27c0-5 5-9 10-9s10 4 10 9c0 3-1 5-2 7M14 34h16" stroke="#FFF3E0" stroke-width="3" stroke-linecap="round" />
+  </g>
+  <text x="66" y="27" font-family="'Montserrat', 'Inter', sans-serif" font-size="16" font-weight="900" fill="#BF360C" letter-spacing="1.5">MAVALLI</text>
+  <text x="66" y="44" font-family="'Montserrat', 'Inter', sans-serif" font-size="11" font-weight="600" fill="#FF8F00" letter-spacing="3.5">BIRIYANI</text>
+</svg>
