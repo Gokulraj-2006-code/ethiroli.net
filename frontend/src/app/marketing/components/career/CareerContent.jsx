@@ -1,13 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import ApplyModal from './ApplyModal';
 
 const CareerContent = () => {
-  const [applyRole, setApplyRole] = useState('');
-  const [isApplyOpen, setIsApplyOpen] = useState(false);
-  const openApply = (role) => { setApplyRole(role); setIsApplyOpen(true); };
-
   return (
     <>
       <section className="ab-section" id="openings">
@@ -58,9 +53,9 @@ const CareerContent = () => {
               <p>
                 <strong>Launch Your Career Here:</strong> Gain hands-on internship experience that sets you apart. Build a standout portfolio, learn directly from expert mentors, and master real-world campaign workflows from day one.
               </p>
-              <button type="button" className="btn" onClick={() => openApply('Video Editor Intern')}>
+              <Link className="btn" to="/career/apply?role=Video%20Editor%20Intern">
                 Apply Now
-              </button>
+              </Link>
             </motion.article>
 
             <motion.article
@@ -100,9 +95,9 @@ const CareerContent = () => {
                 <strong>Launch Your Career Here:</strong> Gain hands-on internship experience that sets you apart. Build a standout portfolio, learn directly from expert mentors, and master real-world campaign workflows from day one.
               </p>
               
-              <button type="button" className="btn" onClick={() => openApply('Web Developer Intern')}>
+              <Link className="btn" to="/career/apply?role=Web%20Developer%20Intern">
                 Apply Now
-              </button>
+              </Link>
             </motion.article>
           </div>
 
@@ -136,9 +131,9 @@ const CareerContent = () => {
               <p>
                 <strong>Launch Your Career Here:</strong> Gain hands-on internship experience that sets you apart. Build a standout portfolio, learn directly from expert mentors, and master real-world campaign workflows from day one.
               </p>
-              <button type="button" className="btn" onClick={() => openApply('Graphic Designer Intern')}>
+              <Link className="btn" to="/career/apply?role=Graphic%20Designer%20Intern">
                 Apply Now
-              </button>
+              </Link>
             </motion.article>
           </div>
         </div>
@@ -164,7 +159,7 @@ const CareerContent = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.2 }}
             >
-              <button type="button" className="btn" onClick={() => openApply('General Application')}>Apply Now</button>
+              <Link className="btn" to="/career/apply">Apply Now</Link>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
@@ -179,8 +174,6 @@ const CareerContent = () => {
           </div>
         </motion.div>
       </section>
-
-      <ApplyModal open={isApplyOpen} role={applyRole} onClose={() => setIsApplyOpen(false)} />
     </>
   );
 };
