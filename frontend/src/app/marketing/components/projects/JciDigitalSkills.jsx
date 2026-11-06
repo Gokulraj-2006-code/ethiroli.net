@@ -204,20 +204,19 @@ const JciDigitalSkills = () => {
                 onToggle={toggleFaq} 
             />
             
-            <section
-                className="jci-hero1"
-                style={{
-                    backgroundImage: "linear-gradient(90deg, rgba(8, 20, 19, 0.94) 0%, rgba(8, 20, 19, 0.72) 48%, rgba(8, 20, 19, 0.32) 100%), url('/assets/images/founder/WhatsApp Image 2026-03-16 at 2.11.29 PM.jpeg')",
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    padding: '4rem 2rem',
-                    display: 'flex',
-                }}
-            >
-                <div style={{ color: 'white' }}>
-                    <h2 style={{ color: 'white', fontFamily: 'var(--jci-font-heading)', fontSize: '3rem', marginBottom: '1.5rem' }}>Be Part of the Journey</h2>
-                    <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '1.2rem', marginBottom: '2.5rem' }}>Your involvement shapes the future of women in media and technology.</p>
-                    <button type="button" className="jci-btn-primary jci-btn-clay" onClick={() => setIsApplyOpen(true)}>Apply Now</button>
+            <section className="jci-journey-cta" aria-labelledby="jci-journey-title">
+                <div className="jci-journey-cta-inner">
+                    <span className="jci-journey-tag">Join the Movement</span>
+                    <h2 id="jci-journey-title">Be Part of the Journey</h2>
+                    <p>Your involvement shapes the future of women in media and technology.</p>
+                    <button
+                        type="button"
+                        className="jci-btn-primary jci-btn-clay jci-journey-apply"
+                        onClick={() => setIsApplyOpen(true)}
+                    >
+                        Apply Now
+                        <span className="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+                    </button>
                 </div>
             </section>
 

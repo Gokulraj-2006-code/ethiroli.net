@@ -1241,6 +1241,9 @@ video { display: block; }
     overflow: hidden;
     box-shadow: 0 12px 30px rgba(26, 75, 72, 0.08);
     transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .et-project-card:hover {
@@ -1252,26 +1255,43 @@ video { display: block; }
     width: 100%;
     aspect-ratio: 16 / 10;
     object-fit: cover;
+    display: block;
 }
 
 .et-project-card-content {
     padding: 1.2rem 1.2rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .et-project-card-content h3 {
     font-size: 1.3rem;
     margin-bottom: 0.5rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.6em;
 }
 
 .et-project-card-content p {
     color: var(--color-text-muted);
     margin-bottom: 0.8rem;
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .et-project-link {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    margin-top: auto;
+    padding-top: 0.75rem;
     font-weight: 600;
     color: var(--color-secondary);
 }
@@ -4779,7 +4799,7 @@ details[open] summary:after {
     overflow: hidden;
     background:
         linear-gradient(135deg, rgba(12, 26, 25, 0.9), rgba(26, 75, 72, 0.68)),
-        url('/assets/images/banner/gals.png') center/cover no-repeat;
+        url('/assets/images/banner/gals.jpg') center/cover no-repeat;
 }
 
 .hero-overlay {
@@ -7741,6 +7761,109 @@ details[open] summary:after {
         .jci-btn-clay { background-color: var(--color-secondary); }
         
         .jci-btn-primary:hover { transform: scale(1.05); filter: brightness(1.1); }
+
+        /* "Be Part of the Journey" closing CTA — full-width band with a
+           clearly visible Apply Now button on every screen size. */
+        .jci-journey-cta {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: clamp(56px, 8vw, 96px) clamp(20px, 6vw, 80px);
+            background:
+                linear-gradient(90deg, rgba(8, 20, 19, 0.95) 0%, rgba(8, 20, 19, 0.78) 52%, rgba(8, 20, 19, 0.42) 100%),
+                url('/assets/images/founder/WhatsApp Image 2026-03-16 at 2.11.29 PM.jpeg') center / cover no-repeat;
+            isolation: isolate;
+        }
+
+        .jci-journey-cta::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(8, 20, 19, 0) 55%, rgba(8, 20, 19, 0.55) 100%);
+        }
+
+        .jci-journey-cta-inner {
+            max-width: 720px;
+            color: #ffffff;
+        }
+
+        .jci-journey-tag {
+            display: inline-block;
+            margin-bottom: 1rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.12);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+
+        .jci-journey-cta h2 {
+            color: #ffffff;
+            font-family: var(--font-display);
+            font-size: clamp(1.9rem, 4.4vw, 3rem);
+            line-height: 1.12;
+            margin: 0 0 1rem;
+        }
+
+        .jci-journey-cta p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: clamp(1rem, 1.6vw, 1.18rem);
+            line-height: 1.6;
+            margin: 0 0 2rem;
+        }
+
+        .jci-journey-apply {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            min-height: 56px;
+            min-width: 200px;
+            padding: 1rem 2.2rem;
+            background-color: var(--color-secondary, #AF431E);
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 999px;
+            font-size: 1rem;
+            letter-spacing: 0.04em;
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+        }
+
+        .jci-journey-apply .material-symbols-outlined {
+            font-size: 1.2rem;
+            transition: transform 0.25s ease;
+        }
+
+        .jci-journey-apply:hover {
+            background-color: #c94f24;
+            filter: none;
+            transform: translateY(-2px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.42);
+        }
+
+        .jci-journey-apply:hover .material-symbols-outlined {
+            transform: translateX(4px);
+        }
+
+        .jci-journey-apply:focus-visible {
+            outline: 3px solid #ffffff;
+            outline-offset: 3px;
+        }
+
+        @media (max-width: 640px) {
+            .jci-journey-cta {
+                text-align: left;
+            }
+            .jci-journey-apply {
+                width: 100%;
+                min-height: 52px;
+            }
+        }
 
         /* Hero Section - Split Layout */
         .jci-hero {

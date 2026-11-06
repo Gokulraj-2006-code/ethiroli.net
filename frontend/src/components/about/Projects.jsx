@@ -50,7 +50,7 @@ const Projects = () => {
                 >
                     <div className="ab-projects-zigzag-media">
                         <img
-                            src="/assets/images/banner/gals.png"
+                            src="/assets/images/banner/gals.jpg"
                             alt="Networking events and mentorship programs"
                             loading="lazy"
                         />
