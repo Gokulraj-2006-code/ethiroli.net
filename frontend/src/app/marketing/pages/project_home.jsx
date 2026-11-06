@@ -20,7 +20,7 @@ const projects = [
     title: 'Glamers Gathering',
     description:
       'A fashion and networking experience where creativity meets influence, supported by Eithiroli.',
-    image: '/assets/images/banner/gals.png',
+    image: '/assets/images/banner/gals.jpg',
     year: 2026,
     keywords: ['fashion', 'networking', 'media', 'event'],
     link: '/projects/glamers-gathering',

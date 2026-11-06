@@ -18,7 +18,7 @@ const projects = [
     title: 'Glamers Gathering',
     description:
       'A fashion and networking experience where creativity meets influence, supported by Eithiroli.',
-    image: '/assets/images/banner/gals.png',
+    image: '/assets/images/banner/gals.jpg',
     year: 2026,
     keywords: ['fashion', 'networking', 'media', 'event'],
     link: '/projects/glamers-gathering',
@@ -29,7 +29,7 @@ const projects = [
     title: 'Empowering Students',
     description:
       'A social media marketing seminar helping students learn visibility, branding, and digital confidence.',
-    image: '/assets/images/banner/gals.png',
+    image: '/assets/images/banner/gals.jpg',
     year: 2026,
     keywords: ['students', 'social media', 'marketing', 'seminar'],
     link: '/projects/Ethiroliseminarjayarani',
@@ -39,7 +39,7 @@ const projects = [
   { 
   title: 'Digital Marketing in the Web Era', 
   description: 'A comprehensive webinar at KSRCT on building successful business models through digital strategy, brand visibility, and modern marketing channels.', 
-  image: '/assets/images/banner/gals.png', 
+  image: '/assets/images/banner/gals.jpg', 
   year: 2026, 
   keywords: ['ksrct', 'digital marketing', 'business models', 'webinar', 'branding'], 
   link: '/projects/Ethiroliseminarksrct', 
