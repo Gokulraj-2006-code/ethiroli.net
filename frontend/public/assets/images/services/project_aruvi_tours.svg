@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0E5F8A"/>
+      <stop offset="0.45" stop-color="#3B8DB8"/>
+      <stop offset="1" stop-color="#FFF3C9"/>
+    </linearGradient>
+    <linearGradient id="hill1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#14532D"/>
+      <stop offset="1" stop-color="#1E6A3C"/>
+    </linearGradient>
+    <linearGradient id="hill2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2E7D4F"/>
+      <stop offset="1" stop-color="#43A06B"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.72" cy="0.30" r="0.18">
+      <stop offset="0" stop-color="#FFD54F"/>
+      <stop offset="0.7" stop-color="#FFB74D"/>
+      <stop offset="1" stop-color="#FFB74D" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="pathG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8D6E63"/>
+      <stop offset="1" stop-color="#4E342E"/>
+    </linearGradient>
+  </defs>
+
+  <!-- sky -->
+  <rect width="800" height="600" fill="url(#sky)"/>
+  <!-- sun -->
+  <circle cx="575" cy="180" r="70" fill="url(#sun)"/>
+
+  <!-- clouds -->
+  <g fill="#FFFFFF" opacity="0.85">
+    <ellipse cx="160" cy="150" rx="60" ry="16"/>
+    <ellipse cx="205" cy="140" rx="45" ry="14"/>
+    <ellipse cx="120" cy="142" rx="35" ry="12"/>
+    <ellipse cx="650" cy="95" rx="45" ry="12"/>
+    <ellipse cx="680" cy="86" rx="32" ry="10"/>
+  </g>
+
+  <!-- distant hills -->
+  <path d="M0 300 L140 210 L250 300 L350 235 L470 310 L590 225 L720 305 L800 270 L800 420 L0 420 Z" fill="url(#hill2)" opacity="0.9"/>
+  <path d="M0 360 L180 275 L330 360 L470 285 L640 370 L800 340 L800 460 L0 460 Z" fill="url(#hill1)" opacity="0.9"/>
+
+  <!-- winding path -->
+  <path d="M0 600 L0 540 C160 520 300 500 380 470 C450 445 470 440 480 410 C495 360 560 355 640 380 C720 405 760 400 800 430 L800 600 Z" fill="url(#pathG)" opacity="0.9"/>
+  <path d="M0 560 C150 545 300 525 385 495 C460 468 480 452 490 415" stroke="#D7CCC8" stroke-width="14" fill="none" opacity="0.6"/>
+
+  <!-- signature waterfall -->
+  <path d="M515 250 C512 285 518 305 525 335" stroke="#E0F7FA" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.95"/>
+  <path d="M515 250 C512 285 518 305 525 335" stroke="#FFFFFF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- text -->
+  <text x="60" y="140" font-family="Montserrat, Inter, sans-serif" font-size="58" font-weight="900" fill="#FFFFFF" letter-spacing="4">ARUVI</text>
+  <text x="60" y="205" font-family="Montserrat, Inter, sans-serif" font-size="34" font-weight="700" fill="#E0F2FE" letter-spacing="12">TOURS</text>
+  <text x="60" y="252" font-family="Montserrat, Inter, sans-serif" font-size="15" font-weight="600" fill="#BDE3F7" letter-spacing="2">TAMIL NADU · CURATED JOURNEYS</text>
+
+  <!-- subtle border glow -->
+  <rect x="0" y="0" width="800" height="600" fill="none" stroke="#0B3C5D" stroke-width="10" opacity="0.55"/>
+</svg>

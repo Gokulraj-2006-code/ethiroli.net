@@ -1823,12 +1823,31 @@ button {
 }
 
 .replica-portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
     gap: 24px;
+    padding-bottom: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(12, 26, 25, 0.35) transparent;
+}
+
+.replica-portfolio-grid::-webkit-scrollbar {
+    height: 8px;
+}
+.replica-portfolio-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+.replica-portfolio-grid::-webkit-scrollbar-thumb {
+    background: rgba(12, 26, 25, 0.35);
+    border-radius: 4px;
 }
 
 .replica-project-card {
+    flex: 0 0 auto;
+    width: 330px;
+    scroll-snap-align: start;
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(232, 225, 214, 0.85));
     border: 1px solid rgba(12, 26, 25, 0.1);
     border-radius: var(--radius-md, 12px);

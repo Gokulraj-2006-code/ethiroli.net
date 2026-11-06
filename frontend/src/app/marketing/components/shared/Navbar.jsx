@@ -31,7 +31,6 @@ const Navbar = () => {
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
     const isAbout = location.pathname === '/about';
-
     // Close the drawer whenever the route changes.
     useEffect(() => {
         setMenuOpen(false);
@@ -55,12 +54,9 @@ const Navbar = () => {
         };
     }, [menuOpen]);
 
-    // Services page only: darker (less transparent) header; all other pages stay as-is.
-    const servicesPage = location.pathname === '/services';
-
     return (
         <nav
-            className={`main-nav ${scrolled ? 'scrolled' : ''}${isAbout ? ' about-nav' : ''}${servicesPage ? ' main-nav--services' : ''}`}
+            className={`main-nav ${scrolled ? 'scrolled' : ''}${isAbout ? ' about-nav' : ''}`}
             id="navbar"
             style={{ transform: 'translateY(0)' }}
         >

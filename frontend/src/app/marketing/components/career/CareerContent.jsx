@@ -136,6 +136,119 @@ const CareerContent = () => {
               </Link>
             </motion.article>
           </div>
+
+          <div className="ab-card-grid-two" style={{ marginTop: '24px' }}>
+            <motion.article
+              className="ab-card-premium"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <h3>UX UI Designer Intern </h3>
+              <p>
+                <strong>Role Summary:</strong> Design intuitive, user-centered web and
+                mobile experiences for agency client projects — from research to
+                prototype.
+              </p>
+              <ul>
+                <li>Create wireframes, user flows, and interactive prototypes in Figma.</li>
+                <li>Work from real briefs: research users, map journeys, iterate on feedback.</li>
+                <li>Translate wireframes into responsive, pixel-perfect interfaces.</li>
+                <li>Maintain reusable components and simple design systems.</li>
+                <li>Collaborate with design, content, and development teams through reviews.</li>
+              </ul>
+              <p>
+                <strong>Skills Required:</strong> Figma, wireframing and prototyping,
+                layout and typography fundamentals, attention to detail, and clear
+                communication of design decisions.
+              </p>
+              <p>
+                <strong>What You Gain:</strong> Portfolio-ready case studies, mentorship,
+                and exposure to live client projects.
+              </p>
+              <p>
+                <strong>Launch Your Career Here:</strong> Gain hands-on internship experience that sets you apart. Build a standout portfolio, learn directly from expert mentors, and master real-world campaign workflows from day one.
+              </p>
+              <Link className="btn" to="/career/apply?role=UX%20UI%20Designer%20Intern">
+                Apply Now
+              </Link>
+            </motion.article>
+
+            <motion.article
+              className="ab-card-premium"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <h3>SMM / SEO Intern </h3>
+              <p>
+                <strong>Role Summary:</strong> Grow client brands organically — search
+                visibility, social engagement, and content performance.
+              </p>
+              <ul>
+                <li>Perform keyword research and on-page / off-page SEO optimization.</li>
+                <li>Manage client social channels (Instagram, Facebook, LinkedIn, YouTube) — plan, create, publish.</li>
+                <li>Write captions, create short-form content, coordinate with design and video teams.</li>
+                <li>Monitor rankings, traffic, and engagement; build weekly performance reports.</li>
+                <li>Support backlink building, competitor research, and Google Business Profile management.</li>
+              </ul>
+              <p>
+                <strong>Skills Required:</strong> Strong writing skills, basic SEO
+                knowledge (Search Console, Google Analytics), social platforms, Canva,
+                and eagerness to analyze numbers.
+              </p>
+              <p>
+                <strong>What You Gain:</strong> Real client accounts, measurable growth
+                results, and reporting experience.
+              </p>
+              <p>
+                <strong>Launch Your Career Here:</strong> Gain hands-on internship experience that sets you apart. Build a standout portfolio, learn directly from expert mentors, and master real-world campaign workflows from day one.
+              </p>
+              <Link className="btn" to="/career/apply?role=SMM%2FSEO%20Intern">
+                Apply Now
+              </Link>
+            </motion.article>
+          </div>
+
+          <div style={{ marginTop: '24px' }}>
+            <motion.article
+              className="ab-card-premium"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <h3>Digital Marketing Intern </h3>
+              <p>
+                <strong>Role Summary:</strong> Support full-funnel digital campaigns —
+                content, social, email, and paid channels — for agency clients.
+              </p>
+              <ul>
+                <li>Help plan and execute content calendars, social campaigns, email blasts, and basic PPC.</li>
+                <li>Research trends, competitors, and audience insights; draft copy and campaign briefs.</li>
+                <li>Coordinate ad creative handoffs and landing pages with design and content teams.</li>
+                <li>Track campaign metrics and report traffic, engagement, and conversions to clients.</li>
+                <li>Participate in brainstorms, delivery timelines, and cross-team campaign launches.</li>
+              </ul>
+              <p>
+                <strong>Skills Required:</strong> Digital fundamentals (SEO, SEM, email,
+                social), Google Sheets/Excel, strong communication, and proactive
+                learning mindset.
+              </p>
+              <p>
+                <strong>What You Gain:</strong> End-to-end campaign exposure, analytics
+                reporting, and portfolio-ready deliverables.
+              </p>
+              <p>
+                <strong>Launch Your Career Here:</strong> Gain hands-on internship experience that sets you apart. Build a standout portfolio, learn directly from expert mentors, and master real-world campaign workflows from day one.
+              </p>
+              <Link className="btn" to="/career/apply?role=Digital%20Marketing%20Intern">
+                Apply Now
+              </Link>
+            </motion.article>
+          </div>
         </div>
       </section>
 

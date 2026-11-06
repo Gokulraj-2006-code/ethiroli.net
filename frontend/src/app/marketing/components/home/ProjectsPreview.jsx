@@ -22,6 +22,16 @@ const projects = [
         title: "Maruthi Constructions",
         category: "Website Design",
         image: "/assets/images/services/project_kottai_varahi.jpg"
+    },
+    {
+        title: "Aruvi Tours",
+        category: "Travel Website",
+        image: "/assets/images/services/project_aruvi_tours.svg"
+    },
+    {
+        title: "Infinity Marathon",
+        category: "Marathon Website",
+        image: "/assets/images/services/project_marathon.jpg"
     }
 ];
 

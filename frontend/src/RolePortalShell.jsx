@@ -9,6 +9,7 @@ import PrivateRoute from './common/components/PrivateRoute/PrivateRoute.jsx';
 import Unauthorized from './common/components/Unauthorized/Unauthorized.jsx';
 import MainLayout from './common/layout/MainLayout.jsx';
 import { ROLES } from './common/utils/roleRouting.js';
+import ScrollToTop from './common/utils/ScrollToTop.jsx';
 import ActivateAccount from './roles/public/pages/ActivateAccount.jsx';
 
 /**
@@ -36,6 +37,7 @@ export default function RolePortalShell({ slug, loginPage, allowedRoles, routes 
         <AuthProvider portalScope={slug}>
           <SocketProvider>
             <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <ScrollToTop />
               <Routes>
                 <Route path="/activate" element={<ActivateAccount />} />
                 {/* Portal login screens (canonical + historic aliases). */}

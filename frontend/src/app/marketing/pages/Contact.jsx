@@ -79,6 +79,7 @@ const Contact = () => {
                         <div className="icon"><i className="fa-solid fa-phone"></i></div>
                         <h3>Phone</h3>
                         <a href="tel:+916380049042">+91 63800 49042</a>
+                        <a href="tel:+919789547065">+91 97895 47065</a>
                     </motion.div>
                     <motion.div className="contact-info-card" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.2 }}>
                         <div className="icon"><i className="fa-solid fa-location-dot"></i></div>
@@ -128,6 +129,10 @@ const Contact = () => {
                         <a href="tel:+916380049042">
                             <i className="fa-solid fa-phone"></i>
                             +91 63800 49042
+                        </a>
+                        <a href="tel:+919789547065">
+                            <i className="fa-solid fa-phone"></i>
+                            +91 97895 47065
                         </a>
                         <a
                             href="https://www.google.com/maps/search/?api=1&query=Gopala+Krishnan+Complex,+Gugai,+Salem,+Tamil+Nadu+636006"

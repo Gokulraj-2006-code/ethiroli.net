@@ -328,23 +328,6 @@ video { display: block; }
     background: var(--base-white);
 }
 
-/* Services page only — darker (less transparent) header over the light banner hero.
-   The white nav text is invisible over it, so the links go dark for that page. */
-.main-nav--services {
-    background: rgba(241, 236, 230, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
-}
-
-.main-nav--services .nav-links a {
-    color: #1a4b48;
-}
-
-.main-nav--services .nav-links a.active {
-    color: #af431e;
-}
-
 .logo {
     display: flex;
     align-items: center;
@@ -2921,23 +2904,48 @@ font-size: clamp(2rem, 3vw, 24px); }
     height: auto;
     min-height: 45vh;
     padding: calc(var(--header-height) + 24px) 5% 32px;
-    background: #f8f6f2;
+    background: linear-gradient(135deg, #0f3d3a 0%, #1A4B48 45%, #2d6a4f 100%);
 }
 
 #about-hero::before {
-    display: none;
+    display: block;
+    top: -20%;
+    left: -10%;
+    right: auto;
+    bottom: auto;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(129, 158, 53, 0.35), transparent 65%);
+    filter: blur(10px);
+    pointer-events: none;
+}
+
+#about-hero::after {
+    content: "";
+    position: absolute;
+    bottom: -25%;
+    right: -5%;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 60%);
+    filter: blur(8px);
+    pointer-events: none;
 }
 
 #about-hero .ab-hero-content h1 {
-    color: var(--color-accent);
+    color: #ffffff;
 }
 
 #about-hero .ab-hero-content p {
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.82);
 }
 
 .career-hero {
-    background: #f8f6f2;
+    background: linear-gradient(135deg, rgba(8, 14, 26, 0.72), rgba(28, 35, 56, 0.55)),
+        url('/assets/images/banner/career_hero.jpg') center center / cover no-repeat;
+    min-height: 72vh;
 }
 
 .career-hero::before {
@@ -2945,11 +2953,11 @@ font-size: clamp(2rem, 3vw, 24px); }
 }
 
 .career-hero .ab-hero-content h1 {
-    color: var(--color-accent);
+    color: #ffffff;
 }
 
 .career-hero .ab-hero-content p {
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .ab-hero::before {
@@ -6878,12 +6886,31 @@ details[open] summary:after {
 }
 
 .replica-portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
     gap: 24px;
+    padding-bottom: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(12, 26, 25, 0.35) transparent;
+}
+
+.replica-portfolio-grid::-webkit-scrollbar {
+    height: 8px;
+}
+.replica-portfolio-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+.replica-portfolio-grid::-webkit-scrollbar-thumb {
+    background: rgba(12, 26, 25, 0.35);
+    border-radius: 4px;
 }
 
 .replica-project-card {
+    flex: 0 0 auto;
+    width: 330px;
+    scroll-snap-align: start;
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(232, 225, 214, 0.85));
     border: 1px solid rgba(12, 26, 25, 0.1);
     border-radius: var(--radius-md, 12px);
@@ -7251,7 +7278,6 @@ details[open] summary:after {
         gap: 40px;
     }
     .replica-services-grid,
-    .replica-portfolio-grid,
     .replica-why-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -7265,7 +7291,6 @@ details[open] summary:after {
 
 @media (max-width: 640px) {
     .replica-services-grid,
-    .replica-portfolio-grid,
     .replica-why-grid {
         grid-template-columns: 1fr;
     }

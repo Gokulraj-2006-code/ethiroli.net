@@ -129,6 +129,9 @@ const CareerApply = () => {
                             <option value="Video Editor Intern">Video Editor </option>
                             <option value="Web Developer Intern">Web Developer </option>
                             <option value="Graphic Designer Intern">Graphic Designer </option>
+                            <option value="UX UI Designer Intern">UX UI Designer </option>
+                            <option value="SMM/SEO Intern">SMM/SEO </option>
+                            <option value="Digital Marketing Intern">Digital Marketing </option>
                         </select>
                     </label>
 

@@ -156,6 +156,11 @@ body.contact-page-active .hamburger span {
     line-height: 1.5;
 }
 
+.contact-info-card a + a {
+    display: block;
+    margin-top: 2px;
+}
+
 .contact-info-card a:hover {
     color: var(--color-primary);
 }

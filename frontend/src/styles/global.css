@@ -304,23 +304,6 @@ video { display: block; }
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Services page only — darker (less transparent) header over the light banner hero.
-   The white nav text is invisible over it, so the links go dark for that page. */
-.main-nav--services {
-    background: rgba(241, 236, 230, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
-}
-
-.main-nav--services .nav-links a {
-    color: #1a4b48;
-}
-
-.main-nav--services .nav-links a.active {
-    color: #af431e;
-}
-
 .logo {
     display: flex;
     align-items: center;

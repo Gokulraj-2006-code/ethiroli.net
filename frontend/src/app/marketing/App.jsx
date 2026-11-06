@@ -6,6 +6,7 @@ import Footer from './components/shared/Footer';
 import ScrollToTopBtn from './components/shared/ScrollToTopBtn';
 import WhatsAppBtn from './components/shared/WhatsAppBtn';
 import PremiumMotionProvider from './components/shared/PremiumMotionProvider';
+import ScrollToTop from '../../common/utils/ScrollToTop';
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
@@ -34,6 +35,7 @@ const AppContent = ({ showLoader }) => {
         </div>
       ) : null}
       <PremiumMotionProvider />
+      <ScrollToTop />
       <Navbar />
       <main>
         <Suspense fallback={
