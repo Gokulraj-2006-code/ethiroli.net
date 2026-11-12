@@ -278,7 +278,7 @@ export const getPeopleDirectory = asyncHandler(async (req, res) => {
       ORDER BY u.full_name`, internParams).then(([r]) => r)
   ]);
   const managers = ['HR', 'SUPER_ADMIN'].includes(req.user.role)
-    ? await pool.execute(`SELECT u.id AS user_id, NULL AS profile_id, u.employee_code, u.full_name, u.role, u.is_active,
+    ? await pool.execute(`SELECT u.id AS user_id, NULL AS profile_id, NULL AS employee_code, u.full_name, u.role, u.is_active,
         NULL AS department, 'Manager' AS sub_role, DATE_FORMAT(u.created_at,'%Y-%m-%d') AS start_date,
         'ACTIVE' AS account_status,
         (SELECT s.branch_id FROM manager_scopes s WHERE s.manager_user_id=u.id ORDER BY s.branch_id LIMIT 1) AS branch_id,
