@@ -14,7 +14,7 @@ import ActivateAccount from './roles/public/pages/ActivateAccount.jsx';
 
 /**
  * RolePortalShell - the shared bootstrap for every role portal entry
- * (student.html, tutor.html, intern.html, pm.html, ...).
+ * (super-admin.html, hr.html, employee.html).
  *
  * It owns the provider stack (Redux / theme / auth / socket) and the router,
  * registers the portal-specific login + alias routes, and mounts the role's
@@ -47,8 +47,7 @@ export default function RolePortalShell({ slug, loginPage, allowedRoles, routes 
                 <Route path="/auth/login" element={<Navigate to={login} replace />} />
                 <Route path="/login" element={<Navigate to={login} replace />} />
                 <Route path="/auth/super-admin/login" element={loginPage} />
-                {/* PrivateRoute falls back to the admin login for paths without a known
-                    role segment (e.g. /app/super-admin/*), so serve this portal's login. */}
+                {/* Legacy alias: historic links pointed at the retired Admin portal login. */}
                 <Route path="/auth/admin/login" element={loginPage} />
 
                 {/* Document / clean-URL aliases: /student.html, /student, /app/student */}

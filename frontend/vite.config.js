@@ -8,19 +8,13 @@ import { existsSync } from 'fs'
 const ROLE_HTML = [
   ['/activate', '/employee.html'],
   ['/app/super-admin', '/super-admin.html'],
-  ['/app/manager', '/pm.html'],
-  ['/app/pm', '/pm.html'],
   ['/app/hr', '/hr.html'],
   ['/auth/super-admin', '/super-admin.html'],
-  ['/auth/manager', '/pm.html'],
-  ['/auth/pm', '/pm.html'],
   ['/auth/hr', '/hr.html'],
   ['/auth/employee', '/employee.html'],
   ['/app/', '/employee.html'],
   ['/auth/', '/employee.html'],
-  ['/intern', '/employee.html'],
   ['/employee', '/employee.html'],
-  ['/manager', '/pm.html'],
   ['/hr', '/hr.html'],
   ['/super-admin', '/super-admin.html'],
   ['/dashboard', '/employee.html'],
@@ -36,7 +30,7 @@ const multiPageRewritePlugin = () => ({
   configureServer(server) {
     server.middlewares.use((req, res, next) => {
       const url = req.url ? req.url.split('?')[0] : '';
-      const rolePaths = ['/activate', '/app', '/admin', '/auth', '/dashboard', '/intern', '/student', '/employee', '/finance', '/sales', '/reception', '/tutor'];
+      const rolePaths = ['/activate', '/app', '/auth', '/dashboard', '/employee'];
       if (rolePaths.some((path) => url.startsWith(path)) && !url.includes('.')) {
         req.url = roleEntryHtml(url);
       }
@@ -100,7 +94,6 @@ export default defineConfig({
         main: resolve(process.cwd(), 'index.html'),
         'super-admin': resolve(process.cwd(), 'super-admin.html'),
         'hr': resolve(process.cwd(), 'hr.html'),
-        'manager': resolve(process.cwd(), 'pm.html'),
         'employee': resolve(process.cwd(), 'employee.html'),
       },
       output: {

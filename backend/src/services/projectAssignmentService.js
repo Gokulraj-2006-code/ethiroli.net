@@ -1,5 +1,6 @@
 import pool from '../config/database.js';
 import { decrypt } from '../config/encryption.js';
+import { looksLikeEncryptedValue } from '../models/User.js';
 
 /**
  * Safe decrypt for display strings. Values that are already plaintext (rows
@@ -10,7 +11,10 @@ const safeDecrypt = (value, fallback = null) => {
   if (value === undefined || value === null || value === '') return fallback;
   try {
     const out = decrypt(value);
-    return out ?? fallback;
+    if (out === undefined || out === null || out === '') return fallback;
+    // decrypt() hands back the payload unchanged when the key does not match;
+    // showing that as a person's name would leak raw ciphertext.
+    return looksLikeEncryptedValue(out) ? fallback : out;
   } catch (_) {
     return fallback;
   }
@@ -29,20 +33,17 @@ const formatPerson = (row) => (row
 
 /**
  * Roles that can be made responsible for delivering a project.
- * A project is delivered by delivery people, so STUDENT is excluded.
+ *
+ * Restricted to roles that still have a live portal (interns share the
+ * Employee portal): an assignee has to be able to open the project, so the
+ * retired panels — admin, tutor, project manager, finance, sales, reception
+ * and student — are deliberately not assignable.
  */
 export const ASSIGNABLE_ROLES = [
-  'PROJECT_MANAGER',
-  'TUTOR',
-  'SENIOR_TUTOR',
-  'EMPLOYEE',
-  'INTERN',
-  'FINANCE',
-  'SALES',
-  'RECEPTION',
+  'SUPER_ADMIN',
   'HR',
-  'ADMIN',
-  'SUPER_ADMIN'
+  'EMPLOYEE',
+  'INTERN'
 ];
 
 /** Serialises an id list for the JSON column, or leaves it alone when absent. */
@@ -178,8 +179,11 @@ export const fetchAssignableUsers = async () => {
     ASSIGNABLE_ROLES
   );
   // Sort by decrypted display name so the picker reads alphabetically.
+  // Accounts whose email cannot be decrypted are dropped: they can neither
+  // sign in nor be notified, so offering them would create broken assignments.
   return rows
     .map(formatPerson)
+    .filter((person) => Boolean(person.email))
     .sort((a, b) => String(a.full_name).localeCompare(String(b.full_name)));
 };
 

@@ -17,7 +17,7 @@ const RoleRedirect = () => {
         navigate(defaultPath, { replace: true });
       }
     } else if (!user && !loading) {
-      navigate('/auth/admin/login', { replace: true });
+      navigate('/auth/login', { replace: true });
     }
   }, [user, role, loading, navigate, location.pathname]);
 

@@ -14,8 +14,8 @@ import { validateBody } from '../middleware/validation.js';
 const router = express.Router();
 router.use(authenticate);
 
-const viewRoles = requireRole('STUDENT', 'EMPLOYEE', 'INTERN', 'TUTOR', 'PROJECT_MANAGER', 'ADMIN', 'SUPER_ADMIN', 'RECEPTION');
-const editRoles = requireRole('STUDENT', 'TUTOR', 'PROJECT_MANAGER', 'ADMIN', 'SUPER_ADMIN');
+const viewRoles = requireRole('STUDENT', 'EMPLOYEE', 'INTERN', 'TUTOR', 'PROJECT_MANAGER', 'ADMIN', 'SUPER_ADMIN', 'RECEPTION', 'HR');
+const editRoles = requireRole('STUDENT', 'TUTOR', 'PROJECT_MANAGER', 'ADMIN', 'SUPER_ADMIN', 'HR');
 // Only roles that can actually own a project need the assignee directory.
 const assignRoles = requireRole('TUTOR', 'PROJECT_MANAGER', 'ADMIN', 'SUPER_ADMIN', 'HR');
 

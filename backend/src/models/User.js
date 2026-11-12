@@ -4,7 +4,7 @@ import { encrypt, decrypt, encryptDeterministic } from '../config/encryption.js'
 
 // A failed decryption returns the original AES-GCM payload. Never expose that
 // ciphertext as a person's display name in the API/UI.
-const looksLikeEncryptedValue = (value) => {
+export const looksLikeEncryptedValue = (value) => {
   if (typeof value !== 'string') return false;
   const parts = value.split(':');
   return parts.length === 3

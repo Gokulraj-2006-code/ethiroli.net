@@ -13,6 +13,7 @@ const Attendance = lazy(() => import('./pages/Attendance.jsx'));
 const Calendar = lazy(() => import('./pages/Calendar.jsx'));
 const HRProfile = lazy(() => import('../../common/components/RoleProfile/RoleProfile.jsx'));
 const CareerApplications = lazy(() => import('./pages/CareerApplications.jsx'));
+const HRProjects = lazy(() => import('./pages/Projects.jsx'));
 const DeactivatedRegister = lazy(() => import('./pages/DeactivatedRegister.jsx'));
 const Messages = lazy(() => import('./pages/Messages.jsx'));
 
@@ -23,6 +24,7 @@ export default function HRApp() {
       <Route path="dashboard" element={<HRDashboard />} />
       <Route path="employees" element={<HREmployees />} />
       <Route path="interns" element={<HRInterns />} />
+      <Route path="projects" element={<HRProjects />} />
       <Route path="organization" element={<OrganizationSettings />} />
       <Route path="documents" element={<HRDocuments />} />
       <Route path="leaves" element={<LeaveRequests />} />

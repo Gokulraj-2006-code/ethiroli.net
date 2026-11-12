@@ -4,18 +4,14 @@ import { useAuth } from '../../hooks/useAuth';
 import { isRoleAuthorized } from '../../utils/roleRouting';
 
 const getLoginUrlForPath = (pathname) => {
-  if (pathname.includes('/student')) return '/auth/student/login';
-  if (pathname.includes('/intern')) return '/auth/intern/login';
+  // Interns share the Employee portal, so their paths land on the employee login.
+  if (pathname.includes('/intern')) return '/auth/employee/login';
   if (pathname.includes('/employee')) return '/auth/employee/login';
   if (pathname.includes('/hr')) return '/auth/hr/login';
-  if (pathname.includes('/manager') || pathname.includes('/project-manager') || pathname.includes('/pm')) return '/auth/manager/login';
   if (pathname.includes('/super-admin')) return '/auth/super-admin/login';
-  if (pathname.includes('/tutor')) return '/auth/tutor/login';
-  if (pathname.includes('/reception')) return '/auth/reception/login';
-  if (pathname.includes('/sales')) return '/auth/sales/login';
-  if (pathname.includes('/finance')) return '/auth/finance/login';
-  if (pathname.includes('/pm') || pathname.includes('/project-manager')) return '/auth/pm/login';
-  return '/auth/admin/login';
+  // Unknown/dead paths: /auth/login is registered by every portal bundle, so it
+  // can never bounce between two portals the way a portal-specific fallback would.
+  return '/auth/login';
 };
 
 const PrivateRoute = ({ children, allowedRoles }) => {

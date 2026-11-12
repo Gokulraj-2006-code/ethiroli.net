@@ -14,7 +14,7 @@ import {
   fetchAssignableUsers
 } from '../services/projectAssignmentService.js';
 
-const privilegedRoles = [ROLES.ADMIN, ROLES.SUPER_ADMIN, ROLES.PROJECT_MANAGER, ROLES.TUTOR];
+const privilegedRoles = [ROLES.ADMIN, ROLES.SUPER_ADMIN, ROLES.PROJECT_MANAGER, ROLES.TUTOR, ROLES.HR];
 
 const isPrivileged = (req) => privilegedRoles.includes(req.user.role);
 
@@ -36,7 +36,9 @@ export const listAssignableUsers = asyncHandler(async (req, res) => {
 
 export const listStudentProjects = asyncHandler(async (req, res) => {
   const { status, page = 1, limit = 50 } = req.query;
-  const studentId = isPrivileged(req) ? (req.query.student_id || req.user.id) : req.user.id;
+  // Privileged roles (incl. HR, which now runs the project board) see every
+  // project unless a specific owner is requested; everyone else sees their own.
+  const studentId = isPrivileged(req) ? (req.query.student_id || null) : req.user.id;
   const offset = (parseInt(page) - 1) * parseInt(limit);
 
   const [items, countRow] = await Promise.all([

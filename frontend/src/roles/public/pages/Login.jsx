@@ -1,38 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../../common/contexts/AuthContext.jsx';
-import { ROLES, getRoleDefaultPath } from '../../../common/utils/roleRouting.js';
-import StudentLoginPage from '../../../auth/portals/pages/StudentLoginPage.jsx';
-import TutorLoginPage from '../../../auth/portals/pages/TutorLoginPage.jsx';
-import InternLoginPage from '../../../auth/portals/pages/InternLoginPage.jsx';
+import { getRoleDefaultPath } from '../../../common/utils/roleRouting.js';
 
+// Only the three live portals remain: Super Admin, HR and Employee.
 const ROLE_PORTAL_MAP = {
   SUPER_ADMIN: 'super-admin',
-  ADMIN: 'admin',
   HR: 'hr',
-  TUTOR: 'tutor',
-  PROJECT_MANAGER: 'pm',
-  FINANCE: 'finance',
-  SALES: 'sales',
-  RECEPTION: 'reception',
-  EMPLOYEE: 'employee',
-  STUDENT: 'student',
-  INTERN: 'intern'
+  EMPLOYEE: 'employee'
 };
 
 function LoginPage() {
   const { role: roleParam } = useParams();
-
-  // Route to dedicated role-tailored login portals
-  if (roleParam === 'student') {
-    return <StudentLoginPage />;
-  }
-  if (roleParam === 'tutor') {
-    return <TutorLoginPage />;
-  }
-  if (roleParam === 'intern' || roleParam === 'ims') {
-    return <InternLoginPage />;
-  }
 
   return <DefaultLoginPage roleParam={roleParam} />;
 }
@@ -47,8 +26,6 @@ function DefaultLoginPage({ roleParam }) {
 
   const portalLabel = roleParam === 'super-admin'
     ? 'Super Admin'
-    : roleParam === 'pm'
-    ? 'Project Manager'
     : roleParam
     ? roleParam.charAt(0).toUpperCase() + roleParam.slice(1)
     : 'Enterprise';
@@ -58,10 +35,8 @@ function DefaultLoginPage({ roleParam }) {
     setLoading(true);
     setError('');
     try {
-      const roleKey = roleParam === 'super-admin' 
-        ? 'SUPER_ADMIN' 
-        : roleParam === 'pm' 
-        ? 'PROJECT_MANAGER' 
+      const roleKey = roleParam === 'super-admin'
+        ? 'SUPER_ADMIN'
         : roleParam?.toUpperCase();
       const portal = roleKey ? ROLE_PORTAL_MAP[roleKey] : null;
       const data = await login(email, password, portal);

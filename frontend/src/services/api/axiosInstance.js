@@ -45,8 +45,7 @@ axiosInstance.interceptors.request.use(
 function portalScopeForPath(pathname) {
   const segments = String(pathname || '').toLowerCase().split('/').filter(Boolean);
   const portalSegment = segments[0] === 'auth' ? segments[1] : (segments[0] === 'app' ? segments[1] : null);
-  if (portalSegment === 'pm' || portalSegment === 'project-manager') return 'manager';
-  return ['super-admin', 'manager', 'hr', 'employee'].includes(portalSegment) ? portalSegment : null;
+  return ['super-admin', 'hr', 'employee'].includes(portalSegment) ? portalSegment : null;
 }
 
 /**
@@ -61,18 +60,10 @@ function portalScopeForPath(pathname) {
  */
 const PORTAL_LOGINS = [
   ['super-admin', '/auth/super-admin/login'],
-  ['manager', '/auth/manager/login'],
-  ['student', '/auth/student/login'],
-  ['intern', '/auth/intern/login'],
-  ['tutor', '/auth/tutor/login'],
-  ['pm', '/auth/manager/login'],
-  ['project-manager', '/auth/manager/login'],
-  ['finance', '/auth/finance/login'],
-  ['sales', '/auth/sales/login'],
-  ['reception', '/auth/reception/login'],
-  ['employee', '/auth/employee/login'],
   ['hr', '/auth/hr/login'],
-  ['admin', '/auth/admin/login'],
+  ['employee', '/auth/employee/login'],
+  // Interns authenticate through the Employee portal.
+  ['intern', '/auth/employee/login'],
 ];
 
 // Paths with no recognisable role segment keep the previous target so the

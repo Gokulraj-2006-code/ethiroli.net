@@ -16,22 +16,15 @@ export default function Sidebar({ role, navItems }) {
     const parts = location.pathname.split('/');
     if (parts[1] === 'app' && parts[2]) {
       const seg = parts[2].toLowerCase();
-      if (seg === 'tutor') return 'TUTOR';
-      if (seg === 'student') return 'STUDENT';
       if (seg === 'hr') return 'HR';
-      if (seg === 'pm' || seg === 'manager' || seg === 'project-manager') return 'PROJECT_MANAGER';
-      if (seg === 'finance') return 'FINANCE';
-      if (seg === 'sales') return 'SALES';
-      if (seg === 'reception') return 'RECEPTION';
       if (seg === 'intern') return 'INTERN';
       if (seg === 'employee') return 'EMPLOYEE';
       if (seg === 'super-admin') return 'SUPER_ADMIN';
-      if (seg === 'admin') return 'ADMIN';
     }
     return null;
   }, [location.pathname]);
 
-  const effectiveRole = role || activeRole || urlRole || user?.role || 'TUTOR';
+  const effectiveRole = role || activeRole || urlRole || user?.role || 'EMPLOYEE';
   const navData = useMemo(() => navItems || getNavigationForRole(effectiveRole), [navItems, effectiveRole]);
 
   const activeGroups = useMemo(() => {
@@ -143,7 +136,7 @@ export default function Sidebar({ role, navItems }) {
         className={`portalSidebar ${effectiveRole === 'INTERN' ? 'internSidebar' : ''} ${!sidebarOpen ? 'closed' : ''} ${sidebarOpen ? 'mobileOpen' : ''}`} 
       >
         <div className="portalSidebarHeader">
-          <Link to={effectiveRole === 'INTERN' ? '/app/intern/dashboard' : '/'} className="portalBrandBox" aria-label="Dashboard Home">
+          <Link to="/app/employee/dashboard" className="portalBrandBox" aria-label="Dashboard Home">
             {effectiveRole === 'INTERN' ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%' }}>
                 <img

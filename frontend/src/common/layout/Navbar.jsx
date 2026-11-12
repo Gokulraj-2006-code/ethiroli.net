@@ -23,17 +23,10 @@ export default function Navbar({ role, onSearchClick, onToggleFeed, unreadFeedCo
   const getRoleSlug = (r) => {
     switch (r) {
       case ROLES.SUPER_ADMIN: return 'super-admin';
-      case ROLES.ADMIN: return 'admin';
       case ROLES.HR: return 'hr';
-      case ROLES.TUTOR: return 'tutor';
-      case ROLES.PROJECT_MANAGER: return 'pm';
-      case ROLES.FINANCE: return 'finance';
-      case ROLES.SALES: return 'sales';
-      case ROLES.RECEPTION: return 'reception';
       case ROLES.EMPLOYEE: return 'employee';
-      case ROLES.STUDENT: return 'student';
-      case ROLES.INTERN: return 'intern';
-      default: return 'admin';
+      case ROLES.INTERN: return 'employee';
+      default: return 'employee';
     }
   };
 

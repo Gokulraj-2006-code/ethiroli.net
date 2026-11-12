@@ -26,7 +26,7 @@ export const ROLE_DEFAULT_ROUTES = Object.freeze({
   [ROLES.ADMIN]: '/unauthorized',
   [ROLES.HR]: '/app/hr/dashboard',
   [ROLES.TUTOR]: '/unauthorized',
-  [ROLES.PROJECT_MANAGER]: '/app/manager/dashboard',
+  [ROLES.PROJECT_MANAGER]: '/unauthorized',
   [ROLES.FINANCE]: '/unauthorized',
   [ROLES.VIDEO_EDITOR]: '/unauthorized',
   [ROLES.SALES]: '/unauthorized',
