@@ -331,6 +331,16 @@ body.mobile-menu-open .whatsapp-floating-btn {
     pointer-events: none;
 }
 
+/* The floating widgets sit on top of form fields on small screens — on the
+   career application form, and whenever any field has focus. */
+body:has(.career-apply-form) .whatsapp-floating-btn,
+body:has(input:focus, textarea:focus, select:focus) .whatsapp-floating-btn,
+body:has(input:focus, textarea:focus, select:focus) .scroll-to-top {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
 /* About Us: green top bar matching the logo */
 .main-nav.about-nav,
 .main-nav.about-nav.scrolled {
@@ -3131,6 +3141,9 @@ font-size: clamp(2rem, 3vw, 24px); }
     min-height: 45vh;
     padding: calc(var(--header-height) + 24px) 5% 32px;
     background: linear-gradient(135deg, #0f3d3a 0%, #1A4B48 45%, #2d6a4f 100%);
+    /* The decorative glow circles bleed past the section edges; clipping them
+       here keeps the page from becoming wider than the viewport. */
+    overflow: hidden;
 }
 
 #about-hero::before {
@@ -3215,6 +3228,9 @@ font-size: clamp(2rem, 3vw, 24px); }
     position: relative;
     isolation: isolate;
     background: linear-gradient(180deg, #f8f6f2 0%, #f4efe6 100%);
+    /* Cards animate in from x: +/-30. Clip only the horizontal axis so the
+       off-screen starting pose cannot widen the document before it settles. */
+    overflow-x: clip;
 }
 
 .ab-section:nth-child(odd):not(.ab-hero):not(.ab-cta) {
@@ -7542,6 +7558,9 @@ details[open] summary:after {
     grid-template-columns: 1.05fr 0.95fr;
     gap: clamp(16px, 3vw, 28px);
     padding: clamp(26px, 4vw, 50px) 5%;
+    /* The two panels fade in from x: +/-30; keep that off-screen pose from
+       widening the page on phones. Vertical shadows stay visible. */
+    overflow-x: clip;
     background:
         radial-gradient(circle at 12% 0%, rgba(129, 158, 53, 0.15), transparent 35%),
         radial-gradient(circle at 88% 14%, rgba(26, 75, 72, 0.2), transparent 36%),

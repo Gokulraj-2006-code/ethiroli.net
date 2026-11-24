@@ -81,7 +81,9 @@ const Sitemap = () => {
         </motion.div>
       </section>
 
-      <section className="ab-section" style={{ padding: '60px 20px', maxWidth: '1200px', margin: '0 auto' }}>
+      {/* Cards use white headings and light grey links, so this region needs a
+          dark surface rather than the inherited cream .ab-section gradient. */}
+      <section className="ab-section" style={{ padding: '60px 20px', maxWidth: '1200px', margin: '0 auto', background: 'linear-gradient(180deg, #0c1a19 0%, #10312e 100%)' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
           {sitemapSections.map((sec, idx) => (
             <motion.div
