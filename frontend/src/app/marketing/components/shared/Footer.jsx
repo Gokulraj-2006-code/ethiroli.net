@@ -64,14 +64,7 @@ const Footer = () => {
             </div>
 
             <div className="et-footer-bottom">
-                <p>&copy; {currentYear} <a href="https://ethiroli.net" style={{ color: 'inherit', textDecoration: 'none' }}>ethiroli.net</a>. All Rights Reserved. Premier Branding & Marketing Agency.</p>
-                <div className="et-footer-bottom-links" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '8px' }}>
-                    <Link to="/privacy-policy">Privacy Policy</Link>
-                    <Link to="/terms-of-service">Terms of Service</Link>
-                    <Link to="/sitemap">Sitemap</Link>
-                    <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer">XML Sitemap</a>
-                    <Link to="/contact_us#faq">FAQs</Link>
-                </div>
+                <p>&copy; {currentYear} ethiroli.net. All Rights Reserved. Premier Branding &amp; Marketing Agency.</p>
             </div>
         </footer>
     );

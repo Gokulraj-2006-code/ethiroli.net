@@ -35,7 +35,7 @@ const teamMembers = [
 
 const Team = () => {
     return (
-        <section className="et-team-section" aria-labelledby="team-title">
+        <section className="et-team-section" id="team" aria-labelledby="team-title">
             <div className="et-team-header">
                 <span className="et-label"><span className="star-rotate">★</span>Meet our</span>
                 <h2 id="team-title">Team</h2>
