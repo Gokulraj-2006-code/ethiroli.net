@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SEO from '../components/shared/SEO';
+import PageHero from '../components/shared/PageHero';
 
 const sitemapSections = [
   {
@@ -62,97 +63,68 @@ const sitemapSections = [
 
 const Sitemap = () => {
   return (
-    <div className="ab-page sitemap-page">
+    <div className="sitemap-page">
       <SEO
         title="HTML Sitemap — Ethiroli Branding & Marketing Agency"
         description="Comprehensive sitemap of Ethiroli. Explore our branding, performance marketing, marketing automation, SEO/AEO/GEO services, and case studies on ethiroli.net."
         canonical="https://ethiroli.net/sitemap"
         keywords="sitemap, ethiroli sitemap, branding agency pages, marketing agency navigation, ethiroli.net"
       />
-      <section className="ab-hero" style={{ backgroundImage: "url('/assets/images/banner/banner.png')" }}>
-        <motion.div
-          className="ab-hero-content"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1>Site Directory & Sitemap</h1>
-          <p>Complete guide to all pages, services, and resources on ethiroli.net</p>
-        </motion.div>
-      </section>
+      <PageHero
+        eyebrow="Site Directory"
+        title="Site Directory & Sitemap"
+        subtitle="A complete guide to every page, service and resource on ethiroli.net."
+      />
 
-      {/* Cards use white headings and light grey links, so this region needs a
-          dark surface rather than the inherited cream .ab-section gradient. */}
-      <section className="ab-section" style={{ padding: '60px 20px', maxWidth: '1200px', margin: '0 auto', background: 'linear-gradient(180deg, #0c1a19 0%, #10312e 100%)' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
-          {sitemapSections.map((sec, idx) => (
-            <motion.div
-              key={sec.category}
-              style={{
-                background: 'rgba(255, 255, 255, 0.03)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: '16px',
-                padding: '28px',
-                backdropFilter: 'blur(10px)',
-              }}
+      <div className="sitemap-shell">
+        <div className="sitemap-intro">
+          <span className="sitemap-count">{sitemapSections.length} sections</span>
+          <span>{sitemapSections.reduce((total, section) => total + section.links.length, 0)} links across the site</span>
+        </div>
+
+        <div className="sitemap-grid">
+          {sitemapSections.map((section, index) => (
+            <motion.section
+              key={section.category}
+              className="sitemap-card"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
+              transition={{ duration: 0.45, delay: index * 0.08 }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
-                <span className="material-symbols-outlined" style={{ color: '#d4af37', fontSize: '24px' }}>
-                  {sec.icon}
+              <div className="sitemap-card-head">
+                <span className="sitemap-card-icon" aria-hidden="true">
+                  <span className="material-symbols-outlined">{section.icon}</span>
                 </span>
-                <h3 style={{ margin: 0, fontSize: '1.2rem', color: '#fff' }}>{sec.category}</h3>
+                <h2>{section.category}</h2>
+                <span className="sitemap-card-count">{section.links.length}</span>
               </div>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                {sec.links.map((link) => (
-                  <li key={link.name} style={{ marginBottom: '12px' }}>
+              <ul className="sitemap-links">
+                {section.links.map((link) => (
+                  <li key={link.name}>
                     {link.external ? (
-                      <a
-                        href={link.path}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          color: '#b0b8c4',
-                          textDecoration: 'none',
-                          fontSize: '0.95rem',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          transition: 'color 0.2s',
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = '#d4af37')}
-                        onMouseLeave={(e) => (e.currentTarget.style.color = '#b0b8c4')}
-                      >
-                        <span>→</span> {link.name}
+                      <a href={link.path} target="_blank" rel="noopener noreferrer">
+                        <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                        <span>{link.name}</span>
                       </a>
                     ) : (
-                      <Link
-                        to={link.path}
-                        style={{
-                          color: '#b0b8c4',
-                          textDecoration: 'none',
-                          fontSize: '0.95rem',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          transition: 'color 0.2s',
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = '#d4af37')}
-                        onMouseLeave={(e) => (e.currentTarget.style.color = '#b0b8c4')}
-                      >
-                        <span>→</span> {link.name}
+                      <Link to={link.path}>
+                        <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        <span>{link.name}</span>
                       </Link>
                     )}
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </motion.section>
           ))}
         </div>
-      </section>
+
+        <div className="sitemap-note">
+          <i className="fa-solid fa-circle-info" aria-hidden="true"></i>
+          Looking for the machine-readable version? <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer">Open the XML sitemap</a>.
+        </div>
+      </div>
     </div>
   );
 };

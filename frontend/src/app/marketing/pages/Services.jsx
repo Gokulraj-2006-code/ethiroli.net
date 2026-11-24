@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import SEO from '../components/shared/SEO';
 
 const allProjects = [
@@ -200,6 +201,25 @@ const categories = ['All', 'Marketing Systems & Automation', 'Brand Portals & Co
 
 const EthiroliPage = () => {
   const [activeCategory, setActiveCategory] = useState('All');
+  const location = useLocation();
+
+  // Sitemap links such as /services#disciplines arrive before this lazy page
+  // renders, so jump again once the section exists in the DOM.
+  useEffect(() => {
+    if (!location.hash) return undefined;
+
+    const targetId = decodeURIComponent(location.hash.slice(1));
+    const jumpToTarget = () => {
+      document.getElementById(targetId)?.scrollIntoView({ behavior: 'instant', block: 'start' });
+    };
+    const timer = window.setTimeout(jumpToTarget, 350);
+    const settleTimer = window.setTimeout(jumpToTarget, 1200);
+
+    return () => {
+      window.clearTimeout(timer);
+      window.clearTimeout(settleTimer);
+    };
+  }, [location.hash]);
 
   const filteredProjects = useMemo(() => {
     if (activeCategory === 'All') return allProjects;
