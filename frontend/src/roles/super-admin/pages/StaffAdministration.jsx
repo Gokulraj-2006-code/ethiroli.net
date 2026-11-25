@@ -167,7 +167,7 @@ export default function StaffAdministration() {
   return (
     <AdminPage title="Staff Administration" subtitle="Create, edit, update, activate and deactivate HR and Manager accounts." loading={loading} error={error} onRetry={load} actions={<button type="button" className="btn btn-primary" onClick={openCreate}><i className="bi bi-plus-lg me-1"></i>Add staff</button>}>
       {notice && <div className="alert alert-success">{notice}</div>}
-      <div className="mb-3"><input className="form-control" style={{ maxWidth: 320 }} placeholder="Search staff..." value={search} onChange={(e) => setSearch(e.target.value)} /></div>
+      <div className="mb-3"><input className="form-control" aria-label="Search staff" style={{ maxWidth: 320 }} placeholder="Search staff..." value={search} onChange={(e) => setSearch(e.target.value)} /></div>
       <div className="card"><div className="table-responsive"><table className="table table-sm mb-0 align-middle">
         <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Branch</th><th>Status</th><th className="text-end">Actions</th></tr></thead>
         <tbody>

@@ -3,9 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../../common/contexts/AuthContext.jsx';
 import { getRoleDefaultPath } from '../../../common/utils/roleRouting.js';
 
-// Only the three live portals remain: Super Admin, HR and Employee.
+// Five live portals: Super Admin, Sales, Manager, HR and Employee.
 const ROLE_PORTAL_MAP = {
   SUPER_ADMIN: 'super-admin',
+  SALES: 'sales',
   HR: 'hr',
   EMPLOYEE: 'employee'
 };

@@ -71,8 +71,8 @@ export default function DeactivationRequests() {
     <AdminPage title="Deactivation Requests" subtitle="Review HR-submitted employee and intern deactivation requests." loading={loading} error={error} onRetry={load}>
       {notice && <div className="alert alert-success">{notice}</div>}
       <div className="d-flex flex-wrap gap-2 mb-3 align-items-center">
-        <input className="form-control" style={{ maxWidth: 260 }} placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
-        <select className="form-select" style={{ maxWidth: 180 }} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+        <input className="form-control" aria-label="Search deactivation requests" style={{ maxWidth: 260 }} placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
+        <select className="form-select" aria-label="Filter deactivation requests by status" style={{ maxWidth: 180 }} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
           <option value="PENDING">Pending</option>
           <option value="APPROVED">Approved</option>
           <option value="REJECTED">Rejected</option>

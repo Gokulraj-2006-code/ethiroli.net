@@ -2,11 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { ROLES, getRoleDefaultPath, isRoleAuthorized } from '../src/common/utils/roleRouting.js';
 import { getNavigationForRole } from '../src/common/layout/navigationConfig.js';
 
-// Only three panels ship: Super Admin, HR and Employee (interns share Employee).
-describe('three portal routing', () => {
+// Five panels ship: Super Admin, Sales, Manager, HR and Employee (interns share Employee).
+describe('five portal routing', () => {
   it.each([
     [ROLES.SUPER_ADMIN, '/app/super-admin/dashboard'],
+    [ROLES.SALES, '/app/sales/dashboard'],
     [ROLES.HR, '/app/hr/dashboard'],
+    [ROLES.PROJECT_MANAGER, '/app/manager/dashboard'],
     [ROLES.EMPLOYEE, '/app/employee/dashboard'],
     [ROLES.INTERN, '/app/employee/dashboard'],
   ])('routes %s to %s', (role, path) => expect(getRoleDefaultPath(role)).toBe(path));
@@ -14,9 +16,7 @@ describe('three portal routing', () => {
   it.each([
     ROLES.ADMIN,
     ROLES.TUTOR,
-    ROLES.PROJECT_MANAGER,
     ROLES.FINANCE,
-    ROLES.SALES,
     ROLES.RECEPTION,
     ROLES.STUDENT,
   ])('does not expose a separate portal for %s', (role) => expect(getRoleDefaultPath(role)).toBe('/unauthorized'));
@@ -48,11 +48,34 @@ describe('three portal routing', () => {
   it('exposes profile and attendance links to the roles that use them', () => {
     expect(getNavigationForRole(ROLES.SUPER_ADMIN).map(({ path }) => path)).toContain('/app/super-admin/profile');
     expect(getNavigationForRole(ROLES.HR).map(({ path }) => path)).toContain('/app/hr/profile');
+    expect(getNavigationForRole(ROLES.PROJECT_MANAGER).map(({ path }) => path)).toContain('/app/manager/profile');
+    expect(getNavigationForRole(ROLES.PROJECT_MANAGER).map(({ path }) => path)).toContain('/app/manager/attendance');
     expect(getNavigationForRole(ROLES.EMPLOYEE).map(({ path }) => path)).toContain('/app/employee/attendance');
   });
 
+  it('exposes budget, project and To-Do navigation to the roles that use them', () => {
+    const pathsFor = (role) => getNavigationForRole(role).map(({ path }) => path);
+    expect(pathsFor(ROLES.SUPER_ADMIN)).toEqual(expect.arrayContaining([
+      '/app/super-admin/budgets',
+      '/app/super-admin/projects',
+      '/app/super-admin/monitoring',
+      '/app/super-admin/todos',
+    ]));
+    expect(pathsFor(ROLES.SALES)).toEqual(expect.arrayContaining([
+      '/app/sales/budget',
+      '/app/sales/client-orders',
+      '/app/sales/projects',
+      '/app/sales/todos',
+    ]));
+    expect(pathsFor(ROLES.PROJECT_MANAGER)).toEqual(expect.arrayContaining([
+      '/app/manager/projects',
+      '/app/manager/todos',
+      '/app/manager/workspace',
+    ]));
+    expect(pathsFor(ROLES.EMPLOYEE)).toContain('/app/employee/todos');
+  });
+
   it('gives retired portal roles no sidebar of their own', () => {
-    expect(getNavigationForRole(ROLES.PROJECT_MANAGER)).toEqual([]);
     expect(getNavigationForRole(ROLES.TUTOR)).toEqual([]);
     expect(getNavigationForRole(ROLES.FINANCE)).toEqual([]);
   });

@@ -19,6 +19,15 @@ export const PORTAL_CONFIGS = {
     oauthProviders: [],
     brandColor: '#0f3460',
   },
+  [ROLES.PROJECT_MANAGER]: {
+    slug: 'manager',
+    label: 'Manager',
+    pageComponent: 'PmLoginPage',
+    strategies: ['password'],
+    mfaRequired: false,
+    oauthProviders: [],
+    brandColor: '#e94560',
+  },
   [ROLES.EMPLOYEE]: {
     slug: 'employee',
     label: 'Employee',
@@ -27,6 +36,15 @@ export const PORTAL_CONFIGS = {
     mfaRequired: false,
     oauthProviders: [],
     brandColor: '#264653',
+  },
+  [ROLES.SALES]: {
+    slug: 'sales',
+    label: 'Sales',
+    pageComponent: 'SalesLoginPage',
+    strategies: ['password'],
+    mfaRequired: false,
+    oauthProviders: [],
+    brandColor: '#1a4b48',
   },
 };
 

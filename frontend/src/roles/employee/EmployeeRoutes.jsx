@@ -5,6 +5,7 @@ import './styles/employee-portal.css';
 
 const Dashboard = lazy(() => import('./pages/Dashboard.jsx'));
 const Tasks = lazy(() => import('./pages/Tasks.jsx'));
+const Todos = lazy(() => import('./pages/Todos.jsx'));
 const Attendance = lazy(() => import('./pages/Attendance.jsx'));
 const Calendar = lazy(() => import('./pages/Calendar.jsx'));
 const Leaves = lazy(() => import('./pages/Leaves.jsx'));
@@ -19,6 +20,7 @@ export default function EmployeeRoutes() {
       <Route index element={<Navigate to="dashboard" replace />} />
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="tasks" element={<Tasks />} />
+      <Route path="todos" element={<Todos />} />
       <Route path="attendance" element={<Attendance />} />
       <Route path="calendar" element={<Calendar />} />
       <Route path="leaves" element={<Leaves />} />

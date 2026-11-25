@@ -9,7 +9,7 @@ export default function RolesPermissions() {
     { id: 'ADMIN', name: 'Organization Admin', scope: 'Single Tenant', usersCount: 48, description: 'Complete administrative control within assigned organization.' },
     { id: 'HR', name: 'HR Manager', scope: 'Module Level', usersCount: 92, description: 'Manage employee lifecycle, interns, leaves, and attendance.' },
     { id: 'TUTOR', name: 'Faculty / Tutor', scope: 'Module Level', usersCount: 140, description: 'Course management, curriculum, live batches, and grading.' },
-    { id: 'PROJECT_MANAGER', name: 'Project Manager', scope: 'Module Level', usersCount: 65, description: 'Sprint delivery, milestones, team assignments, and timesheets.' },
+    { id: 'PROJECT_MANAGER', name: 'Manager', scope: 'Module Level', usersCount: 65, description: 'Sprint delivery, milestones, team assignments, and timesheets.' },
     { id: 'FINANCE', name: 'Finance Controller', scope: 'Module Level', usersCount: 24, description: 'Income, invoicing, receipts, payments, and payroll audits.' },
     { id: 'SALES', name: 'Sales Executive', scope: 'Module Level', usersCount: 88, description: 'Leads, deals pipeline, opportunities, and proposals.' },
     { id: 'RECEPTION', name: 'Receptionist', scope: 'Module Level', usersCount: 34, description: 'Visitor gate logs, appointments, admissions, and receipts.' },

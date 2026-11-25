@@ -34,7 +34,7 @@ const DEFAULT_PLANS = [
         phaseName: 'Phase 3 – Live Project Execution',
         days: 'Day 11–25',
         tasks: [
-          { task: 'Live Client / Internal Module Assignment', assignee: 'Project Manager', verified: false },
+          { task: 'Live Client / Internal Module Assignment', assignee: 'Manager', verified: false },
           { task: 'Sprint Feature Development & Testing', assignee: 'Intern', verified: false },
           { task: 'Mid-Term Code Review & Milestone Demo', assignee: 'Mentor', verified: false }
         ]

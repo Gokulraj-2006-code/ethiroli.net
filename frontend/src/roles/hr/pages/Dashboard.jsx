@@ -4,6 +4,7 @@ import AdminPage from '../../../common/components/AdminPage/AdminPage.jsx';
 import axiosInstance from '../../../services/api/axiosInstance.js';
 import NotificationBell from '../../../common/components/NotificationBell.jsx';
 import SelfAttendancePunch from '../../../common/components/Attendance/SelfAttendancePunch.jsx';
+import PanelMonitoring from '../../../common/components/PanelMonitoring/PanelMonitoring.jsx';
 import { useSocket } from '../../../common/contexts/SocketContext.jsx';
 
 const unwrap = (response) => response?.data?.data ?? response?.data;
@@ -102,6 +103,7 @@ export default function HRDashboard() {
       <button type="button" className="btn btn-sm btn-outline-dark" onClick={load}>Retry workforce data</button>
     </div> : null}
     <SelfAttendancePunch />
+    <PanelMonitoring />
     <div className="row g-3 mb-4">{metrics.map(([label, value, tone]) => <div className="col-6 col-xl-4" key={label}>
       <div className={`emp-stat ${tone} h-100`}><span className="emp-stat__label">{label}</span><div className="emp-stat__value">{value ?? '—'}</div><div className="emp-stat__hint">Live workforce data</div></div>
     </div>)}</div>

@@ -42,11 +42,7 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-function portalScopeForPath(pathname) {
-  const segments = String(pathname || '').toLowerCase().split('/').filter(Boolean);
-  const portalSegment = segments[0] === 'auth' ? segments[1] : (segments[0] === 'app' ? segments[1] : null);
-  return ['super-admin', 'hr', 'employee'].includes(portalSegment) ? portalSegment : null;
-}
+const PORTAL_SCOPES = ['super-admin', 'hr', 'manager', 'employee', 'sales'];
 
 /**
  * Portal login screens, mirroring PrivateRoute.getLoginUrlForPath.
@@ -58,20 +54,42 @@ function portalScopeForPath(pathname) {
  * dropped into the Admin portal, whose own login route then 401'd again and
  * re-ran this redirect - an endless reload loop with the error never shown.
  */
-const PORTAL_LOGINS = [
-  ['super-admin', '/auth/super-admin/login'],
-  ['hr', '/auth/hr/login'],
-  ['employee', '/auth/employee/login'],
+const PORTAL_LOGIN_PATHS = Object.freeze({
+  'super-admin': '/auth/super-admin/login',
+  hr: '/auth/hr/login',
+  manager: '/auth/manager/login',
+  employee: '/auth/employee/login',
+  sales: '/auth/sales/login',
   // Interns authenticate through the Employee portal.
-  ['intern', '/auth/employee/login'],
-];
+  intern: '/auth/employee/login',
+});
+
+/** Normalise both /app/manager/* and the historic /pm.html entry point. */
+const normalizePortalSegment = (segment = '') => {
+  const clean = String(segment).toLowerCase().replace(/\.html$/, '');
+  return clean === 'pm' ? 'manager' : clean;
+};
+
+const portalSegments = (pathname) => {
+  const raw = String(pathname || '').toLowerCase().split('/').filter(Boolean);
+  const primaryRaw = raw[0] === 'auth' || raw[0] === 'app' ? (raw[1] || '') : (raw[0] || '');
+  return {
+    segments: raw.map(normalizePortalSegment),
+    primary: normalizePortalSegment(primaryRaw),
+  };
+};
+
+function portalScopeForPath(pathname) {
+  const { primary } = portalSegments(pathname);
+  return PORTAL_SCOPES.includes(primary) ? primary : null;
+}
 
 // Paths with no recognisable role segment keep the previous target so the
 // public site (index.html), which really does own /auth/login, is unchanged.
 export const loginUrlForPathname = (pathname) => {
-  const segments = String(pathname || '').toLowerCase().split('/').filter(Boolean);
-  const hit = PORTAL_LOGINS.find(([segment]) => segments.includes(segment));
-  return hit ? hit[1] : '/auth/login';
+  const { segments } = portalSegments(pathname);
+  const hit = segments.find((segment) => PORTAL_LOGIN_PATHS[segment]);
+  return hit ? PORTAL_LOGIN_PATHS[hit] : '/auth/login';
 };
 
 // A login screen must never be redirected again: if a request made from a login

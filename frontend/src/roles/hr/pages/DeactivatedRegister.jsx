@@ -32,7 +32,7 @@ export default function DeactivatedRegister() {
 
   return (
     <AdminPage title="Deactivated Register" subtitle="Active, pending and deactivated employee/intern records." loading={loading} error={error} onRetry={load}>
-      <div className="mb-3"><input className="form-control" style={{ maxWidth: 320 }} placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} /></div>
+      <div className="mb-3"><input className="form-control" aria-label="Search deactivated accounts" style={{ maxWidth: 320 }} placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} /></div>
       <h5>Active</h5>
       <div className="card mb-3"><div className="table-responsive"><table className="table table-sm mb-0"><thead><tr><th>Name</th><th>ID</th><th>Branch</th><th>Status</th></tr></thead><tbody>
         {filtered(active).map((p) => <tr key={p.user_id}><td>{p.full_name}</td><td>{p.employee_code || '—'}</td><td>{p.branch_name || '—'}</td><td><span className="badge bg-success">Active</span></td></tr>)}

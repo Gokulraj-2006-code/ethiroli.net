@@ -247,6 +247,28 @@ export const PORTAL_CONFIGS = {
   }
 };
 
+/**
+ * Role-based monitoring hierarchy for the five live panels.
+ *
+ * Super Admin can monitor Sales, Manager, HR and Employee. Manager can monitor
+ * HR and Employee. HR can monitor Employee. Sales, Employee and Intern can
+ * monitor none. Every other relationship is denied.
+ */
+export const PANEL_MONITOR_ACCESS = Object.freeze({
+  [ROLES.SUPER_ADMIN]: ['sales', 'manager', 'hr', 'employee'],
+  [ROLES.ADMIN]: ['sales', 'manager', 'hr', 'employee'],
+  [ROLES.PROJECT_MANAGER]: ['hr', 'employee'],
+  [ROLES.HR]: ['employee'],
+  [ROLES.SALES]: [],
+  [ROLES.EMPLOYEE]: [],
+  [ROLES.INTERN]: [],
+});
+
+export const getMonitorablePanelsForRole = (role) => {
+  if (!role) return [];
+  return PANEL_MONITOR_ACCESS[String(role).trim().toUpperCase()] || [];
+};
+
 export const getPortalConfigBySlug = (slug) => {
   const entry = Object.entries(PORTAL_CONFIGS).find(([, config]) => config.slug === slug);
   return entry ? { role: entry[0], ...entry[1] } : null;

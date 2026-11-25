@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
 import { ROLES } from '../utils/roleRouting.js';
+import { formatRoleName } from '../hooks/useDocumentTitle.js';
 import { useAppDispatch } from '../../store/hooks.js';
 import { toggleSidebar } from '../../store/slices/uiSlice.js';
 import RoleAvatar from '../components/RoleAvatar/RoleAvatar.jsx';
@@ -24,6 +25,7 @@ export default function Navbar({ role, onSearchClick, onToggleFeed, unreadFeedCo
     switch (r) {
       case ROLES.SUPER_ADMIN: return 'super-admin';
       case ROLES.HR: return 'hr';
+      case ROLES.PROJECT_MANAGER: return 'manager';
       case ROLES.EMPLOYEE: return 'employee';
       case ROLES.INTERN: return 'employee';
       default: return 'employee';
@@ -84,7 +86,7 @@ export default function Navbar({ role, onSearchClick, onToggleFeed, unreadFeedCo
           </span>
 
           <span className="portalRoleBadge">
-            {String(currentRole || 'PORTAL').replace(/_/g, ' ')}
+            {formatRoleName(currentRole || 'PORTAL')}
           </span>
         </div>
       )}

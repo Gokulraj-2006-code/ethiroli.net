@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 /**
  * Normalizes role codes into user-friendly display labels.
- * e.g., "SUPER_ADMIN" -> "Super Admin", "PROJECT_MANAGER" -> "Project Manager"
+ * e.g., "SUPER_ADMIN" -> "Super Admin", "PROJECT_MANAGER" -> "Manager"
  */
 export function formatRoleName(role) {
   if (!role) return '';
@@ -14,10 +14,10 @@ export function formatRoleName(role) {
     HR: 'HR Management',
     SENIOR_TUTOR: 'Senior Tutor',
     TUTOR: 'Tutor',
-    PROJECT_MANAGER: 'Project Manager',
-    PM: 'Project Manager',
+    PROJECT_MANAGER: 'Manager',
+    PM: 'Manager',
     FINANCE: 'Finance',
-    SALES: 'Sales & Marketing',
+    SALES: 'Sales',
     RECEPTION: 'Reception Desk',
     EMPLOYEE: 'Employee Portal',
     INTERN: 'Internship Portal',

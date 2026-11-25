@@ -14,7 +14,7 @@ export const ROLE_LOGO_SRC = '/assets/images/ethiroli_logo.png';
  *
  * Resolution order:
  *   1. the user's own uploaded avatar, when it loads
- *   2. the Ethiroli brand mark, for brand-logo roles (e.g. Project Manager)
+ *   2. the Ethiroli brand mark, for brand-logo roles (e.g. Manager)
  *   3. the first letter of the display name / email
  *
  * A broken avatar URL or a missing logo file falls through to the next option

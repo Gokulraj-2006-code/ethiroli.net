@@ -8,12 +8,29 @@ import { logger } from '../config/logger.js';
 const SESSION_CACHE_PREFIX = 'session:';
 const SESSION_CACHE_TTL = 30 * 60; // 30 minutes in seconds
 
+// Self-service profile edits are allowed for every role, including the
+// read-only CEO account. RoleProfile uses PATCH /v1/users/me to persist the
+// "CEO" display name and avatar; blocking it surfaced a 403 on the profile page.
+const SELF_PROFILE_PATH = /^\/(?:api\/)?v1\/users\/me\/?$/;
+const SUPER_ADMIN_MUTATION_PATHS = [
+  /^\/(?:api\/)?v1\/(?:staff|deactivation-requests)(?:\/|$)/,
+  // The CEO owns the annual company budget and their own collaborative To-Dos,
+  // and performs the final delivery confirmation. All other company mutations
+  // stay read-only.
+  /^\/(?:api\/)?v1\/budgets(?:\/|$)/,
+  /^\/(?:api\/)?v1\/todos(?:\/|$)/,
+  /^\/(?:api\/)?v1\/task-collaboration(?:\/|$)/,
+  /^\/(?:api\/)?v1\/bell-notifications(?:\/|$)/,
+  /^\/(?:api\/)?v1\/company-projects\/[^/]+\/delivery\/complete\/?$/,
+  SELF_PROFILE_PATH
+];
+
 export const isReadOnlyRoleMutation = (role, method, path = '') => {
   if (role !== 'SUPER_ADMIN') return false;
   const verb = String(method).toUpperCase();
   if (['GET', 'HEAD', 'OPTIONS'].includes(verb)) return false;
-  // Allow CEO to manage staff accounts and deactivation requests
-  if (/^\/(?:api\/)?v1\/(?:staff|deactivation-requests)(?:\/|$)/.test(String(path))) return false;
+  // Allow CEO to manage staff, deactivation requests, and their own profile.
+  if (SUPER_ADMIN_MUTATION_PATHS.some((pattern) => pattern.test(String(path)))) return false;
   return true;
 };
 
@@ -23,7 +40,18 @@ const SUPER_ADMIN_READ_PATHS = [
   /^\/(?:api\/)?v1\/leaves(?:\/|$)/,
   /^\/(?:api\/)?v1\/role\/(?:dashboard|navigation|portal-config|permissions|profile|me)\/?$/,
   /^\/(?:api\/)?v1\/auth\/me\/?$/,
-  /^\/(?:api\/)?v1\/(?:staff|deactivation-requests)(?:\/|$)/
+  /^\/(?:api\/)?v1\/auth\/monitorable-panels\/?$/,
+  SELF_PROFILE_PATH,
+  /^\/(?:api\/)?v1\/(?:staff|deactivation-requests)(?:\/|$)/,
+  // Company oversight reads for the new five-panel workflow.
+  /^\/(?:api\/)?v1\/(?:budgets|client-orders|company-projects|todos|task-collaboration)(?:\/|$)/,
+  // Curated assignee directory used by the CEO's To-Do sharing picker. The
+  // full user directory stays outside the read-only CEO scope.
+  /^\/(?:api\/)?v1\/(?:projects|student-projects\/projects)\/assignable-users\/?$/,
+  /^\/(?:api\/)?v1\/(?:notifications|bell-notifications)(?:\/|$)/,
+  // Read-only monitoring console data is part of the CEO oversight scope.
+  /^\/(?:api\/)?monitoring\/(?:errors|trends)(?:\/|$)/,
+  /^\/(?:api\/)?v1\/system\/cluster\/telemetry\/?$/
 ];
 
 export const isSuperAdminReadAllowed = (role, method, path) => {
@@ -33,8 +61,9 @@ export const isSuperAdminReadAllowed = (role, method, path) => {
   if (['GET', 'HEAD', 'OPTIONS'].includes(verb)) {
     return SUPER_ADMIN_READ_PATHS.some((pattern) => pattern.test(normalizedPath));
   }
-  // Mutations are only permitted for staff account and deactivation request management.
-  return /^\/(?:api\/)?v1\/(?:staff|deactivation-requests)(?:\/|$)/.test(normalizedPath);
+  // Mutations are only permitted for staff/deactivation management and the
+  // signed-in user's own profile.
+  return SUPER_ADMIN_MUTATION_PATHS.some((pattern) => pattern.test(normalizedPath));
 };
 
 const getRedisSession = async (token) => {

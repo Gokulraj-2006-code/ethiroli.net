@@ -1,6 +1,6 @@
 /**
  * Ethiroli SaaS Platform — Role-Based Navigation Configuration
- * Defines sidebar menu items for the three live roles (Super Admin, HR, Employee) based on PROJECT_DOCUMENTATION.md Section 5.2.
+ * Defines sidebar menu items for the five live panels (Super Admin, Sales, Manager, HR, Employee) based on PROJECT_DOCUMENTATION.md Section 5.2.
  */
 
 import { ROLES } from '../utils/roleRouting.js';
@@ -25,6 +25,16 @@ export const ROLE_NAVIGATION = Object.freeze({
       children: [
         { label: 'Leads (CRM)', path: '/app/super-admin/leads', icon: 'contact_mail' },
         { label: 'Website Enquiries', path: '/app/super-admin/enquiries', icon: 'contact_mail' },
+      ],
+    },
+    {
+      label: 'Company delivery',
+      icon: 'folder2',
+      children: [
+        { label: 'Annual budgets', path: '/app/super-admin/budgets', icon: 'wallet2' },
+        { label: 'Company projects', path: '/app/super-admin/projects', icon: 'folder2' },
+        { label: 'Panel monitoring', path: '/app/super-admin/monitoring', icon: 'monitor_heart' },
+        { label: 'To-Dos', path: '/app/super-admin/todos', icon: 'check2-square' },
       ],
     },
     {
@@ -87,6 +97,23 @@ export const ROLE_NAVIGATION = Object.freeze({
     },
   ],
 
+  [ROLES.SALES]: [
+    { label: 'Dashboard', path: '/app/sales/dashboard', icon: 'dashboard' },
+    { label: 'Budget', path: '/app/sales/budget', icon: 'wallet2' },
+    { label: 'Client Orders', path: '/app/sales/client-orders', icon: 'clipboard2' },
+    {
+      label: 'Projects',
+      icon: 'kanban',
+      children: [
+        { label: 'Company Projects', path: '/app/sales/projects', icon: 'folder2' },
+        { label: 'Project Expenses', path: '/app/sales/expenses', icon: 'receipt' },
+      ],
+    },
+    { label: 'To-Dos', path: '/app/sales/todos', icon: 'check2-square' },
+    { label: 'Notifications', path: '/app/sales/notifications', icon: 'bell' },
+    { label: 'My Profile', path: '/app/sales/profile', icon: 'person' },
+  ],
+
   [ROLES.HR]: [
     { label: 'Dashboard', path: '/app/hr/dashboard', icon: 'dashboard' },
     { label: 'Employee Directory', path: '/app/hr/employees', icon: 'badge' },
@@ -112,6 +139,7 @@ export const ROLE_NAVIGATION = Object.freeze({
       icon: 'briefcase',
       children: [
         { label: 'My Tasks', path: '/app/employee/tasks', icon: 'check2-square' },
+        { label: 'To-Dos', path: '/app/employee/todos', icon: 'checklist' },
         { label: 'My Projects', path: '/app/employee/projects', icon: 'kanban' },
         { label: 'Attendance', path: '/app/employee/attendance', icon: 'clock' },
         { label: 'Leave Management', path: '/app/employee/leaves', icon: 'calendar-x' },
@@ -150,6 +178,14 @@ export const ROLE_NAVIGATION = Object.freeze({
     },
   ],
 
+  [ROLES.PROJECT_MANAGER]: [
+    { label: 'Dashboard', path: '/app/manager/dashboard', icon: 'dashboard' },
+    { label: 'Manager workspace', path: '/app/manager/workspace', icon: 'work' },
+    { label: 'Assigned projects', path: '/app/manager/projects', icon: 'folder2' },
+    { label: 'To-Dos', path: '/app/manager/todos', icon: 'check2-square' },
+    { label: 'My Profile', path: '/app/manager/profile', icon: 'person' },
+  ],
+
 });
 
 /**
@@ -167,9 +203,32 @@ export const getNavigationForRole = (role) => {
       { label: 'Leave monitoring', path: '/app/super-admin/leaves', icon: 'event' },
       { label: 'Staff administration', path: '/app/super-admin/staff', icon: 'people' },
       { label: 'Deactivation requests', path: '/app/super-admin/deactivation-requests', icon: 'person_off' },
+      { label: 'Annual budgets', path: '/app/super-admin/budgets', icon: 'wallet2' },
+      { label: 'Company projects', path: '/app/super-admin/projects', icon: 'folder2' },
+      { label: 'Panel monitoring', path: '/app/super-admin/monitoring', icon: 'monitor_heart' },
+      { label: 'To-Dos', path: '/app/super-admin/todos', icon: 'check2-square' },
       { label: 'My Profile', path: '/app/super-admin/profile', icon: 'person' }
     ];
   }
+  if (normalized === 'SALES') return [
+    { label: 'Dashboard', path: '/app/sales/dashboard', icon: 'dashboard' },
+    { label: 'Budget', path: '/app/sales/budget', icon: 'wallet2' },
+    { label: 'Client Orders', path: '/app/sales/client-orders', icon: 'clipboard2' },
+    { label: 'Company Projects', path: '/app/sales/projects', icon: 'folder2' },
+    { label: 'Project Expenses', path: '/app/sales/expenses', icon: 'receipt' },
+    { label: 'To-Dos', path: '/app/sales/todos', icon: 'check2-square' },
+    { label: 'Notifications', path: '/app/sales/notifications', icon: 'bell' },
+    { label: 'My Profile', path: '/app/sales/profile', icon: 'person' }
+  ];
+  if (normalized === 'PROJECT_MANAGER') return [
+    { label: 'Dashboard', path: '/app/manager/dashboard', icon: 'dashboard' },
+    { label: 'Manager attendance', path: '/app/manager/attendance', icon: 'schedule' },
+    { label: 'Calendar', path: '/app/manager/calendar', icon: 'calendar_month' },
+    { label: 'Manager workspace', path: '/app/manager/workspace', icon: 'work' },
+    { label: 'Assigned projects', path: '/app/manager/projects', icon: 'folder2' },
+    { label: 'To-Dos', path: '/app/manager/todos', icon: 'check2-square' },
+    { label: 'My Profile', path: '/app/manager/profile', icon: 'person' }
+  ];
   if (normalized === 'HR') return [
     { label: 'Dashboard', path: '/app/hr/dashboard', icon: 'dashboard' },
     { label: 'HR attendance', path: '/app/hr/attendance', icon: 'schedule' },
@@ -188,6 +247,7 @@ export const getNavigationForRole = (role) => {
   if (normalized === 'EMPLOYEE' || normalized === 'INTERN') return [
     { label: 'Dashboard', path: '/app/employee/dashboard', icon: 'dashboard' },
     { label: 'My Tasks', path: '/app/employee/tasks', icon: 'checklist' },
+    { label: 'To-Dos', path: '/app/employee/todos', icon: 'check2-square' },
     { label: 'Attendance', path: '/app/employee/attendance', icon: 'schedule' },
     { label: 'Leaves', path: '/app/employee/leaves', icon: 'event_busy' },
     { label: 'Calendar', path: '/app/employee/calendar', icon: 'calendar_month' },

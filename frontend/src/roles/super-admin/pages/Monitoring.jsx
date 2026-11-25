@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../../services/api/axiosInstance.js';
-import { listErrorLogs, resolveError } from '../../../services/api/monitoringApi.js';
+import PanelMonitoring from '../../../common/components/PanelMonitoring/PanelMonitoring.jsx';
+import { listErrorLogs } from '../../../services/api/monitoringApi.js';
 
 export default function Monitoring() {
   const [logs, setLogs] = useState([]);
   const [telemetry, setTelemetry] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [resolving, setResolving] = useState(null);
-  const [reloadingCluster, setReloadingCluster] = useState(false);
-  const [feedback, setFeedback] = useState(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -35,41 +33,6 @@ export default function Monitoring() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleResolve = async (id) => {
-    setResolving(id);
-    try {
-      await resolveError(id);
-      setLogs(prev => prev.filter(l => l.id !== id));
-    } catch (err) {
-      console.error('Failed to resolve error', err);
-      alert('Failed to resolve error.');
-    } finally {
-      setResolving(null);
-    }
-  };
-
-  const handleClusterReload = async () => {
-    setReloadingCluster(true);
-    setFeedback(null);
-    try {
-      const res = await axiosInstance.post('/v1/system/cluster/reload', {
-        reason: 'Manual rolling restart from Monitoring Console'
-      });
-      setFeedback({
-        type: 'success',
-        message: res.data?.message || 'Zero-downtime rolling reload initiated successfully.'
-      });
-      setTimeout(fetchData, 2000);
-    } catch (err) {
-      setFeedback({
-        type: 'danger',
-        message: err.response?.data?.message || err.message || 'Failed to trigger cluster reload.'
-      });
-    } finally {
-      setReloadingCluster(false);
-    }
-  };
-
   if (loading && !telemetry && logs.length === 0) {
     return (
       <div className="container-fluid p-3 text-center text-muted py-5">
@@ -87,6 +50,10 @@ export default function Monitoring() {
 
   return (
     <div className="container-fluid p-3 bg-light min-vh-100">
+      <PanelMonitoring />
+
+      {error && <div className="alert alert-danger py-2" role="alert">{error}</div>}
+
       <div className="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
         <div>
           <h2 className="fw-bold mb-1 d-flex align-items-center gap-2">
@@ -97,28 +64,10 @@ export default function Monitoring() {
             Real-time Node.js multi-worker distribution, database connection pooling metrics, and zero-downtime cluster reload.
           </p>
         </div>
-        <div className="d-flex gap-2">
-          <button 
-            className="btn btn-warning btn-sm d-flex align-items-center gap-1 shadow-sm text-dark fw-semibold"
-            onClick={handleClusterReload}
-            disabled={reloadingCluster}
-          >
-            <i className="bi bi-arrow-repeat" aria-hidden="true"></i>
-            {reloadingCluster ? 'Reloading Workers...' : 'Zero-Downtime Rolling Reload'}
-          </button>
-          <button className="btn btn-outline-secondary btn-sm" onClick={fetchData}>
-            <i className="bi bi-arrow-clockwise me-1"></i> Refresh
-          </button>
-        </div>
+        <button className="btn btn-outline-secondary btn-sm" onClick={fetchData}>
+          <i className="bi bi-arrow-clockwise me-1"></i> Refresh
+        </button>
       </div>
-
-      {feedback && (
-        <div className={`alert alert-${feedback.type} alert-dismissible fade show shadow-sm mb-2`} role="alert">
-          <i className="bi bi-check-circle-fill me-2"></i>
-          {feedback.message}
-          <button type="button" className="btn-close" onClick={() => setFeedback(null)}></button>
-        </div>
-      )}
 
       {/* Cluster & DB Pool Telemetry Section */}
       {telemetry && (
@@ -202,7 +151,6 @@ export default function Monitoring() {
                   <th>Severity</th>
                   <th>Service / Route</th>
                   <th>Timestamp</th>
-                  <th className="text-end">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -217,15 +165,6 @@ export default function Monitoring() {
                     </td>
                     <td><code>{log.service || log.source || '-'}</code></td>
                     <td className="small text-muted">{new Date(log.createdAt || log.created_at || Date.now()).toLocaleString()}</td>
-                    <td className="text-end">
-                      <button 
-                        className="btn btn-outline-primary btn-sm py-1 px-2"
-                        disabled={resolving === log.id || log.resolved || log.isResolved}
-                        onClick={() => handleResolve(log.id)}
-                      >
-                        {resolving === log.id ? 'Resolving...' : (log.resolved || log.isResolved ? 'Resolved' : 'Resolve')}
-                      </button>
-                    </td>
                   </tr>
                 ))}
               </tbody>

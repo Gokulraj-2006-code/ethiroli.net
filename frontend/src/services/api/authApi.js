@@ -29,6 +29,12 @@ export const getMe = async () => {
   return response.data;
 };
 
+/** Panels the signed-in role is allowed to monitor (backend-authoritative). */
+export const getMonitorablePanels = async () => {
+  const response = await axiosInstance.get('/v1/auth/monitorable-panels');
+  return response?.data?.panels || response?.panels || response?.data?.data?.panels || [];
+};
+
 export const impersonate = async (targetUserId) => {
   const response = await axiosInstance.post('/v1/auth/impersonate', { targetUserId });
   return response.data;

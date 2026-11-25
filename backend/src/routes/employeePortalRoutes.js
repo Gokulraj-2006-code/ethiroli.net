@@ -53,6 +53,11 @@ router.post('/leaves', controller.applyLeave);
 // 4. Tasks & Projects
 router.get('/tasks', controller.getAssignedTasks);
 router.patch('/tasks/:id/status', controller.updateTaskStatus);
+// Explicit employee workflow endpoints. The status patch above is kept for the
+// existing panel; these give richer clients progress and submission notes.
+router.post('/tasks/:id/start', controller.startTask);
+router.patch('/tasks/:id/progress', controller.updateTaskProgress);
+router.post('/tasks/:id/submit', controller.submitTaskForReview);
 router.get('/projects', controller.getMyProjects);
 
 // 5. Training & Development

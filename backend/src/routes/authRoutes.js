@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, logout, getMe, verifyMfa, oauthAuthorize, oauthCallback, changePassword, impersonate, stopImpersonation } from '../controllers/authController.js';
+import { login, logout, getMe, getMonitorablePanels, verifyMfa, oauthAuthorize, oauthCallback, changePassword, impersonate, stopImpersonation } from '../controllers/authController.js';
 import { authenticate } from '../middleware/auth.js';
 import { validateBody } from '../middleware/validation.js';
 import { loginLimiter, passwordRecoveryLimiter } from '../middleware/rateLimiter.js';
@@ -22,6 +22,7 @@ router.get('/oauth/:provider/authorize', oauthAuthorize);
 router.get('/oauth/:provider/callback', oauthCallback);
 router.post('/logout', logout);
 router.get('/me', authenticate, getMe);
+router.get('/monitorable-panels', authenticate, getMonitorablePanels);
 router.post('/change-password', authenticate, validateBody('changePassword'), changePassword);
 
 // Employee password recovery - deliberately PUBLIC (no `authenticate`).

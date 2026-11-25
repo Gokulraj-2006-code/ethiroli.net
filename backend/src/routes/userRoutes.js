@@ -23,8 +23,10 @@ import {
   rejectPasswordChangeRequest
 } from '../controllers/passwordChangeController.js';
 import PasswordRecoveryRequest from '../models/PasswordRecoveryRequest.js';
+import User from '../models/User.js';
 import { asyncHandler } from '../middleware/errorHandler.js';
 import { success } from '../utils/response.js';
+import { NotFoundError } from '../utils/errors.js';
 
 /**
  * GET /v1/users/password-recovery-requests
@@ -60,6 +62,14 @@ router.post('/password-change-requests/:id/approve', requireRole('ADMIN', 'SUPER
 router.post('/password-change-requests/:id/reject', requireRole('ADMIN', 'SUPER_ADMIN', 'HR', 'HR_SUPERADMIN'), rejectPasswordChangeRequest);
 
 // Self-service (any authenticated role) - must precede /:id
+router.get('/me', asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (!user) throw new NotFoundError('User not found.');
+  // Never expose the stored hash, even to the signed-in user.
+  const safeUser = { ...user };
+  delete safeUser.password_hash;
+  return success(res, 200, safeUser, 'Profile retrieved');
+}));
 router.patch('/me', updateMyProfile);
 
 // User collection routes - HR and Admins can manage within clearance; Tutors can enumerate students

@@ -3,12 +3,20 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { isRoleAuthorized } from '../../utils/roleRouting';
 
+const normalizeSegment = (segment = '') => {
+  const clean = String(segment).toLowerCase().replace(/\.html$/, '');
+  return clean === 'pm' ? 'manager' : clean;
+};
+
 const getLoginUrlForPath = (pathname) => {
+  const segments = String(pathname || '').toLowerCase().split('/').filter(Boolean).map(normalizeSegment);
   // Interns share the Employee portal, so their paths land on the employee login.
-  if (pathname.includes('/intern')) return '/auth/employee/login';
-  if (pathname.includes('/employee')) return '/auth/employee/login';
-  if (pathname.includes('/hr')) return '/auth/hr/login';
-  if (pathname.includes('/super-admin')) return '/auth/super-admin/login';
+  if (segments.includes('intern') || segments.includes('employee')) return '/auth/employee/login';
+  if (segments.includes('hr')) return '/auth/hr/login';
+  if (segments.includes('super-admin')) return '/auth/super-admin/login';
+  if (segments.includes('sales')) return '/auth/sales/login';
+  // The Manager panel keeps its historic /pm.html entry point and /app/pm alias.
+  if (segments.includes('manager')) return '/auth/manager/login';
   // Unknown/dead paths: /auth/login is registered by every portal bundle, so it
   // can never bounce between two portals the way a portal-specific fallback would.
   return '/auth/login';

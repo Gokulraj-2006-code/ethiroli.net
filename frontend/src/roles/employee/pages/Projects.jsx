@@ -129,7 +129,7 @@ export default function Projects() {
           <EmptyState
             icon="bi-kanban"
             title="No projects assigned to you yet"
-            text="When a project manager adds you to a project it will appear here with its repository and role. Nothing has been assigned to you yet."
+            text="When a manager adds you to a project it will appear here with its repository and role. Nothing has been assigned to you yet."
           />
         </div>
       ) : (

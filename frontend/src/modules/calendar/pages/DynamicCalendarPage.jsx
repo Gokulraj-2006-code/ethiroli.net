@@ -958,6 +958,7 @@ export default function DynamicCalendarPage({
                 <i className="bi bi-search deck-search-icon"></i>
                 <input
                   type="text"
+                  aria-label="Search events and clients"
                   className="deck-search-input"
                   placeholder="Search events, clients..."
                   value={searchQuery}
@@ -1751,7 +1752,7 @@ export default function DynamicCalendarPage({
                         <option value="INTERN">🎓 Interns Only</option>
                         <option value="TUTOR">📚 Tutors / Instructors Only</option>
                         <option value="STUDENT">🎒 Students Only</option>
-                        <option value="PROJECT_MANAGER">🚀 Project Managers Only</option>
+                        <option value="PROJECT_MANAGER">🚀 Managers Only</option>
                         <option value="HR">💼 HR Department Only</option>
                         <option value="SALES">📈 Sales Team Only</option>
                         <option value="FINANCE">💳 Finance Department Only</option>

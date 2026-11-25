@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store/index.js';
@@ -11,6 +11,7 @@ import MainLayout from './common/layout/MainLayout.jsx';
 import { ROLES } from './common/utils/roleRouting.js';
 import ScrollToTop from './common/utils/ScrollToTop.jsx';
 import ActivateAccount from './roles/public/pages/ActivateAccount.jsx';
+import './styles/panel-visuals.css';
 
 /**
  * RolePortalShell - the shared bootstrap for every role portal entry
@@ -30,6 +31,18 @@ import ActivateAccount from './roles/public/pages/ActivateAccount.jsx';
 export default function RolePortalShell({ slug, loginPage, allowedRoles, routes }) {
   const home = `/app/${slug}/dashboard`;
   const login = `/auth/${slug}/login`;
+
+  // Scopes the shared colorful panel layer to the current portal. The cleanup
+  // only removes the attribute if this shell still owns it, so navigating
+  // between portal entries cannot clear another portal's scope.
+  useEffect(() => {
+    document.documentElement.setAttribute('data-portal', slug);
+    return () => {
+      if (document.documentElement.getAttribute('data-portal') === slug) {
+        document.documentElement.removeAttribute('data-portal');
+      }
+    };
+  }, [slug]);
 
   return (
     <Provider store={store}>

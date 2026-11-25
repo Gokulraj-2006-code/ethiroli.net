@@ -33,6 +33,9 @@ import {
 import { authenticate } from '../middleware/auth.js';
 import { requireRole } from '../middleware/rbac.js';
 import { asyncHandler } from '../middleware/errorHandler.js';
+import { success } from '../utils/response.js';
+import { NotFoundError, ValidationError } from '../utils/errors.js';
+import SalesCommission from '../models/SalesCommission.js';
 
 const router = express.Router();
 
@@ -96,10 +99,10 @@ router.post(
 router.get(
   '/commissions',
   authenticate,
-  requireRole('SALES', 'MANAGER', 'SUPER_ADMIN'),
+  requireRole('SALES', 'PROJECT_MANAGER', 'SUPER_ADMIN'),
   asyncHandler(async (req, res) => {
     let bda_id = req.query.bda_id;
-    const isManagement = ['ADMIN', 'SUPER_ADMIN', 'MANAGER'].includes(req.user?.role);
+    const isManagement = ['ADMIN', 'SUPER_ADMIN', 'PROJECT_MANAGER'].includes(req.user?.role);
     if (!isManagement) {
       bda_id = req.user?.id;
     } else if (bda_id === 'me') {
@@ -121,7 +124,7 @@ router.get(
 router.get(
   '/commissions/:id',
   authenticate,
-  requireRole('SALES', 'MANAGER', 'SUPER_ADMIN'),
+  requireRole('SALES', 'PROJECT_MANAGER', 'SUPER_ADMIN'),
   asyncHandler(async (req, res) => {
     const commission = await SalesCommission.getCommissionById(req.params.id);
     if (!commission) throw new NotFoundError('Commission not found');
@@ -132,7 +135,7 @@ router.get(
 router.patch(
   '/commissions/:id/approve',
   authenticate,
-  requireRole('MANAGER', 'SUPER_ADMIN'),
+  requireRole('PROJECT_MANAGER', 'SUPER_ADMIN'),
   asyncHandler(async (req, res) => {
     const approved = await SalesCommission.approveCommission(
       req.params.id,
@@ -162,7 +165,7 @@ router.patch(
 router.patch(
   '/commissions/:id/reject',
   authenticate,
-  requireRole('MANAGER', 'SUPER_ADMIN'),
+  requireRole('PROJECT_MANAGER', 'SUPER_ADMIN'),
   asyncHandler(async (req, res) => {
     const rejected = await SalesCommission.rejectCommission(
       req.params.id,

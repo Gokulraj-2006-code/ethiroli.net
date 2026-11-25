@@ -19,6 +19,18 @@ export const employeePortalApi = {
   // 4. Tasks & Projects
   getAssignedTasks: (params) => axiosInstance.get('/v1/employee/tasks', { params }),
   updateTaskStatus: (id, status) => axiosInstance.patch(`/v1/employee/tasks/${id}/status`, { status }),
+  // Shared, server-scoped task list. The employee endpoints above remain for
+  // the richer decorated view; these are the real review-workflow endpoints.
+  getTasks: (params) => axiosInstance.get('/v1/tasks', { params }),
+  startTask: (id) => axiosInstance.post(`/v1/tasks/${encodeURIComponent(id)}/start`),
+  updateTaskProgress: (id, progressPercent) => axiosInstance.patch(
+    `/v1/tasks/${encodeURIComponent(id)}/progress`,
+    { progress_percent: progressPercent }
+  ),
+  submitTaskForReview: (id, submissionNote) => axiosInstance.post(
+    `/v1/tasks/${encodeURIComponent(id)}/submit`,
+    { submission_note: submissionNote }
+  ),
   getMyProjects: () => axiosInstance.get('/v1/employee/projects'),
 
   // 5. Training & Development

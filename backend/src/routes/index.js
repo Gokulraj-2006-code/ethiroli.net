@@ -80,6 +80,11 @@ import operationsRoutes from './operationsRoutes.js';
 import pmRoutes from './pmRoutes.js';
 import financeRoutes from './financeRoutes.js';
 import salesRoutes from './salesRoutes.js';
+import budgetRoutes from './budgetRoutes.js';
+import clientOrderRoutes from './clientOrderRoutes.js';
+import companyProjectRoutes from './companyProjectRoutes.js';
+import todoRoutes from './todoRoutes.js';
+import taskCollaborationRoutes from './taskCollaborationRoutes.js';
 import receptionRoutes from './receptionRoutes.js';
 import tutorRoutes from './tutorRoutes.js';
 
@@ -220,6 +225,11 @@ router.use('/v1/operations', operationsRoutes);
 router.use('/v1/pm', pmRoutes);
 router.use('/v1/finance', financeRoutes);
 router.use('/v1/sales', salesRoutes);
+router.use('/v1/client-orders', clientOrderRoutes);
+router.use('/v1/budgets', budgetRoutes);
+router.use('/v1/company-projects', companyProjectRoutes);
+router.use('/v1/todos', todoRoutes);
+router.use('/v1/task-collaboration', taskCollaborationRoutes);
 router.use('/v1/reception', receptionRoutes);
 
 export default router;

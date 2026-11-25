@@ -18,7 +18,7 @@ const DEMO_PASSWORD = process.env.PM_DEMO_PASSWORD || 'Pm@123';
 // "Use" button rather than a list of near-identical people.
 const PM_USER = {
   name: 'Meenakshi Iyer',
-  email: 'meenakshi.iyer@ethiroli.edu',
+  email: 'manager@ethiroli.com',
   phone: '+91 98401 31001',
   dept: 'Project Delivery'
 };

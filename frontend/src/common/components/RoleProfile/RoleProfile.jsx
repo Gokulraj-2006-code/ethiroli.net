@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AdminPage from '../AdminPage/AdminPage.jsx';
 import AvatarUploader from '../AvatarUploader/AvatarUploader.jsx';
 import { useAuth } from '../../contexts/AuthContext.jsx';
-import useDocumentTitle from '../../hooks/useDocumentTitle.js';
+import useDocumentTitle, { formatRoleName } from '../../hooks/useDocumentTitle.js';
 import { updateMyProfile } from '../../../services/api/userApi.js';
 import { changePassword as apiChangePassword } from '../../../services/api/authApi.js';
 
@@ -160,7 +160,7 @@ export default function RoleProfile({ title = 'My Account Profile', subtitle = '
             <p className="text-muted small mb-3">{formData.email}</p>
             <div className="mb-3">
               <span className="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-1">
-                ROLE: {String(formData.role || 'USER').replace(/_/g, ' ')}
+                ROLE: {formatRoleName(formData.role || 'USER')}
               </span>
             </div>
 
@@ -208,6 +208,7 @@ export default function RoleProfile({ title = 'My Account Profile', subtitle = '
                   <label className="form-label small fw-semibold">Full Legal Name</label>
                   <input
                     type="text"
+                    aria-label="Full legal name"
                     className="form-control"
                     value={formData.full_name}
                     onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
@@ -233,6 +234,7 @@ export default function RoleProfile({ title = 'My Account Profile', subtitle = '
                   <label className="form-label small fw-semibold">Primary Contact Phone</label>
                   <input
                     type="tel"
+                    aria-label="Primary contact phone"
                     className="form-control"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}

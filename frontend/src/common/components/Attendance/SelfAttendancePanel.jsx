@@ -393,6 +393,7 @@ export default function SelfAttendancePanel({
                   <label className="form-label mb-0 small text-muted">Go to date:</label>
                   <input
                     type="date"
+                    aria-label="Go to date"
                     className="form-control form-control-sm"
                     value={selectedDate || ''}
                     onChange={(e) => {

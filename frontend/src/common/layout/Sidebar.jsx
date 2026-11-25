@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
+import { getRoleDefaultPath } from '../utils/roleRouting.js';
 import { getNavigationForRole } from './navigationConfig.js';
 import { useAppSelector, useAppDispatch } from '../../store/hooks.js';
 import { toggleSidebar } from '../../store/slices/uiSlice.js';
@@ -136,7 +137,7 @@ export default function Sidebar({ role, navItems }) {
         className={`portalSidebar ${effectiveRole === 'INTERN' ? 'internSidebar' : ''} ${!sidebarOpen ? 'closed' : ''} ${sidebarOpen ? 'mobileOpen' : ''}`} 
       >
         <div className="portalSidebarHeader">
-          <Link to="/app/employee/dashboard" className="portalBrandBox" aria-label="Dashboard Home">
+          <Link to={getRoleDefaultPath(effectiveRole)} className="portalBrandBox" aria-label="Dashboard Home">
             {effectiveRole === 'INTERN' ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%' }}>
                 <img
@@ -173,7 +174,11 @@ export default function Sidebar({ role, navItems }) {
             {effectiveRole !== 'INTERN' && (
               <div>
                 <div className="portalBrandName">
-                  {String(effectiveRole || 'ETHIROLI').replace(/_/g, ' ')}
+                  {effectiveRole === 'PROJECT_MANAGER'
+                    ? 'Manager'
+                    : effectiveRole === 'SALES'
+                      ? 'Sales'
+                      : String(effectiveRole || 'ETHIROLI').replace(/_/g, ' ')}
                 </div>
                 <span className="portalBrandSubtitle">Enterprise Portal</span>
               </div>

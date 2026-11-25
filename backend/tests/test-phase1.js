@@ -3,6 +3,7 @@ import { encrypt, decrypt, encryptDeterministic } from '../src/config/encryption
 import User from '../src/models/User.js';
 import Lead from '../src/models/Lead.js';
 import pool from '../src/config/database.js';
+import { isSuperAdminReadAllowed } from '../src/middleware/auth.js';
 
 async function runTests() {
   console.log('--- Phase 1 Self-Verification Test Suite ---');
@@ -51,6 +52,24 @@ async function runTests() {
     }
   } catch (error) {
     console.error('❌ User model query failed:', error.message);
+  }
+
+  // 4. Read-only CEO scope
+  console.log('\n4. Testing Super Admin read scope...');
+  const assignableRead = isSuperAdminReadAllowed(
+    'SUPER_ADMIN',
+    'GET',
+    '/api/v1/projects/assignable-users'
+  );
+  const userDirectoryRead = isSuperAdminReadAllowed(
+    'SUPER_ADMIN',
+    'GET',
+    '/api/v1/users?limit=200&is_active=true'
+  );
+  if (assignableRead && !userDirectoryRead) {
+    console.log('✅ To-Do assignee reads allowed; full user directory remains restricted.');
+  } else {
+    console.error('❌ Super Admin read scope check failed.');
   }
 
   console.log('\n--- Test Suite Complete ---');

@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import AdminPage from '../../../common/components/AdminPage/AdminPage.jsx';
 import axiosInstance from '../../../services/api/axiosInstance.js';
 import PersonMonitoringModal from '../../../common/components/Attendance/PersonMonitoringModal.jsx';
+import PanelMonitoring from '../../../common/components/PanelMonitoring/PanelMonitoring.jsx';
 
 const METRICS = [
   ['Total employees', 'totalEmployees'],
@@ -54,8 +56,6 @@ export default function Dashboard() {
       const dirList = Array.isArray(directory) ? directory : [];
       // Count only active EMPLOYEE roles as employees (matches 6 in Salem)
       const employeeCount = dirList.filter(p => p.role === 'EMPLOYEE' && p.is_active === 1).length;
-      const hrCount = dirList.filter(p => p.role === 'HR' && p.is_active === 1).length;
-      const managerCount = dirList.filter(p => p.role === 'PROJECT_MANAGER' && p.is_active === 1).length;
       setStats({
         totalEmployees: employeeCount,
         totalInterns: overview?.interns,
@@ -94,6 +94,17 @@ export default function Dashboard() {
           {loading ? 'Refreshing…' : 'Refresh'}
         </button>
       </div>
+
+      <PanelMonitoring />
+
+      <section className="card mt-4 shadow-sm" aria-label="Quick links">
+        <div className="card-body d-flex flex-wrap gap-2 align-items-center">
+          <span className="text-secondary small me-2">Quick links:</span>
+          <Link className="btn btn-outline-primary btn-sm" to="/app/super-admin/budgets">Budgets</Link>
+          <Link className="btn btn-outline-primary btn-sm" to="/app/super-admin/projects">Company projects</Link>
+          <Link className="btn btn-outline-primary btn-sm" to="/app/super-admin/todos">To-Dos</Link>
+        </div>
+      </section>
 
       {error && <div className="alert alert-danger" role="alert">{error}</div>}
 

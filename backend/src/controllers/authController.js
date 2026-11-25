@@ -8,7 +8,7 @@ import { broadcastToRole } from '../services/socketService.js';
 import { asyncHandler } from '../middleware/errorHandler.js';
 import { success } from '../utils/response.js';
 import { AuthenticationError, AuthorizationError, ValidationError } from '../utils/errors.js';
-import { ROLES, PORTAL_CONFIGS, getPortalConfigBySlug, IMPERSONATION_TARGETS } from '../config/constants.js';
+import { ROLES, PORTAL_CONFIGS, getPortalConfigBySlug, getMonitorablePanelsForRole, IMPERSONATION_TARGETS } from '../config/constants.js';
 import { isMfaRequiredForRole, validateMfaForLogin } from '../services/mfaService.js';
 import CredentialService from '../services/credentialService.js';
 import Attendance from '../models/Attendance.js';
@@ -360,6 +360,22 @@ export const getMe = asyncHandler(async (req, res) => {
     impersonating: Boolean(req.user.impersonated_by),
     activePortal
   });
+});
+
+/**
+ * GET /v1/auth/monitorable-panels
+ *
+ * Returns only the panels the authenticated user's role is allowed to monitor.
+ * The frontend uses this to render its monitoring links, so a role can never
+ * request a panel outside the approved hierarchy.
+ */
+export const getMonitorablePanels = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    throw new AuthenticationError('User not found.');
+  }
+  const panels = getMonitorablePanelsForRole(user.role);
+  return success(res, 200, { role: user.role, panels }, 'Monitorable panels retrieved');
 });
 
 export const impersonate = asyncHandler(async (req, res) => {

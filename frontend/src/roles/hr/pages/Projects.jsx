@@ -37,7 +37,7 @@ const formatDate = (value) => (value ? new Date(value).toLocaleDateString() : 'â
 /**
  * Projects & Roles â€” the HR project board.
  *
- * HR now owns project delivery after the Project Manager panel was retired, so
+ * HR shares project delivery oversight with the Manager panel, so
  * this screen lists every project and lets HR assign a delivery lead and a team
  * (each member shown with their system role) to a project.
  */

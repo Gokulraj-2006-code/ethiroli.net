@@ -129,7 +129,7 @@ console.log('[DEPLOY] Frontend build candidates:', candidatePaths.map((candidate
   exists: fs.existsSync(candidate)
 })));
 
-const requiredPortalFiles = ['index.html', 'hr.html', 'pm.html', 'employee.html', 'super-admin.html'];
+const requiredPortalFiles = ['index.html', 'sales.html', 'hr.html', 'pm.html', 'employee.html', 'super-admin.html'];
 const clientDist = candidatePaths.find((candidate) => (
   fs.existsSync(candidate) &&
   requiredPortalFiles.every((file) => fs.existsSync(path.join(candidate, file)))
@@ -153,6 +153,9 @@ const MPA_ROLE_MAP = [
   ['/auth/pm',         'pm.html'],
   ['/app/hr',          'hr.html'],
   ['/auth/hr',         'hr.html'],
+  ['/app/sales',       'sales.html'],
+  ['/auth/sales',      'sales.html'],
+  ['/sales',           'sales.html'],
   ['/app/employee',    'employee.html'],
   ['/auth/employee',   'employee.html'],
   ['/app/intern',      'employee.html'],
@@ -162,7 +165,6 @@ const MPA_ROLE_MAP = [
   ['/app/student',     'employee.html'],
   ['/app/tutor',       'employee.html'],
   ['/app/finance',     'employee.html'],
-  ['/app/sales',       'employee.html'],
   ['/app/reception',   'employee.html'],
   ['/employee',        'employee.html'],
   ['/intern',          'employee.html'],

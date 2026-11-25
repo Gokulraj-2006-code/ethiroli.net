@@ -19,6 +19,7 @@ import { success, error } from '../utils/response.js';
 import { NotFoundError, BadRequestError, AuthorizationError } from '../utils/errors.js';
 import { decrypt } from '../config/encryption.js';
 import { validatePhone } from '../utils/validators.js';
+import { updateTaskStatusCore as updateSharedTaskStatus } from './taskController.js';
 
 // Allowed ENUM values (mirror the database schemas) — validated before insert
 // so invalid input returns 400 instead of a raw DB error / 500.
@@ -764,52 +765,85 @@ export const getAssignedTasks = asyncHandler(async (req, res) => {
   });
 });
 
-export const updateTaskStatus = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
-  const { id } = req.params;
-  const { status } = req.body;
-
-  if (!TASK_STATUSES.includes(status)) {
-    throw new BadRequestError(`Invalid status. Must be one of: ${TASK_STATUSES.join(', ')}`);
-  }
-
-  const task = await Task.findById(id);
-  if (!task) throw new NotFoundError('Task not found');
-  // Exact-match ownership. This used to read
-  // `task.assigned_to && task.assigned_to !== userId`, so a task with
-  // assigned_to IS NULL passed the check and any employee could mark an
-  // unassigned task COMPLETED.
-  if (task.assigned_to !== userId) {
+const assertEmployeeTaskOwner = async (req) => {
+  const task = await Task.findById(req.params.id);
+  if (!task || task.assigned_to !== req.user.id) {
     throw new AuthorizationError('You are not assigned to this task');
   }
+  return task;
+};
 
-  const completionNote = typeof req.body.completion_note === 'string' ? req.body.completion_note.trim().slice(0, 4000) : null;
+export const updateTaskStatus = asyncHandler(async (req, res) => {
+  await assertEmployeeTaskOwner(req);
+  return updateSharedTaskStatus(req, res);
+});
+
+/**
+ * Employee task workflow. The status patch above now enforces the shared
+ * PENDING -> IN_PROGRESS -> UNDER_REVIEW -> manager decision lifecycle; these
+ * routes expose the same transitions explicitly for richer clients.
+ */
+export const startTask = asyncHandler(async (req, res) => {
+  await assertEmployeeTaskOwner(req);
+  req.body.status = 'IN_PROGRESS';
+  return updateSharedTaskStatus(req, res);
+});
+
+export const submitTaskForReview = asyncHandler(async (req, res) => {
+  const task = await Task.findById(req.params.id);
+  if (!task || task.assigned_to !== req.user.id) {
+    throw new AuthorizationError('You are not assigned to this task');
+  }
+  if (task.status !== 'IN_PROGRESS' && task.status !== 'BLOCKED') {
+    throw new BadRequestError('Only work in progress can be submitted for review');
+  }
+  const submissionNote = String(req.body.submission_note || req.body.completion_note || '').trim() || null;
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
-    await connection.execute(`UPDATE tasks SET status = ? WHERE id = ? AND assigned_to = ?`, [status, id, userId]);
-
-
-
-    await connection.execute(`INSERT INTO task_history (task_id, actor_user_id, event_type, from_status, to_status, note)
-      VALUES (?, ?, 'EMPLOYEE_UPDATE', ?, ?, ?)`, [id, userId, task.status, status, completionNote]);
+    await connection.execute(
+      `UPDATE tasks SET status = 'UNDER_REVIEW', submitted_at = NOW(), submission_note = ? WHERE id = ? AND assigned_to = ?`,
+      [submissionNote, task.id, req.user.id]
+    );
+    await connection.execute(
+      `INSERT INTO task_history (task_id, actor_user_id, event_type, from_status, to_status, note)
+       VALUES (?, ?, 'TASK_SUBMITTED', ?, 'UNDER_REVIEW', ?)`,
+      [task.id, req.user.id, task.status, submissionNote]
+    );
     await connection.commit();
   } catch (error) {
     await connection.rollback();
     throw error;
   } finally { connection.release(); }
-  if (status === 'UNDER_REVIEW' && task.created_by) {
-    await createNotification(task.created_by, 'TASK_SUBMITTED', 'Task submitted for review', `${req.user.full_name} submitted a task for your review`, 'TASK', id);
-  }
   await ActivityFeed.create({
-    user_id: userId,
-    actor_id: userId,
+    user_id: req.user.id,
+    actor_id: req.user.id,
     event_type: 'TASK_STATUS_CHANGED',
     entity_type: 'Task',
-    entity_id: id,
-    payload: { from: task.status, to: status }
+    entity_id: task.id,
+    payload: { from: task.status, to: 'UNDER_REVIEW' }
   });
-  return success(res, 200, { id, status }, 'Task status updated');
+  return success(res, 200, { id: task.id, status: 'UNDER_REVIEW' }, 'Task submitted for review');
+});
+
+export const updateTaskProgress = asyncHandler(async (req, res) => {
+  const task = await Task.findById(req.params.id);
+  if (!task || task.assigned_to !== req.user.id) {
+    throw new AuthorizationError('You are not assigned to this task');
+  }
+  if (!['IN_PROGRESS', 'BLOCKED'].includes(task.status)) {
+    throw new BadRequestError('Progress can only be updated while work is in progress');
+  }
+  const progress = Number(req.body.progress_percent);
+  if (!Number.isFinite(progress) || progress < 0 || progress > 99) {
+    throw new BadRequestError('Progress must be between 0 and 99 until a Manager approves the work');
+  }
+  const percent = Math.round(progress * 100) / 100;
+  await pool.execute(
+    'UPDATE tasks SET progress_percent = ?, actual_hours = ? WHERE id = ?',
+    [percent, req.body.actual_hours !== undefined ? Number(req.body.actual_hours) || 0 : task.actual_hours, task.id]
+  );
+  return success(res, 200, { id: task.id, progress_percent: percent }, 'Task progress updated');
 });
 
 export const getMyProjects = asyncHandler(async (req, res) => {

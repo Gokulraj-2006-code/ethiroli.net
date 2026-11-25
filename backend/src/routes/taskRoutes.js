@@ -1,5 +1,20 @@
 import express from 'express';
-import { listTasks, createTask, getTask, getTaskHistory, updateTask, updateTaskStatus, bulkUpdateTasks, deleteTask, moveTask } from '../controllers/taskController.js';
+import {
+  listTasks,
+  createTask,
+  getTask,
+  getTaskHistory,
+  updateTask,
+  updateTaskStatus,
+  bulkUpdateTasks,
+  deleteTask,
+  moveTask,
+  startTask,
+  updateTaskProgress,
+  submitTaskForReview,
+  approveTask,
+  rejectTask
+} from '../controllers/taskController.js';
 import { authenticate } from '../middleware/auth.js';
 import { requireRole } from '../middleware/rbac.js';
 import { validateBody } from '../middleware/validation.js';
@@ -18,6 +33,14 @@ router.put('/tasks/:id', manageRoles, validateBody('updateTask'), updateTask);
 router.patch('/tasks/:id', manageRoles, validateBody('updateTask'), updateTask);
 router.patch('/tasks/:id/status', readRoles, validateBody('updateTaskStatus'), updateTaskStatus);
 router.patch('/tasks/:id/move', readRoles, moveTask);
+// Review lifecycle. Employees start / submit; Managers approve / reject with
+// persisted feedback. All four routes are role-guarded inside the controller
+// by project ownership and task assignment.
+router.post('/tasks/:id/start', requireRole('EMPLOYEE', 'INTERN'), startTask);
+router.patch('/tasks/:id/progress', requireRole('EMPLOYEE', 'INTERN'), updateTaskProgress);
+router.post('/tasks/:id/submit', requireRole('EMPLOYEE', 'INTERN'), submitTaskForReview);
+router.post('/tasks/:id/approve', manageRoles, approveTask);
+router.post('/tasks/:id/reject', manageRoles, rejectTask);
 router.delete('/tasks/:id', manageRoles, deleteTask);
 router.post('/tasks/bulk/status', manageRoles, validateBody('bulkUpdateTasks'), bulkUpdateTasks);
 

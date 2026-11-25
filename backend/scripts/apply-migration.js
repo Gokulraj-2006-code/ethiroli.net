@@ -158,10 +158,15 @@ async function runStatement(conn, statement) {
     await conn.query(stmt);
   } catch (err) {
     // Re-running an already-applied migration must be a no-op, not a failure:
-    // duplicate keys / indexes / foreign keys mean "already there".
+    // duplicate keys / indexes / foreign keys mean "already there". MariaDB
+    // reports a duplicate FK constraint name as ER_CANT_CREATE_TABLE (1005)
+    // with errno 121 inside the message instead of MySQL 8's ER_FK_DUP_NAME.
     const benignCodes = ['ER_DUP_ENTRY', 'ER_DUP_KEYNAME', 'ER_DUP_FKNAME', 'ER_FK_DUP_NAME'];
     const benignErrnos = [1062, 1061, 1826, 1827];
-    if (benignCodes.includes(err.code) || benignErrnos.includes(err.errno)) {
+    const duplicateForeignKey =
+      /FOREIGN\s+KEY/i.test(stmt) &&
+      (err.errno === 121 || /Duplicate foreign key constraint name/i.test(err.message || ''));
+    if (benignCodes.includes(err.code) || benignErrnos.includes(err.errno) || duplicateForeignKey) {
       console.log(`  SKIP  ${stmt.split('\n')[0].slice(0, 70)} (${err.code})`);
       return 'skipped';
     }

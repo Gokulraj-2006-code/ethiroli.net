@@ -12,6 +12,7 @@ import {
   validateOwners,
   fetchAssignableUsers
 } from '../services/projectAssignmentService.js';
+import { getProject, assertProjectAccess, recomputeProjectProgress } from '../services/companyProjectService.js';
 
 // ==========================================
 // 1. PROJECTS
@@ -20,11 +21,26 @@ import {
 export const listProjects = async (req, res) => {
   try {
     const { is_active, limit = 50, offset = 0 } = req.query;
-    const projects = await StudentProject.list({
+    let projects = await StudentProject.list({
       is_active: is_active !== undefined ? is_active === 'true' : undefined,
       limit: parseInt(limit, 10),
       offset: parseInt(offset, 10)
     });
+
+    // A Manager only sees projects they own or are on the delivery team for.
+    if (!['ADMIN', 'SUPER_ADMIN'].includes(req.user?.role)) {
+      projects = projects.filter((project) => {
+        if (project.manager_id === req.user.id) return true;
+        try {
+          const team = typeof project.assigned_user_ids === 'string'
+            ? JSON.parse(project.assigned_user_ids)
+            : project.assigned_user_ids;
+          return Array.isArray(team) && team.includes(req.user.id);
+        } catch (_) {
+          return false;
+        }
+      });
+    }
 
     // Enrich with active milestones and sprint status
     const enriched = await Promise.all(
@@ -57,9 +73,7 @@ export const getProjectDetails = async (req, res) => {
   try {
     const { id } = req.params;
     const project = await StudentProject.findById(id);
-    if (!project) {
-      return res.status(404).json({ error: 'Project not found' });
-    }
+    await assertProjectAccess(req.user, project);
 
     const milestones = await ProjectMilestone.list({ project_id: id });
     const sprints = await ProjectSprint.list({ project_id: id });
@@ -212,9 +226,7 @@ export const deleteProject = async (req, res) => {
   try {
     const { id } = req.params;
     const project = await StudentProject.findById(id);
-    if (!project) {
-      return res.status(404).json({ error: 'Project not found' });
-    }
+    await assertProjectAccess(req.user, project, { write: true });
     await StudentProject.delete(id);
     res.json({ success: true, message: 'Project deleted successfully' });
   } catch (error) {
@@ -270,7 +282,9 @@ export const signoffMilestone = async (req, res) => {
     if (!updated) {
       return res.status(404).json({ error: 'Milestone not found' });
     }
-    res.json({ success: true, milestone: updated });
+    const projectId = updated.project_id || (await pool.execute('SELECT project_id FROM project_milestones WHERE id = ?', [id]))[0][0]?.project_id;
+    const progressPercent = projectId ? await recomputeProjectProgress(projectId) : null;
+    res.json({ success: true, milestone: updated, progress_percent: progressPercent });
   } catch (error) {
     console.error('signoffMilestone error:', error);
     res.status(500).json({ error: 'Failed to sign-off milestone' });
@@ -475,31 +489,52 @@ export const rejectExpense = async (req, res) => {
 
 export const getPerformanceKPIs = async (req, res) => {
   try {
-    const [projectCounts] = await pool.execute(`
-      SELECT 
-        COUNT(*) as total_projects,
-        SUM(CASE WHEN is_active = TRUE THEN 1 ELSE 0 END) as active_projects
-      FROM student_projects
-    `);
+    const admin = ['ADMIN', 'SUPER_ADMIN'].includes(req.user?.role);
+    const scopeSql = admin
+      ? ''
+      : ' AND (p.manager_id = ? OR JSON_CONTAINS(p.assigned_user_ids, JSON_QUOTE(?)))';
+    const scopeValues = admin ? [] : [req.user.id, req.user.id];
 
-    const [milestoneStats] = await pool.execute(`
-      SELECT 
-        COUNT(*) as total_milestones,
-        SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END) as completed_count,
-        SUM(CASE WHEN status = 'DELAYED' THEN 1 ELSE 0 END) as delayed_count
-      FROM project_milestones
-    `);
+    const [projectCounts] = await pool.execute(
+      `SELECT COUNT(*) AS total_projects,
+              SUM(CASE WHEN is_active = TRUE THEN 1 ELSE 0 END) AS active_projects
+         FROM student_projects p
+        WHERE 1 = 1${scopeSql}`,
+      scopeValues
+    );
 
-    const [expenseSum] = await pool.execute(`
-      SELECT 
-        COALESCE(SUM(amount), 0) as total_expenses,
-        COALESCE(SUM(CASE WHEN is_billable = TRUE THEN amount ELSE 0 END), 0) as billable
-      FROM project_expenses
-    `);
+    const [milestoneStats] = await pool.execute(
+      `SELECT COUNT(m.id) AS total_milestones,
+              SUM(CASE WHEN m.status = 'COMPLETED' THEN 1 ELSE 0 END) AS completed_count,
+              SUM(CASE WHEN m.status = 'DELAYED' THEN 1 ELSE 0 END) AS delayed_count
+         FROM student_projects p
+         LEFT JOIN project_milestones m ON m.project_id = p.id
+        WHERE 1 = 1${scopeSql}`,
+      scopeValues
+    );
 
-    const totalMilestones = milestoneStats[0].total_milestones || 1;
-    const completedMilestones = milestoneStats[0].completed_count || 0;
-    const onTimeDeliveryRate = Math.round((completedMilestones / totalMilestones) * 100);
+    const [expenseSum] = await pool.execute(
+      `SELECT COALESCE(SUM(e.amount), 0) AS total_expenses,
+              COALESCE(SUM(CASE WHEN e.is_billable = TRUE THEN e.amount ELSE 0 END), 0) AS billable
+         FROM student_projects p
+         LEFT JOIN project_expenses e ON e.project_id = p.id
+        WHERE 1 = 1${scopeSql}`,
+      scopeValues
+    );
+
+    // Delivery speed is derived from completed task records, never invented.
+    const [velocity] = await pool.execute(
+      `SELECT COUNT(t.id) AS completed_tasks,
+              COALESCE(AVG(t.actual_hours), 0) AS average_hours
+         FROM student_projects p
+         LEFT JOIN tasks t ON t.project_id = p.id AND t.status = 'COMPLETED'
+        WHERE 1 = 1${scopeSql}`,
+      scopeValues
+    );
+
+    const totalMilestones = Number(milestoneStats[0].total_milestones || 0);
+    const completedMilestones = Number(milestoneStats[0].completed_count || 0);
+    const onTimeDeliveryRate = totalMilestones ? Math.round((completedMilestones / totalMilestones) * 100) : 0;
 
     res.json({
       success: true,
@@ -508,7 +543,7 @@ export const getPerformanceKPIs = async (req, res) => {
         onTimeDeliveryRate: `${onTimeDeliveryRate}%`,
         milestoneStats: milestoneStats[0],
         financials: expenseSum[0],
-        teamVelocityAverage: 38
+        deliveryVelocity: velocity[0]
       }
     });
   } catch (error) {

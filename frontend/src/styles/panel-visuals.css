@@ -1,0 +1,301 @@
+/* ============================================================
+   ETHIROLI — SHARED PANEL VISUAL LAYER
+
+   Scoped to the five authenticated portals via <html data-portal="...">.
+   It sits on top of Bootstrap + admin.css and only changes presentation:
+   role accents for navigation, headers, cards, tables, states and the
+   read-only panel monitoring cards. No workflow or routing behaviour lives
+   in this file.
+   ============================================================ */
+
+:root[data-portal] {
+  --panel-accent: #1a4b48;
+  --panel-accent-2: #819e35;
+  --panel-accent-ink: #123a38;
+  --panel-accent-soft: rgba(26, 75, 72, 0.10);
+  --panel-glow: rgba(26, 75, 72, 0.10);
+  --panel-sidebar-top: #0c1a19;
+  --panel-sidebar-bottom: #102a27;
+}
+
+:root[data-portal="super-admin"] {
+  --panel-accent: #4f46e5;
+  --panel-accent-2: #af431e;
+  --panel-accent-ink: #3730a3;
+  --panel-accent-soft: rgba(79, 70, 229, 0.11);
+  --panel-glow: rgba(79, 70, 229, 0.09);
+  --panel-sidebar-top: #191342;
+  --panel-sidebar-bottom: #0c1a19;
+}
+
+:root[data-portal="sales"] {
+  --panel-accent: #0f766e;
+  --panel-accent-2: #819e35;
+  --panel-accent-ink: #115e59;
+  --panel-accent-soft: rgba(15, 118, 110, 0.11);
+  --panel-glow: rgba(13, 148, 136, 0.08);
+  --panel-sidebar-top: #063b36;
+  --panel-sidebar-bottom: #0c1a19;
+}
+
+:root[data-portal="manager"] {
+  --panel-accent: #2563eb;
+  --panel-accent-2: #7c3aed;
+  --panel-accent-ink: #1d4ed8;
+  --panel-accent-soft: rgba(37, 99, 235, 0.11);
+  --panel-glow: rgba(37, 99, 235, 0.09);
+  --panel-sidebar-top: #122451;
+  --panel-sidebar-bottom: #0c1a19;
+}
+
+:root[data-portal="hr"] {
+  --panel-accent: #be185d;
+  --panel-accent-2: #ea580c;
+  --panel-accent-ink: #9d174d;
+  --panel-accent-soft: rgba(190, 24, 93, 0.10);
+  --panel-glow: rgba(190, 24, 93, 0.08);
+  --panel-sidebar-top: #3a1230;
+  --panel-sidebar-bottom: #0c1a19;
+}
+
+:root[data-portal="employee"] {
+  --panel-accent: #0d9488;
+  --panel-accent-2: #0284c7;
+  --panel-accent-ink: #0f766e;
+  --panel-accent-soft: rgba(13, 148, 136, 0.11);
+  --panel-glow: rgba(2, 132, 199, 0.08);
+  --panel-sidebar-top: #07393a;
+  --panel-sidebar-bottom: #0c1a19;
+}
+
+/* ------------------------------------------------------------
+   PAGE CANVAS + HEADERS
+   ------------------------------------------------------------ */
+:root[data-portal] .mainContent {
+  background:
+    radial-gradient(circle at 8% 0%, var(--panel-glow), transparent 28rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0) 260px);
+}
+
+:root[data-portal] .mainContent h1,
+:root[data-portal] .mainContent h2,
+:root[data-portal] .mainContent h3,
+:root[data-portal] .pageTitle,
+:root[data-portal] .adminPageTitle {
+  color: var(--panel-accent-ink) !important;
+}
+
+:root[data-portal] .pageHeader,
+:root[data-portal] .adminPageHeader {
+  padding-left: 14px;
+  border-left: 4px solid var(--panel-accent);
+  border-radius: 0 12px 12px 0;
+}
+
+:root[data-portal] .pageSubtitle,
+:root[data-portal] .adminPageSubtitle {
+  color: #60716f;
+}
+
+/* ------------------------------------------------------------
+   SIDEBAR + TOP BAR
+   ------------------------------------------------------------ */
+:root[data-portal] .portalSidebar:not(.internSidebar) {
+  background: linear-gradient(165deg, var(--panel-sidebar-top) 0%, var(--panel-sidebar-bottom) 100%) !important;
+}
+
+:root[data-portal] .portalSidebarHeader {
+  background: radial-gradient(circle at 0 0, var(--panel-accent-soft), transparent 70%);
+}
+
+:root[data-portal] .portalNavGroupBtn.childActive {
+  background: var(--panel-accent-soft) !important;
+  color: var(--panel-accent) !important;
+}
+
+:root[data-portal] .portalNavLink.active {
+  background: linear-gradient(135deg, var(--panel-accent), var(--panel-accent-2)) !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.24) !important;
+}
+
+:root[data-portal] .portalNavbar {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.98), var(--panel-accent-soft)) !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+:root[data-portal] .portalRoleBadge {
+  background: linear-gradient(135deg, var(--panel-accent), var(--panel-accent-2)) !important;
+  color: #ffffff !important;
+}
+
+/* ------------------------------------------------------------
+   CARDS, STATS, TABLES, FORMS
+   ------------------------------------------------------------ */
+:root[data-portal] .card {
+  box-shadow: inset 0 3px 0 var(--panel-accent), 0 6px 24px rgba(15, 23, 42, 0.07) !important;
+}
+
+:root[data-portal] .card:hover {
+  box-shadow: inset 0 3px 0 var(--panel-accent), 0 12px 30px rgba(15, 23, 42, 0.13) !important;
+}
+
+:root[data-portal] .card-header,
+:root[data-portal] .cardHeader {
+  background: linear-gradient(135deg, var(--panel-accent-soft), rgba(255, 255, 255, 0.96)) !important;
+  border-bottom-color: var(--panel-accent-soft) !important;
+}
+
+:root[data-portal] .cardTitle,
+:root[data-portal] .sectionTitle {
+  color: var(--panel-accent-ink) !important;
+}
+
+:root[data-portal] .statCard::before {
+  background: linear-gradient(180deg, var(--panel-accent), var(--panel-accent-2));
+}
+
+:root[data-portal] .table thead th {
+  background: linear-gradient(135deg, var(--panel-accent), var(--panel-accent-2)) !important;
+  color: #ffffff !important;
+  border-bottom-color: transparent !important;
+}
+
+:root[data-portal] .table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.58);
+}
+
+:root[data-portal] .table-hover tbody tr:hover,
+:root[data-portal] .table tbody tr:hover {
+  background: var(--panel-accent-soft) !important;
+}
+
+:root[data-portal] .form-control:focus,
+:root[data-portal] .form-select:focus {
+  border-color: var(--panel-accent) !important;
+  box-shadow: 0 0 0 3px var(--panel-accent-soft) !important;
+}
+
+:root[data-portal] .progress-bar {
+  background: linear-gradient(90deg, var(--panel-accent), var(--panel-accent-2)) !important;
+}
+
+:root[data-portal] .btn-primary {
+  background: linear-gradient(135deg, var(--panel-accent), var(--panel-accent-2)) !important;
+  border-color: transparent !important;
+  color: #ffffff !important;
+}
+
+:root[data-portal] .btn-outline-primary {
+  border-color: var(--panel-accent) !important;
+  color: var(--panel-accent-ink) !important;
+}
+
+:root[data-portal] .btn-outline-primary:hover,
+:root[data-portal] .btn-outline-primary:focus {
+  background: var(--panel-accent) !important;
+  color: #ffffff !important;
+}
+
+:root[data-portal] .alert {
+  border-left-width: 4px;
+}
+
+/* ------------------------------------------------------------
+   SHARED EMPTY STATES + ACTIVITY FEED
+   ------------------------------------------------------------ */
+:root[data-portal] .sales-empty,
+:root[data-portal] .empty-state,
+:root[data-portal] .emptyState {
+  background: linear-gradient(135deg, var(--panel-accent-soft), rgba(255, 255, 255, 0.92));
+  border: 1px dashed var(--panel-accent);
+  border-radius: 14px;
+}
+
+:root[data-portal] .sales-empty i,
+:root[data-portal] .empty-state i,
+:root[data-portal] .emptyState i {
+  color: var(--panel-accent);
+}
+
+:root[data-portal] .feedHeader {
+  background: linear-gradient(135deg, var(--panel-accent-soft), #ffffff);
+}
+
+:root[data-portal] .feedHeader h3 {
+  color: var(--panel-accent-ink);
+}
+
+:root[data-portal] .feedItem.unreadItem {
+  border-left-color: var(--panel-accent);
+}
+
+/* ------------------------------------------------------------
+   READ-ONLY PANEL MONITORING CARDS
+   Display-only by design: no link, hover pointer, or CTA.
+   ------------------------------------------------------------ */
+:root[data-portal] .monitorCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  height: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: linear-gradient(135deg, var(--panel-accent-soft), rgba(255, 255, 255, 0.96));
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+  cursor: default;
+}
+
+:root[data-portal] .monitorCardIcon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--panel-accent), var(--panel-accent-2));
+  color: #ffffff;
+  font-size: 1.15rem;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.18);
+}
+
+:root[data-portal] .monitorCardPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid var(--panel-accent);
+  color: var(--panel-accent-ink);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Custom dashboard stat tiles (Sales and Employee do not use Bootstrap cards
+   for these, so they need the same accent treatment explicitly). */
+:root[data-portal="sales"] .sales-stat,
+:root[data-portal="employee"] .emp-portal .emp-stat {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), var(--panel-accent-soft));
+  border-color: rgba(15, 23, 42, 0.10) !important;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+:root[data-portal="sales"] .sales-stat__value,
+:root[data-portal="employee"] .emp-portal .emp-stat__value {
+  color: var(--panel-accent-ink) !important;
+}
+
+:root[data-portal="employee"] .emp-portal .text-center.py-4 {
+  background: linear-gradient(135deg, var(--panel-accent-soft), rgba(255, 255, 255, 0.94));
+  border: 1px dashed var(--panel-accent);
+  border-radius: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-portal] .card,
+  :root[data-portal] .portalNavLink {
+    transition: none !important;
+  }
+}

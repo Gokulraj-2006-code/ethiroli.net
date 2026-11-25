@@ -58,7 +58,7 @@ async function resetAllPasswords() {
     { email: 'intern@ethiroli.com', role: 'INTERN', name: 'Software Intern', pass: 'Intern@123' },
     { email: 'student@ethiroli.com', role: 'STUDENT', name: 'Ethiroli Student', pass: 'Student@123' },
     { email: 'employee@ethiroli.com', role: 'EMPLOYEE', name: 'Senior Developer', pass: 'Employee@123' },
-    { email: 'pm@ethiroli.com', role: 'PROJECT_MANAGER', name: 'Project Manager', pass: 'Pm@123' },
+    { email: 'pm@ethiroli.com', role: 'PROJECT_MANAGER', name: 'Manager', pass: 'Pm@123' },
     { email: 'finance@ethiroli.com', role: 'FINANCE', name: 'Finance Lead', pass: 'Finance@123' },
     { email: 'sales@ethiroli.com', role: 'SALES', name: 'Sales Director', pass: 'Sales@123' },
     { email: 'reception@ethiroli.com', role: 'RECEPTION', name: 'Front Desk', pass: 'Reception@123' }
